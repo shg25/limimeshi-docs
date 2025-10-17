@@ -85,12 +85,22 @@ Phase 4: リリース・運用
 
 ### 2-1. ディレクトリ構成の整備
 
+Phase0完了時に以下のディレクトリ構成に整理：
+
 ```
-l-docs/
-├── specs/           # GitHub Spec Kit形式の機能設計書
-├── adr/             # Architecture Decision Records
-├── api/             # API仕様書
-└── data-model/      # データモデル詳細
+limimeshi-docs/
+├── README.md
+├── CONTRIBUTING.md
+├── .gitignore
+├── roadmap.md
+├── planning/            # 企画ドキュメント（Phase0で作成したファイルを移動）
+│   ├── first-idea.md
+│   ├── lean-canvas.md
+│   └── inception-deck.md
+├── specs/               # 機能設計書（Phase1で追加）
+├── adr/                 # Architecture Decision Records（Phase1で追加）
+├── api/                 # API仕様書（Phase1で追加）
+└── data-model/          # データモデル詳細（Phase1で追加）
 ```
 
 ### 2-2. GitHub Spec Kitで機能設計
