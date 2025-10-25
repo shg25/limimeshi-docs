@@ -12,11 +12,13 @@
 
 ## ドキュメント構成
 
-| ファイル名 | 内容 |
+| ディレクトリ/ファイル | 内容 |
 |-----------|------|
-| [first-idea.md](./first-idea.md) | サービスの基本アイデア、ターゲットユーザー、データモデル、技術スタック、非機能要件 |
-| [lean-canvas.md](./lean-canvas.md) | リーンキャンバス（9ブロック）、ビジネスモデル、検証すべき仮説 |
-| [inception-deck.md](./inception-deck.md) | インセプションデッキ（10の質問）、プロジェクトの目的、優先順位、トレードオフ |
+| [planning/](./planning/) | Phase0企画ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md） |
+| [specs/](./specs/) | 機能設計書（GitHub Spec Kit形式） |
+| [adr/](./adr/) | Architecture Decision Records（技術選定の記録） |
+| [api/](./api/) | API仕様書 |
+| [data-model/](./data-model/) | データモデル詳細設計 |
 | [roadmap.md](./roadmap.md) | プロジェクト全体のロードマップ、フェーズ管理、進捗状況 |
 | [WRITING_STYLE_GUIDE.md](./WRITING_STYLE_GUIDE.md) | ドキュメント記述ルール |
 
