@@ -14,8 +14,11 @@
 
 | ファイル名 | 内容 |
 |-----------|------|
-| [first-idea.md](./first-idea.md) | サービスの基本アイデア、ターゲットユーザー、データモデル、技術スタック |
-| [roadmap.md](./roadmap.md) | プロジェクト全体のロードマップ、フェーズ管理 |
+| [first-idea.md](./first-idea.md) | サービスの基本アイデア、ターゲットユーザー、データモデル、技術スタック、非機能要件 |
+| [lean-canvas.md](./lean-canvas.md) | リーンキャンバス（9ブロック）、ビジネスモデル、検証すべき仮説 |
+| [inception-deck.md](./inception-deck.md) | インセプションデッキ（10の質問）、プロジェクトの目的、優先順位、トレードオフ |
+| [roadmap.md](./roadmap.md) | プロジェクト全体のロードマップ、フェーズ管理、進捗状況 |
+| [WRITING_STYLE_GUIDE.md](./WRITING_STYLE_GUIDE.md) | ドキュメント記述ルール |
 
 ## 開発方針
 
@@ -36,7 +39,7 @@
 |-------------|------|------|
 | `limimeshi-web` | 一般向けWebアプリ | Hosting:web |
 | `limimeshi-admin` | 管理UI | Hosting:admin |
-| `limimeshi-jobs` | 定期処理・差分検知 | Functions（onSchedule） |
+| `limimeshi-jobs` | 定期処理（季節メニューリマインダー等） | Functions（onSchedule） |
 | `limimeshi-docs` | 企画・設計・ADR | 公開リポジトリ（このリポジトリ） |
 
 ## コントリビューション
@@ -55,4 +58,4 @@
 
 ---
 
-**最終更新**：2025/10/14
+**最終更新**：2025/10/26
