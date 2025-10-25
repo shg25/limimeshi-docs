@@ -108,27 +108,40 @@ Phase5以降：スケールアップ・機能拡張
 
 ---
 
-## Phase1：設計・仕様策定 📋 未着手
+## Phase1：設計・仕様策定 🔄 進行中
 
-### 1-1. ディレクトリ構成の整備
+### 1-1. ディレクトリ構成の整備 ✅ 完了
 
-Phase0完了時に以下のディレクトリ構成に整理：
+Phase0完了後、以下のディレクトリ構成に整理しました：
 
 ```
 limimeshi-docs/
 ├── README.md
+├── CLAUDE.md            # AI向けプロジェクト情報
+├── WRITING_STYLE_GUIDE.md
 ├── CONTRIBUTING.md
 ├── .gitignore
 ├── roadmap.md
 ├── planning/            # 企画ドキュメント（Phase0で作成したファイルを移動）
+│   ├── README.md
 │   ├── first-idea.md
 │   ├── lean-canvas.md
 │   └── inception-deck.md
 ├── specs/               # 機能設計書（Phase1で追加）
+│   └── README.md
 ├── adr/                 # Architecture Decision Records（Phase1で追加）
+│   └── README.md
 ├── api/                 # API仕様書（Phase1で追加）
+│   └── README.md
 └── data-model/          # データモデル詳細（Phase1で追加）
+    └── README.md
 ```
+
+#### 完了内容
+- Phase0ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md）をplanning/に移動
+- 4つの新規ディレクトリ作成（specs/、adr/、api/、data-model/）
+- 各ディレクトリにREADME.md作成（役割と作成予定ドキュメントを記載）
+- CLAUDE.md作成（AI向けプロジェクト情報、WRITING_STYLE_GUIDE.mdへのリンク含む）
 
 ### 1-2. GitHub Spec Kitで機能設計
 
@@ -223,7 +236,7 @@ limimeshi-docs/
 | フェーズ | ステータス | 進捗率 |
 |---------|-----------|--------|
 | Phase0：企画の妥当性検証 | ✅ 完了 | 100% |
-| Phase1：設計・仕様策定 | 📋 未着手 | 0% |
+| Phase1：設計・仕様策定 | 🔄 進行中 | 25% |
 | Phase2：MVP実装 | 🚧 未着手 | 0% |
 | Phase3：ベータリリース | 🚀 未着手 | 0% |
 | Phase4：本番リリース・運用 | 🚀 未着手 | 0% |
@@ -313,6 +326,21 @@ limimeshi-docs/
     - Phase5以降：MAU 10,000人、DAU 1,000人（スケールアップ）
   - 3つのドキュメント間で矛盾なし、Phase0完了
 
+### Phase1-1：ディレクトリ構成の整備
+- ✅ Phase0ドキュメントの整理
+  - first-idea.md、lean-canvas.md、inception-deck.mdをplanning/ディレクトリに移動
+  - planning/README.md作成（Phase0完了の記録）
+- ✅ Phase1用ディレクトリの作成
+  - specs/：GitHub Spec Kit形式の機能設計書（Phase2 MVP対象機能）
+  - adr/：Architecture Decision Records（技術選定の記録）
+  - api/：API仕様書（Firestore直接アクセス、Cloud Functions）
+  - data-model/：データモデル詳細設計（Firestoreコレクション、セキュリティルール、インデックス）
+  - 各ディレクトリにREADME.md作成（役割と作成予定ドキュメントを記載）
+- ✅ CLAUDE.md作成
+  - AI向けプロジェクト情報（現在のフェーズ、ディレクトリ構造、重要なドキュメント）
+  - WRITING_STYLE_GUIDE.mdへのリンク（AI作業時の必須参照）
+  - AI向けの注意事項（ドキュメント作成時のルール、作業の優先順位）
+
 ---
 
 ## 次のアクション
@@ -326,12 +354,25 @@ limimeshi-docs/
 6. ~~**`inception-deck.md` の作成（Phase0-3）**~~ ✅ 完了（10の質問に全て回答）
 7. ~~**整合性チェック（Phase0-4）**~~ ✅ 完了（矛盾を修正、企画ドキュメント完成）
 
-### 🎯 次のフェーズ
-**Phase1：設計・仕様策定**
-- ディレクトリ構成の整備（`specs/`, `adr/`, `api/`, `data-model/`）
-- GitHub Spec Kitで機能設計
-- ADRで技術選定記録
-- データモデル詳細設計
+### ✅ Phase1-1完了
+8. ~~**ディレクトリ構成の整備**~~ ✅ 完了（planning/, specs/, adr/, api/, data-model/, CLAUDE.md作成）
+
+### 🎯 Phase1：設計・仕様策定（進行中）
+**Phase1-2：GitHub Spec Kitで機能設計**
+- `specs/menu-list.md`：メニュー一覧機能
+- `specs/favorites.md`：お気に入り登録機能
+- `specs/admin-panel.md`：管理画面機能
+
+**Phase1-3：ADRで技術選定記録**
+- `adr/001-why-firebase.md`：なぜFirebaseを選んだか
+- `adr/002-monorepo-vs-multirepo.md`：モノレポ vs マルチリポ
+- `adr/003-react-admin.md`：React Adminを選んだ理由
+- `adr/004-manual-data-update.md`：データ更新の運用方針
+
+**Phase1-4：データモデル詳細設計**
+- `data-model/firestore-collections.md`：Firestoreコレクション設計
+- `data-model/security-rules.md`：セキュリティルール設計
+- `data-model/indexes.md`：インデックス設計
 
 ---
 
@@ -359,3 +400,4 @@ limimeshi-docs/
 - 2025/10/25：Phase0-2完了（lean-canvas.md作成、9ブロック全て完成）、Phase0の進捗率を50%に更新
 - 2025/10/26：Phase0-3完了（inception-deck.md作成、10の質問に全て回答）、Phase0の進捗率を75%に更新
 - 2025/10/26：Phase0-4完了（整合性チェック、矛盾を修正）、Phase0の進捗率を100%に更新、Phase0完了
+- 2025/10/26：Phase1-1完了（ディレクトリ構成の整備、planning/, specs/, adr/, api/, data-model/作成、CLAUDE.md作成）、Phase1開始、Phase1の進捗率を25%に更新
