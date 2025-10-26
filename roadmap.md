@@ -143,7 +143,40 @@ limimeshi-docs/
 - 各ディレクトリにREADME.md作成（役割と作成予定ドキュメントを記載）
 - CLAUDE.md作成（AI向けプロジェクト情報、WRITING_STYLE_GUIDE.mdへのリンク含む）
 
-### 1-2. GitHub Spec Kitで機能設計
+---
+
+### 重要な軌道修正：GitHub Spec Kit公式手法への適合
+
+#### 日付
+
+2025/10/26
+
+#### 背景
+
+- Phase1-2で機能設計書を作成する際、GitHub Spec Kitの公式テンプレートを正しく理解できておらず、一般的な機能仕様書の形式で作成してしまった
+- 認識のズレが判明したため、公式手法に適合するよう軌道修正することを決定
+
+#### 理由
+
+- 業界標準の手法を正しく適用できることを証明
+- GitHubが公式に推奨する最新手法（2025年9月公開）を実践
+- AI駆動開発（Claude Code、GitHub Copilot、Cursor）との連携を前提とした開発手法
+- リーンキャンバス → インセプションデッキ → **GitHub Spec Kit** → AI実装という一貫したストーリー
+
+#### 影響範囲
+
+- Phase1-2の機能設計書を公式テンプレートで書き直し
+- ディレクトリ構造を変更（`specs/menu-list.md` → `specs/001-menu-list/spec.md`）
+- スラッシュコマンド（`/speckit.specify`、`/speckit.plan`、`/speckit.tasks`）のセットアップ
+- Constitution（開発原則）の定義
+
+#### 詳細
+
+[MIGRATION_TO_SPEC_KIT.md](./MIGRATION_TO_SPEC_KIT.md)参照
+
+---
+
+### 1-2. GitHub Spec Kitで機能設計 🔄 作業中（移行中）
 
 #### Phase2（MVP）対象機能
 - メニュー一覧機能
