@@ -176,36 +176,73 @@ limimeshi-docs/
 
 ---
 
-### 1-2. GitHub Spec Kitで機能設計 🔄 作業中（移行中）
+### 1-2. GitHub Spec Kitで機能設計（公式手順） 🔄 作業中
 
-#### Phase2（MVP）対象機能
-- メニュー一覧機能
-- お気に入り登録機能
-- 管理画面機能（入力補助機能含む）
+**出典**：[GitHub Spec Kit公式リポジトリ](https://github.com/github/spec-kit)
 
-#### Phase3以降の機能（Phase1では設計のみ）
-- レビュー機能
-- 位置情報機能
+#### 公式ワークフロー
 
-各機能ごとに `specs/` 配下にドキュメント作成
+1. `/speckit-specify <機能の説明>` → `spec.md`（機能仕様書）を生成
+2. `/speckit-clarify` → 仕様の曖昧な点を明確化（必要に応じて）
+3. `/speckit-plan` → `plan.md`（実装計画）を生成
+4. `/speckit-tasks` → `tasks.md`（タスクリスト）を生成
 
-### 1-3. ADRで技術選定記録
+#### 対象機能
+
+- `specs/001-menu-list/`：メニュー一覧機能（Phase2 MVP）
+- `specs/002-favorites/`：お気に入り登録機能（Phase2 MVP）
+- `specs/003-admin-panel/`：管理画面機能（Phase2 MVP）
+
+#### 完了条件
+
+各機能ごとに `spec.md`、`plan.md`、`tasks.md` が完成
+
+---
+
+### 1-3. 技術選定記録（ADR）📋 未着手
+
+**出典**：[ADR (Architecture Decision Records)](https://adr.github.io/) - 業界標準の手法
+
+**位置づけ**：GitHub Spec Kit公式手順を補完する業界標準プラクティス
+
+#### 目的
+
+技術選定の理由・背景・トレードオフを記録し、後から判断根拠を追跡可能にする
 
 #### 対象項目
-- なぜFirebaseを選んだか
-- モノレポ vs マルチリポ
-- React Adminを選んだ理由
-- データ更新の運用方針（完全手動運用の選定理由）
 
-各選定ごとに `adr/` 配下にドキュメント作成
+- `adr/001-why-firebase.md`：なぜFirebaseを選んだか
+- `adr/002-monorepo-vs-multirepo.md`：モノレポ vs マルチリポ
+- `adr/003-react-admin.md`：React Adminを選んだ理由
+- `adr/004-manual-data-update.md`：データ更新の運用方針（完全手動運用の選定理由）
+- `adr/005-build-tool.md`：ビルドツール選定（Vite、Webpack等）
 
-### 1-4. データモデル詳細設計
+#### ADR形式
+
+Context（背景）→ Decision（決定）→ Consequences（結果）の形式で記録
+
+---
+
+### 1-4. Firestoreデータベース設計 📋 未着手
+
+**出典**：[Firestore公式ベストプラクティス](https://firebase.google.com/docs/firestore/best-practices)
+
+**位置づけ**：GitHub Spec Kit公式手順を補完する、Firebase公式推奨の設計手法
+
+#### 目的
+
+アクセスパターンベースでFirestoreのコレクション構造、セキュリティルール、インデックスを設計
 
 #### 成果物
-`data-model/` 配下に以下を作成
-- Firestore コレクション設計
-- セキュリティルール設計
-- インデックス設計
+
+- `data-model/firestore-collections.md`：コレクション設計（アクセスパターン、非正規化戦略）
+- `data-model/security-rules.md`：セキュリティルール設計
+- `data-model/indexes.md`：複合インデックス設計
+
+#### 参考
+
+- [Firestoreデータモデルの選択](https://firebase.google.com/docs/firestore/data-model)
+- [セキュリティルールのベストプラクティス](https://firebase.google.com/docs/firestore/security/rules-structure)
 
 ---
 

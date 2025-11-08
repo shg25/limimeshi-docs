@@ -14,18 +14,75 @@
 
 | ディレクトリ/ファイル | 内容 |
 |-----------|------|
-| [planning/](./planning/) | Phase0企画ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md） |
-| [specs/](./specs/) | 機能設計書（GitHub Spec Kit形式） |
+| [.claude/](./.claude/) | Claude Code設定（スラッシュコマンド） |
 | [adr/](./adr/) | Architecture Decision Records（技術選定の記録） |
 | [api/](./api/) | API仕様書 |
 | [data-model/](./data-model/) | データモデル詳細設計 |
-| [roadmap.md](./roadmap.md) | プロジェクト全体のロードマップ、フェーズ管理、進捗状況 |
+| [memory/](./memory/) | Constitution（憲法）：開発原則、技術選定方針、品質基準 |
+| [planning/](./planning/) | Phase0企画ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md） |
+| [scripts/](./scripts/) | GitHub Spec Kitスクリプト（bash/PowerShell） |
+| [specs/](./specs/) | 機能設計書（GitHub Spec Kit形式） |
+| [specs-old/](./specs-old/) | 旧仕様書のバックアップ |
+| [templates/](./templates/) | GitHub Spec Kitテンプレート（spec、plan、tasks） |
+| [CLAUDE.md](./CLAUDE.md) | AI向けプロジェクト情報 |
+| [MIGRATION_TO_SPEC_KIT.md](./MIGRATION_TO_SPEC_KIT.md) | GitHub Spec Kit適合計画 |
+| [README.md](./README.md) | プロジェクト概要（このファイル） |
+| [roadmap.md](./roadmap.md) | プロジェクトロードマップ |
 | [WRITING_STYLE_GUIDE.md](./WRITING_STYLE_GUIDE.md) | ドキュメント記述ルール |
+
+## 採用している手法・フレームワーク
+
+このプロジェクトは、業界標準または公式推奨の手法のみを使用しています。
+
+| フェーズ | 手法・フレームワーク | 役割・目的 | 公式リンク |
+|---------|-------------------|-----------|-----------|
+| Phase0 | リーンキャンバス（Lean Canvas） | ビジネスモデルの検証 | [Lean Canvas公式](https://leanstack.com/lean-canvas) |
+| Phase0 | インセプションデッキ（Inception Deck） | プロジェクトの目的・優先順位の明確化 | [Agile Warrior解説](https://agilewarrior.wordpress.com/2010/11/06/the-inception-deck/) |
+| Phase1 | GitHub Spec Kit | 仕様駆動開発（Spec-Driven Development） | [GitHub公式](https://github.com/github/spec-kit) |
+| Phase1 | ADR（Architecture Decision Records） | 技術選定の記録 | [ADR公式](https://adr.github.io/) |
+| Phase1 | Firestore公式ベストプラクティス | データベース設計 | [Firebase公式](https://firebase.google.com/docs/firestore/best-practices) |
+
+**詳細**：各手法の詳細な適用方法は [roadmap.md](./roadmap.md) を参照
+
+## GitHub Spec Kit（仕様駆動開発）
+
+このプロジェクトは **GitHub Spec Kit** を採用しています（2025/10/27）。
+
+GitHub Spec Kitは、GitHubが公式に提供する仕様駆動開発（Spec-Driven Development）のためのツールキット/テンプレート集です。
+
+### 主要な構成要素
+
+- **Constitution（憲法）**: [memory/constitution.md](./memory/constitution.md)
+  - プロジェクトの開発原則、技術選定方針、品質基準を定義
+  - 全ての実装・設計はこの憲法に準拠
+
+- **スラッシュコマンド**: [.claude/commands/](./.claude/commands/)
+  - `/speckit-specify <機能の説明>`: 機能仕様書（spec.md）を生成
+  - `/speckit-plan`: 実装計画（plan.md）を生成
+  - `/speckit-tasks`: タスクリスト（tasks.md）を生成
+  - `/speckit-clarify`: 仕様の曖昧な点を明確化
+  - `/speckit-implement`: 実装開始
+
+- **テンプレート**: [templates/](./templates/)
+  - spec-template.md：機能仕様書テンプレート
+  - plan-template.md：実装計画テンプレート
+  - tasks-template.md：タスクリストテンプレート
+
+- **スクリプト**: [scripts/](./scripts/)
+  - スラッシュコマンドから呼び出されるbash/PowerShellスクリプト
+  - 機能番号の自動採番、ディレクトリ作成などを自動化
+
+### 参考リンク
+
+- [GitHub Spec Kit公式リポジトリ](https://github.com/github/spec-kit)
+- [適合計画の詳細](./MIGRATION_TO_SPEC_KIT.md)
 
 ## 開発方針
 
+- 仕様駆動開発（Spec-Driven Development）：**GitHub Spec Kit** 採用（2025/10/27）
 - ドキュメント駆動開発：実装前に企画・設計を詳細に文書化
-- AI活用前提：AIエージェントが読み取りやすいMarkdown形式で作成
+- AI活用前提：Claude Code + スラッシュコマンドで効率化
+- Constitution（憲法）：開発原則を [memory/constitution.md](./memory/constitution.md) で定義
 - 公開リポジトリ：透明性を重視し、企画段階から公開
 
 ## 技術スタック
@@ -60,4 +117,4 @@
 
 ---
 
-**最終更新**：2025/10/26
+**最終更新**：2025/10/27
