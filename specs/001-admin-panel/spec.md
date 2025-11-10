@@ -1,8 +1,8 @@
 # Feature Specification: 管理画面（Admin Panel）
 
-**Feature Branch**: `001-admin-panel`
-**Created**: 2025-11-10
-**Status**: Draft
+**Feature Branch**: `001-admin-panel`  
+**Created**: 2025-11-10  
+**Status**: Draft  
 **Input**: User description: "React Adminを使用した管理画面。チェーン店、メニュー、タグの手動登録・編集・削除機能を提供。管理者認証（メール+パスワード、Custom Claims）必須。手動データ登録の基盤となる最優先機能。Phase2 MVPで実装。"
 
 ## User Scenarios & Testing *(mandatory)*
