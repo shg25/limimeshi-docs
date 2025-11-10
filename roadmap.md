@@ -189,9 +189,13 @@ limimeshi-docs/
 
 #### 対象機能
 
-- `specs/001-menu-list/`：メニュー一覧機能（Phase2 MVP）
-- `specs/002-favorites/`：お気に入り登録機能（Phase2 MVP）
-- `specs/003-admin-panel/`：管理画面機能（Phase2 MVP）
+Phase2 MVP機能（実装優先順位順）：
+- `specs/001-admin-panel/`：管理画面機能（最優先、手動データ登録の基盤）
+- `specs/002-menu-list/`：メニュー一覧機能
+- `specs/003-favorites/`：お気に入り登録機能
+
+**MVP対象外**：
+- レビュー機能：Phase3以降に延期（モデレーション・スパム対策の運用負荷を考慮）
 
 #### 完了条件
 
