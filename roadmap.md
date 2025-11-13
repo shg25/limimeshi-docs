@@ -190,9 +190,12 @@ limimeshi-docs/
 #### 対象機能
 
 Phase2 MVP機能（実装優先順位順）：
-- `specs/001-admin-panel/`：管理画面機能（最優先、手動データ登録の基盤）
-- `specs/002-menu-list/`：メニュー一覧機能
-- `specs/003-favorites/`：お気に入り登録機能
+- ✅ `specs/001-admin-panel/`：管理画面機能（最優先、手動データ登録の基盤）
+  - spec.md完成（2025/11/14）
+  - タグ管理・入力補助機能をOut of Scopeに移動
+  - ふりがな、X Post URL、ステータス自動判定など詳細要件確定
+- 📋 `specs/002-menu-list/`：メニュー一覧機能
+- 📋 `specs/003-favorites/`：お気に入り登録機能
 
 **MVP対象外**：
 - レビュー機能：Phase3以降に延期（モデレーション・スパム対策の運用負荷を考慮）
@@ -475,3 +478,4 @@ Context（背景）→ Decision（決定）→ Consequences（結果）の形式
 - 2025/10/26：Phase0-3完了（inception-deck.md作成、10の質問に全て回答）、Phase0の進捗率を75%に更新
 - 2025/10/26：Phase0-4完了（整合性チェック、矛盾を修正）、Phase0の進捗率を100%に更新、Phase0完了
 - 2025/10/26：Phase1-1完了（ディレクトリ構成の整備、planning/, specs/, adr/, api/, data-model/作成、CLAUDE.md作成）、Phase1開始、Phase1の進捗率を25%に更新
+- 2025/11/14：Phase1-2の管理画面機能（001-admin-panel）spec.md完成、タグ管理・入力補助機能をOut of Scopeに移動、詳細要件確定（ふりがな必須、X Post URL、ステータス自動判定、チェーン店削除機能なし）
