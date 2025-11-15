@@ -1,0 +1,89 @@
+# Specification Quality Checklist: メニュー一覧（Menu List）
+
+**Purpose**: Validate specification completeness and quality before proceeding to planning
+**Created**: 2025-11-14
+**Updated**: 2025-11-14
+**Feature**: [spec.md](../spec.md)
+
+## Content Quality
+
+- [x] No implementation details (languages, frameworks, APIs)
+- [x] Focused on user value and business needs
+- [x] Written for non-technical stakeholders
+- [x] All mandatory sections completed
+
+## Requirement Completeness
+
+- [x] No [NEEDS CLARIFICATION] markers remain
+- [x] Requirements are testable and unambiguous
+- [x] Success criteria are measurable
+- [x] Success criteria are technology-agnostic (no implementation details)
+- [x] All acceptance scenarios are defined
+- [x] Edge cases are identified
+- [x] Scope is clearly bounded
+- [x] Dependencies and assumptions identified
+
+## Feature Readiness
+
+- [x] All functional requirements have clear acceptance criteria
+- [x] User scenarios cover primary flows
+- [x] Feature meets measurable outcomes defined in Success Criteria
+- [x] No implementation details leak into specification
+
+## Specification Review Summary
+
+### User Stories (2 total)
+1. **メニュー一覧の閲覧** (P1): 期間限定メニューを販売開始日時の降順で表示、X Post埋め込み表示
+2. **お気に入りチェーンフィルタ** (P1): お気に入り登録済みチェーンのメニューのみ表示、フィルタ選択を永続化
+
+### Key Features
+- 読み取り専用機能（管理画面で登録されたデータを表示）
+- 販売開始日時の降順ソート
+- **X Post埋め込み表示**（Phase2で実装、商品画像代わり）
+- お気に入りフィルタ（003機能に依存）
+- **フィルタ選択の永続化**（次回訪問時も保持）
+
+### Key Decisions Made
+- **X Post埋め込み表示をPhase2に含める**: 当初Phase3予定だったが、商品画像代わりの重要機能としてPhase2 MVPに含める
+- **チェーン店別フィルタリングをOut of Scopeに**: 1チェーンあたり1〜5件程度のため、お気に入りフィルタで十分
+- **フィルタ選択の永続化**: ユーザーは同じチェーンを繰り返し確認する傾向があるため、UX向上策として追加
+- **0件時のメッセージを「データなし」に統一**: シンプルで一貫性のあるメッセージ
+- **ページネーション閾値を明確化**: 500件で検討、1000件で必須（Phase2では160件程度を想定）
+
+### Edge Cases Resolution
+- メニュー0件: 「データなし」と表示
+- お気に入り0件: 「データなし」と表示
+- X Post URL未設定: X Post埋め込み非表示
+- X Postに画像がない場合: Postテキストのみ埋め込み表示
+- X Post削除リスク: 外部依存の制約として受け入れ
+- 販売終了日時未設定: 販売終了日時フィールドは非表示、ステータスは「予定」または「発売から◯日経過」「発売から◯ヶ月以上経過」として自動判定
+- 大量メニュー: 500件超で検討、1000件超で必須
+
+### Dependencies
+- 管理画面機能（001）: メニューデータの登録元
+- お気に入り機能（003）: お気に入りフィルタの前提条件
+
+### Out of Scope (Phase3以降)
+- チェーン店別フィルタリング（将来的にチェーン詳細ページで提供）
+- ページネーション（500件超で検討）
+- 画像表示（公式画像はチェーン店との提携後）
+- ソート機能（価格順、人気順など）
+- 検索機能
+- メニュー詳細ページ
+- レビュー表示
+- 位置情報連携
+- 通知機能
+- 比較機能
+- チェーン詳細ページ
+
+## Notes
+
+- All validation items passed successfully
+- Spec is ready for `/speckit-plan`
+- ユーザーフィードバックに基づき大幅に調整
+- X Post埋め込み表示をPhase2に含めることで、Phase2でも視覚的に魅力的なUIを提供可能
+- チェーン店別フィルタリングを削除したことでMVP範囲がシンプルに
+- Phase2でログイン必須とすることで実装を簡素化（未ログインユーザー向けはPhase3以降）
+- 1年経過メニューの自動非表示ルールを追加（データ管理の明確化）
+- ステータス表示ロジックを「予定/発売から◯日経過/販売終了」に変更（「販売中」を削除）
+- 販売終了日時は設定時のみ表示（未設定時は非表示）
