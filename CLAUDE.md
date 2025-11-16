@@ -207,3 +207,10 @@ limimeshi-docs/
 ---
 
 **最終更新**: 2025/10/27
+
+## Active Technologies
+- TypeScript 5.x, React 18.x (001-admin-panel)
+- Firestore (NoSQL document database) (001-admin-panel)
+
+## Recent Changes
+- 001-admin-panel: Added TypeScript 5.x, React 18.x

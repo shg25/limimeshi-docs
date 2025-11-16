@@ -52,3 +52,4 @@ Temporary Items
 
 # AI Assistant temporary files
 .cursor/
+.claude/settings.local.json
