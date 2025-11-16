@@ -1,7 +1,7 @@
 # Specification Quality Checklist: メニュー一覧（Menu List）
-
-**Purpose**: Validate specification completeness and quality before proceeding to planning
-**Created**: 2025-11-14
+  
+**Purpose**: Validate specification completeness and quality before proceeding to planning  
+**Created**: 2025-11-14  
 **Updated**: 2025-11-14
 **Feature**: [spec.md](../spec.md)
 

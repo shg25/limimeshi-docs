@@ -1,9 +1,9 @@
 # Feature Specification: お気に入り登録（Favorites）
 
-**Feature Branch**: `phase1-2-mvp-specs`
-**Created**: 2025-11-16
-**Status**: Draft
-**Input**: User description: "ログインユーザーがチェーン店をお気に入り登録・解除できる機能。お気に入り登録したチェーンは002のメニュー一覧フィルタで使用される。お気に入り状態はFirestoreに永続化され、複数デバイス間で同期される。Phase2 MVPで実装。"
+**Feature Branch**: `phase1-2-mvp-specs`  
+**Created**: 2025-11-16  
+**Status**: Draft  
+**Input**: User description: "ログインユーザーがチェーン店をお気に入り登録・解除できる機能。お気に入り登録したチェーンは002のメニュー一覧フィルタで使用される。お気に入り状態はFirestoreに永続化され、複数デバイス間で同期される。Phase2 MVPで実装。"  
 
 ## User Scenarios & Testing *(mandatory)*
 

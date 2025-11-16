@@ -1,7 +1,7 @@
 # Specification Quality Checklist: 管理画面（Admin Panel）
-
-**Purpose**: Validate specification completeness and quality before proceeding to planning
-**Created**: 2025-11-10
+  
+**Purpose**: Validate specification completeness and quality before proceeding to planning  
+**Created**: 2025-11-10  
 **Updated**: 2025-11-14
 **Feature**: [spec.md](../spec.md)
 

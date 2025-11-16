@@ -383,6 +383,48 @@
 
 ---
 
+## 15. GitHub Spec Kit テンプレート作成時の注意点
+
+### Markdown改行の記法
+
+GitHub Spec Kitのテンプレート（spec.md, plan.md, requirements.md等）では、**メタデータ部分の各行末尾に2つのスペースを追加**する。これによりVSCodeプレビューで正しく改行表示される。
+
+#### 対象箇所
+
+- **spec.md のメタデータ**（`**Feature Branch**`, `**Created**`, `**Status**`, `**Input**`）
+- **plan.md のメタデータ**（`**Branch**`, `**Date**`, `**Spec**`, `**Input**`）
+- **plan.md の Technical Context**（各技術情報項目）
+- **requirements.md のメタデータ**（`**Purpose**`, `**Created**`, `**Updated**`, `**Feature**`）
+
+#### 正しい例
+
+```markdown
+**Feature Branch**: `001-admin-panel`
+**Created**: 2025-11-10
+**Status**: Draft
+**Input**: User description: "..."
+```
+
+各行末尾に見えないスペース2つ（`  `）がある。
+
+#### 誤った例
+
+```markdown
+**Feature Branch**: `001-admin-panel`
+**Created**: 2025-11-10
+**Status**: Draft
+**Input**: User description: "..."
+```
+
+行末にスペースがないため、VSCodeプレビューで改行されない（1行にまとまって表示される）。
+
+#### 実装方法
+
+- **Editツール使用時**: 各行末尾に明示的にスペース2つを追加
+- **Bashコマンド使用時**: `sed -i '' 'Ns/$/  /'` でN行目にスペース2つを追加
+
+---
+
 ## 更新履歴
 
 - 2025/10/18：初版作成（first-idea.mdの整理を元に作成）
@@ -390,3 +432,4 @@
 - 2025/10/18：バージョン番号の表記ルールを追加（英単語間は空ける、バージョン番号の前は詰める）
 - 2025/10/18：見出し vs 太字+コロンのルールを明確化（項目名は見出しを使う）
 - 2025/10/26：サービス名の表記ルール（14）を追加（正式表記と略称の使い分け）
+- 2025/11/16：GitHub Spec Kitテンプレート作成時の注意点（15）を追加（Markdown改行記法）
