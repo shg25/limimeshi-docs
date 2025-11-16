@@ -1,9 +1,9 @@
 # Quickstart Guide: 管理画面（Admin Panel）
 
-**Feature**: 001-admin-panel
-**Date**: 2025-11-16
-**Status**: Phase 1 - Quickstart
-**Related**: [spec.md](./spec.md), [plan.md](./plan.md), [research.md](./research.md)
+**Feature**: 001-admin-panel  
+**Date**: 2025-11-16  
+**Status**: Phase 1 - Quickstart  
+**Related**: [spec.md](./spec.md), [plan.md](./plan.md), [research.md](./research.md)  
 
 ## Overview
 

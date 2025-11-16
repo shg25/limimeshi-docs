@@ -1,9 +1,9 @@
 # React Admin Data Provider Interface: 管理画面（Admin Panel）
 
-**Feature**: 001-admin-panel
-**Date**: 2025-11-16
-**Status**: Phase 1 - Contract
-**Related**: [data-model.md](../data-model.md), [firestore-schema.md](./firestore-schema.md)
+**Feature**: 001-admin-panel  
+**Date**: 2025-11-16  
+**Status**: Phase 1 - Contract  
+**Related**: [data-model.md](../data-model.md), [firestore-schema.md](./firestore-schema.md)  
 
 ## Overview
 

@@ -1,8 +1,8 @@
 # Research: 管理画面フレームワーク選定
 
-**Feature**: 001-admin-panel
-**Date**: 2025-11-16
-**Status**: Phase 0 - Technology Decision
+**Feature**: 001-admin-panel  
+**Date**: 2025-11-16  
+**Status**: Phase 0 - Technology Decision  
 
 ## 1. 管理画面フレームワークの選定
 
