@@ -5,19 +5,19 @@
 
 ## Summary
 
-管理者がチェーン店と期間限定メニューを手動で登録・編集・削除できる管理画面を提供する。React Adminをベースとし、Firebase Authentication（Custom Claims）による管理者認証を実装。チェーン店16店舗、各店舗あたり平均10件のメニューを管理する想定。Phase2 MVPの最優先機能として、手動データ登録の基盤を提供する。
+管理者がチェーン店と期間限定メニューを手動で登録・編集・削除できる管理画面を提供する。管理画面フレームワーク（React Admin、Refine、自作等から選定）とFirebase Authentication（Custom Claims）を使用し、管理者認証を実装。チェーン店16店舗、各店舗あたり平均10件のメニューを管理する想定。Phase2 MVPの最優先機能として、手動データ登録の基盤を提供する。
 
 ## Technical Context
 
 **Language/Version**: TypeScript 5.x, React 18.x  
-**Primary Dependencies**: React Admin 4.x, Firebase SDK 10.x, Vite 5.x  
+**Primary Dependencies**: NEEDS CLARIFICATION (管理画面フレームワーク検討中: React Admin, Refine, 自作等), Firebase SDK 10.x, Vite 5.x  
 **Storage**: Firestore (NoSQL document database)  
 **Testing**: Vitest, React Testing Library, Playwright (E2E)  
 **Target Platform**: Web (Desktop primary, モバイル最適化は優先度低)  
 **Project Type**: Web application (frontend + backend)  
 **Performance Goals**: ページ読み込み時間 3秒以内、保存・削除操作 1秒以内  
-**Constraints**: モバイル4G環境での動作、Phase2は1名運用（同時編集考慮不要）  
-**Scale/Scope**: 16チェーン店、平均160メニュー、1名の管理者（Phase2）  
+**Constraints**: モバイル4G環境での動作、Phase2は1名運用（同時編集考慮不要)  
+**Scale/Scope**: 16チェーン店、平均160メニュー、1名の管理者（Phase2）    
 
 ## Constitution Check
 
@@ -74,10 +74,12 @@ specs/001-admin-panel/
 
 ### Source Code (repository root)
 
+**Note**: 以下は一般的な構造を示す。Phase 0 の技術選定結果により詳細は変更される可能性がある。
+
 ```text
 limimeshi-admin/         # 管理画面リポジトリ（別リポジトリ）
 ├── src/
-│   ├── components/      # React Admin カスタムコンポーネント
+│   ├── components/      # UIコンポーネント（フレームワーク依存）
 │   │   ├── chains/      # チェーン店リソース
 │   │   │   ├── ChainList.tsx
 │   │   │   ├── ChainEdit.tsx
@@ -119,8 +121,8 @@ limimeshi-docs/          # このリポジトリ（ドキュメント専用）
 
 **Structure Decision**:
 - 管理画面は別リポジトリ `limimeshi-admin` として実装（一般向けWebアプリ `limimeshi-web` と分離）
-- Web application構造を採用（frontend: React Admin、backend: Firestore + Cloud Functions）
-- React Adminの標準ディレクトリ構造に従う
+- Web application構造を採用（frontend: 管理画面フレームワーク、backend: Firestore + Cloud Functions）
+- フレームワークの標準ディレクトリ構造に従う（Phase 0で選定後に詳細決定）
 
 ## Complexity Tracking
 
@@ -134,15 +136,20 @@ limimeshi-docs/          # このリポジトリ（ドキュメント専用）
 
 ### Research Tasks
 
-1. **React Admin 4.x Best Practices**
-   - 目的: React Adminの標準的な使い方を理解
-   - 調査内容: データプロバイダー、認証プロバイダー、カスタムフィールドの実装パターン
-   - 成果物: research.md に記録
+1. **管理画面フレームワークの選定**
+   - 目的: 最適な管理画面構築手法を選定
+   - 調査内容:
+     - React Admin 4.x: CRUD自動生成、豊富なコンポーネント、Firestore統合
+     - Refine: ヘッドレスアーキテクチャ、柔軟性高、学習曲線
+     - 自作（React + Firestore直接）: 完全なカスタマイズ性、開発コスト高
+     - その他の選択肢: Admin Bro, Retool等
+   - 評価軸: 開発速度、保守性、Firebase統合、学習コスト、Phase2要件への適合
+   - 成果物: research.md に比較表と選定理由を記録
 
-2. **Firestore Data Provider for React Admin**
-   - 目的: FirestoreとReact Adminの統合パターン
-   - 調査内容: 既存ライブラリ（ra-data-firestore-client等）vs カスタム実装
-   - 成果物: research.md に決定事項を記録
+2. **選定フレームワークとFirestoreの統合パターン**
+   - 目的: Firestoreとの統合方法を理解
+   - 調査内容: 既存ライブラリ vs カスタム実装、ベストプラクティス
+   - 成果物: research.md に統合パターンを記録
 
 3. **Firebase Authentication with Custom Claims**
    - 目的: 管理者認証の実装方法
@@ -314,8 +321,8 @@ interface MenuWithStatus extends Menu {
 **Script**: `bash scripts/bash/update-agent-context.sh`
 
 エージェントコンテキストファイル（CLAUDE.md）に以下の技術情報を追加：
-- React Admin 4.x
-- Firestore data provider pattern
+- 選定した管理画面フレームワーク（Phase 0で決定）
+- Firestoreとの統合パターン
 - Firebase Authentication with Custom Claims
 - Vite + React + TypeScript
 
@@ -347,3 +354,4 @@ interface MenuWithStatus extends Menu {
 - **Out of Scope**: タグ管理、入力補助機能、チェーン店削除機能
 - **依存関係**: なし（最初に実装する機能）
 - **実装リポジトリ**: `limimeshi-admin`（別リポジトリ、このドキュメントリポジトリとは分離）
+- **Phase 0 の重要性**: 管理画面フレームワークの選定を透明性高く実施。React Admin、Refine、自作等を比較検討し、選定理由をresearch.mdとADRに記録する
