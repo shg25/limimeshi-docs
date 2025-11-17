@@ -77,6 +77,42 @@ GitHub Spec Kitは、GitHubが公式に提供する仕様駆動開発（Spec-Dri
 - [GitHub Spec Kit公式リポジトリ](https://github.com/github/spec-kit)
 - [適合計画の詳細](./MIGRATION_TO_SPEC_KIT.md)
 
+## ADR（Architecture Decision Records）
+
+このプロジェクトは **Architecture Decision Records（ADR）** を採用しています。
+
+ADRは、アーキテクチャに関する重要な決定とその理由を記録するドキュメント形式で、Michael Nygardが2011年に提唱した手法です。
+
+### フォーマット
+
+**Michael Nygard形式**（2011年、業界標準）を採用：
+
+1. **Status**: proposed, accepted, deprecated, superseded等
+2. **Context**: なぜこの決定が必要か
+3. **Decision**: 何を選択したか
+4. **Consequences**: この決定がもたらす影響（良い面も悪い面も）
+
+### タイトル命名規則
+
+**Present tense imperative verb phrase**（現在形の命令形動詞句）を使用：
+- `Use Firebase for backend`
+- `Adopt multi-repository structure`
+- `Deploy using Firebase Hosting multi-site`
+
+### 作成済みADR
+
+- [ADR-001: Use Firebase for backend](./adr/001-use-firebase-for-backend.md)
+- [ADR-002: Adopt multi-repository structure](./adr/002-adopt-multi-repository-structure.md)
+- [ADR-003: Use React Admin for admin panel](./adr/003-use-react-admin-for-admin-panel.md)
+- [ADR-004: Use manual data entry for Phase 2](./adr/004-use-manual-data-entry-for-phase2.md)
+- [ADR-005: Deploy using Firebase Hosting multi-site](./adr/005-deploy-using-firebase-hosting-multi-site.md)
+
+### 参考リンク
+
+- [Michael Nygard "Documenting Architecture Decisions" (2011)](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
+- [ADR公式サイト](https://adr.github.io/)
+- [architecture-decision-record リポジトリ](https://github.com/joelparkerhenderson/architecture-decision-record)
+
 ## 開発方針
 
 - 仕様駆動開発（Spec-Driven Development）：**GitHub Spec Kit** 採用（2025/10/27）
