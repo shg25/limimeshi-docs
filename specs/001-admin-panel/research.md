@@ -160,6 +160,50 @@ const authProvider = FirebaseAuthProvider(firebaseConfig);
 - Firestore の random ID を "id" フィールドでオーバーライド可能
 - FileInput による Firebase Storage へのアップロードをサポート
 
+#### CREATE と EDIT の実装パターン
+
+React Adminの標準設計では、CREATE と EDIT は別コンポーネントとして実装する：
+
+- **Create**: `/chains/create` → 空のフォーム → `dataProvider.create()`
+- **Edit**: `/chains/:id` → 既存データ取得 → `dataProvider.update()`
+
+公式ドキュメントより：
+> "Create and Edit views almost never have exactly the same form inputs (which is a deliberate design choice)"
+
+**実装例**:
+
+```typescript
+// ChainCreate.tsx
+export const ChainCreate = () => (
+  <Create>
+    <SimpleForm>
+      <TextInput source="name" validate={required()} />
+      <TextInput source="furigana" validate={required()} />
+      <TextInput source="officialUrl" />
+      <TextInput source="logoUrl" />
+    </SimpleForm>
+  </Create>
+);
+
+// ChainEdit.tsx
+export const ChainEdit = () => (
+  <Edit>
+    <SimpleForm>
+      <TextInput source="name" validate={required()} />
+      <TextInput source="furigana" validate={required()} />
+      <TextInput source="officialUrl" />
+      <TextInput source="logoUrl" />
+      <NumberField source="favoriteCount" disabled />
+    </SimpleForm>
+  </Edit>
+);
+```
+
+**本プロジェクトの方針**:
+- React Adminの標準パターンに従い、ChainCreate/ChainEdit、MenuCreate/MenuEdit を個別に実装
+- コード量は各コンポーネント10行程度で済む
+- 必要に応じてカスタムFormコンポーネントで共通化可能
+
 ---
 
 ## 3. Firebase Authentication with Custom Claims
