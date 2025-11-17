@@ -103,6 +103,8 @@ npm install
 
 ### 5. Firebase プロジェクト作成
 
+**Note**: Firebase Hosting構成の詳細は [ADR-005](../../adr/005-firebase-hosting-multi-site.md) を参照
+
 #### 5-1. Firebase Console でプロジェクト作成
 
 1. [Firebase Console](https://console.firebase.google.com/) にアクセス

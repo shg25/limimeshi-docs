@@ -385,6 +385,7 @@ export default defineConfig({
 | **ビルドツール** | Vite | 最速、React Admin対応 |
 | **言語** | TypeScript | 型安全性、保守性 |
 | **テスト** | Vitest + Playwright | モダンなテストツール |
+| **Hosting構成** | Firebase Hosting Multi-Site | 詳細は [ADR-005](../../adr/005-firebase-hosting-multi-site.md) 参照 |
 
 ### Next Steps（Phase 1）
 
