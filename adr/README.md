@@ -12,13 +12,12 @@ Architecture Decision Records（ADR）は、アーキテクチャに関する重
 3. 決定（Decision）：何を選択したか
 4. 結果（Consequences）：この決定がもたらす影響
 
-## 作成予定
+## 作成済み
 
-Phase1で以下のADRを作成します：
-- [ ] `001-why-firebase.md`：なぜFirebaseを選んだか
-- [ ] `002-monorepo-vs-multirepo.md`：モノレポ vs マルチリポ
-- [ ] `003-react-admin.md`：React Adminを選んだ理由
-- [ ] `004-manual-data-update.md`：データ更新の運用方針（完全手動運用の選定理由）
+- [x] `001-why-firebase.md`：なぜFirebaseを選んだか
+- [x] `002-monorepo-vs-multirepo.md`：モノレポ vs マルチリポ
+- [x] `003-react-admin.md`：React Adminを選んだ理由
+- [x] `004-manual-data-update.md`：データ更新の運用方針（完全手動運用の選定理由）
 - [x] `005-firebase-hosting-multi-site.md`：Firebase Hosting構成とインフラ管理戦略
 
 ## 命名規則
