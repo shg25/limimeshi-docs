@@ -13,6 +13,7 @@ Accepted
 - **予算制約**: 月0〜5,000円（Phase2）、Phase3以降も低コスト運用
 - **開発期間**: Phase2を早期にリリースしたい（MVP重視）
 - **スケーラビリティ**: 将来的に月間1,000人〜10,000人のアクティブユーザーを想定
+- **モバイルアプリ展開**: Phase5以降でiOS/Androidネイティブアプリを開発予定（学習目的含む）
 
 ### 技術要件
 - **認証**: Googleログイン、匿名認証、管理者認証（Custom Claims）
@@ -20,6 +21,7 @@ Accepted
 - **ホスティング**: 一般向けWebアプリ、管理画面の配信
 - **サーバーレス関数**: 定期処理（将来の差分検知等）
 - **セキュリティ**: Firestoreセキュリティルール、認証必須機能
+- **モバイルアプリ統合**: WebアプリとiOS/Androidアプリで認証・データベースを共有
 
 ### 検討した選択肢
 
@@ -57,11 +59,13 @@ Accepted
 | **セキュリティ** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ |
 | **スケーラビリティ** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ |
 | **React Admin統合** | ⭐⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐ |
+| **モバイルアプリ統合** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ |
 
 **Phase2で最も重要な評価軸**:
 1. **運用効率**: 個人開発、1名運用 → Firebase が最適
 2. **開発速度**: 早期リリース重視 → Firebase が最適
 3. **コスト**: 月0〜5,000円 → Firebase が最適
+4. **モバイルアプリ統合**: Phase5以降のiOS/Android展開を見据える → Firebase が最適
 
 ## Decision
 
@@ -100,6 +104,19 @@ Accepted
 - 自動スケーリング
 - 1,000万ユーザーまで対応可能（実績あり）
 
+#### 6. iOS/Androidアプリとの統合
+
+- Firebase SDK for iOS/Android が成熟（SwiftUI、Jetpack Compose対応）
+- WebアプリとモバイルアプリでFirestoreデータベースを共有
+- Firebase Authenticationで認証を統一（匿名認証→Googleログイン、UID継続）
+- Phase5以降のモバイルアプリ展開を見据えた選定
+- React Native（Expo）にも対応（クロスプラットフォーム開発も可能）
+- **モバイルアプリ向けFirebase機能**:
+  - Crashlytics: クラッシュレポート
+  - App Distribution: テスト配布（TestFlight/Google Play Consoleの代替）
+  - Google Analytics: アプリ分析（GA4統合）
+  - Cloud Messaging: プッシュ通知（APNs/FCM統合）
+
 ## Consequences
 
 ### メリット
@@ -127,6 +144,14 @@ Accepted
 **スケーラビリティ**:
 - 自動スケーリング
 - 1,000万ユーザーまで対応可能
+
+**モバイルアプリ統合**:
+- Firebase SDK for iOS/Android が成熟（SwiftUI、Jetpack Compose対応）
+- WebアプリとモバイルアプリでFirestoreデータベースを共有
+- Firebase Authenticationで認証を統一（匿名認証→Googleログイン、UID継続）
+- Phase5以降のモバイルアプリ展開を見据えた選定
+- React Native（Expo）にも対応（クロスプラットフォーム開発も可能）
+- モバイルアプリ向けFirebase機能（Crashlytics、App Distribution、Google Analytics、Cloud Messaging）がオールインワン
 
 ### デメリットと対策
 
@@ -164,6 +189,13 @@ Accepted
 **予算管理**:
 - Firebase予算上限の設定（月0〜5,000円）
 - 予算アラートの設定（80%到達時に通知）
+
+**Firebase Hosting vs Firebase App Hosting**:
+- Phase2ではFirebase Hostingを使用（SPA: Single Page Application）
+- React Admin（管理画面）とReact（一般向けWebアプリ）は静的ファイルとして配信され、ブラウザ上でFirestoreと通信
+- データ編集はブラウザからFirestore APIを直接呼び出す（サーバー不要）
+- Firebase App Hostingは使用しない（Next.js等のSSRフレームワーク向け）
+- Phase3以降でSEO対策等でSSRが必要になった場合、Firebase App Hostingを検討
 
 ### 将来の見直しタイミング
 
