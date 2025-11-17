@@ -74,23 +74,22 @@ specs/001-admin-panel/
 
 ### Source Code (repository root)
 
-**Note**: 以下は一般的な構造を示す。Phase 0 の技術選定結果により詳細は変更される可能性がある。
+**Note**: React公式推奨のFeature-based構造とReact Admin公式デモに準拠。
 
 ```text
 limimeshi-admin/         # 管理画面リポジトリ（別リポジトリ）
 ├── src/
-│   ├── components/      # UIコンポーネント（フレームワーク依存）
-│   │   ├── chains/      # チェーン店リソース
-│   │   │   ├── ChainList.tsx
-│   │   │   ├── ChainEdit.tsx
-│   │   │   └── ChainCreate.tsx
-│   │   ├── menus/       # メニューリソース
-│   │   │   ├── MenuList.tsx
-│   │   │   ├── MenuEdit.tsx
-│   │   │   ├── MenuCreate.tsx
-│   │   │   └── StatusField.tsx  # ステータス自動判定
-│   │   └── auth/        # 認証コンポーネント
-│   │       └── LoginPage.tsx
+│   ├── chains/          # チェーン店リソース（機能ごとにグループ化）
+│   │   ├── ChainList.tsx
+│   │   ├── ChainEdit.tsx
+│   │   └── ChainCreate.tsx
+│   ├── menus/           # メニューリソース
+│   │   ├── MenuList.tsx
+│   │   ├── MenuEdit.tsx
+│   │   ├── MenuCreate.tsx
+│   │   └── StatusField.tsx  # ステータス自動判定
+│   ├── auth/            # 認証
+│   │   └── LoginPage.tsx
 │   ├── providers/       # React Admin データプロバイダー
 │   │   ├── dataProvider.ts      # Firestore データプロバイダー
 │   │   └── authProvider.ts      # Firebase Authentication プロバイダー
@@ -122,7 +121,10 @@ limimeshi-docs/          # このリポジトリ（ドキュメント専用）
 **Structure Decision**:
 - 管理画面は別リポジトリ `limimeshi-admin` として実装（一般向けWebアプリ `limimeshi-web` と分離）
 - Web application構造を採用（frontend: 管理画面フレームワーク、backend: Firestore + Cloud Functions）
-- フレームワークの標準ディレクトリ構造に従う（Phase 0で選定後に詳細決定）
+- **Feature-based（機能ベース）ディレクトリ構造を採用**（React公式推奨、React Admin公式デモに準拠）
+  - 参考: [React公式 - Grouping by features or routes](https://react.dev/learn/thinking-in-react#step-5-add-inverse-data-flow)
+  - 参考: [React Admin公式デモ](https://github.com/marmelab/react-admin/tree/master/examples/demo/src)
+  - 機能（chains, menus, auth）ごとにファイルをグループ化し、凝集度を高める
 
 ## Complexity Tracking
 
