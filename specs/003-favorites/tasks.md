@@ -1,0 +1,144 @@
+# Tasks: お気に入り登録（Favorites）
+
+**Input**: Design documents from `/specs/003-favorites/`
+**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, contracts/firestore-schema.md, quickstart.md
+
+**Tests**: このタスクリストにはテスト作成タスクが含まれています（spec.mdで明示的に要求されているため）
+
+**Organization**: タスクはユーザーストーリーごとにグループ化され、各ストーリーを独立して実装・テスト可能にしています
+
+## Format: `[ID] [P?] [Story] Description`
+
+- **[P]**: 並列実行可能（異なるファイル、依存関係なし）
+- **[Story]**: このタスクが属するユーザーストーリー（例: US1, US2）
+- 説明には正確なファイルパスを含める
+
+## Path Conventions
+
+- **limimeshi-web repository**: `src/pages/`, `src/components/`, `src/utils/`, `src/types/`, `src/firebase/`, `tests/unit/`, `tests/e2e/`
+- パスはplan.mdのProject Structureセクションに基づく
+
+---
+
+## Phase 1: Setup（共有インフラストラクチャ）
+
+**Purpose**: プロジェクトの初期化と基本構造の構築（002-menu-listで大部分が完了済み）
+
+- [ ] T001 limimeshi-webリポジトリのプロジェクト構造を確認（src/pages/, src/components/, src/utils/, src/types/, src/firebase/, tests/が存在することを確認）
+- [ ] T002 [P] Material-UI Iconsパッケージが追加されていることを確認（@mui/icons-material）、未インストールの場合は追加
+
+---
+
+## Phase 2: Foundational（ブロッキング前提条件）
+
+**Purpose**: すべてのユーザーストーリーを実装する前に完了する必要があるコアインフラストラクチャ
+
+**⚠️ CRITICAL**: このフェーズが完了するまで、ユーザーストーリーの作業を開始できません
+
+- [ ] T003 Firestore Security Rulesを更新（/users/{userId}/favorites/{chainId}の読み書きルール、/chains/{chainId}のfavoriteCount更新ルール）
+- [ ] T004 TypeScript型定義を更新 src/types/index.ts（Favorite型を追加、Chain型にfavoriteCountフィールドを追加）
+- [ ] T005 Firebase設定ファイルを確認 src/firebase/config.ts（initializeApp, getFirestore, getAuthが正しく設定されていることを確認）
+
+**Checkpoint**: 基盤が整い、ユーザーストーリーの並列実装が可能になります
+
+---
+
+## Phase 3: User Story 1 - チェーン店のお気に入り登録・解除 (Priority: P1) 🎯 MVP
+
+**Goal**: ログインユーザーがチェーン店をお気に入り登録・解除でき、お気に入り状態が即座にUIに反映される。お気に入り登録したチェーンは002のメニュー一覧フィルタで使用される。
+
+**Independent Test**: お気に入り登録・解除が正しく動作し、状態がFirestoreに永続化され、UIに即座に反映されれば、独立して価値を提供できる。
+
+### Tests for User Story 1
+
+> **NOTE: これらのテストを最初に書き、実装前に失敗することを確認**
+
+- [ ] T006 [P] [US1] お気に入りボタンコンポーネントの単体テストを作成 tests/unit/FavoriteButton.test.tsx（ログインユーザーのボタン表示、未ログインユーザーのボタン無効化、登録・解除操作、Firestore保存確認）
+- [ ] T007 [P] [US1] お気に入り登録・解除のE2Eテストを作成 tests/e2e/favorites.spec.ts（登録→解除の動作確認、未ログインユーザーのボタン無効化確認）
+
+### Implementation for User Story 1
+
+- [ ] T008 [P] [US1] お気に入りボタンコンポーネントを作成 src/components/FavoriteButton.tsx（認証状態監視、お気に入り状態の初期化、登録・解除処理、Firestore Transaction、エラーハンドリング、Material-UI IconButton + Favorite/FavoriteBorderアイコン）
+- [ ] T009 [US1] メニューカードへのお気に入りボタン統合 src/components/MenuCard.tsx（FavoriteButtonコンポーネントを追加、userプロパティを渡す）
+- [ ] T010 [US1] メニュー一覧ページへの認証状態の追加 src/pages/MenuList.tsx（onAuthStateChangedでuserを管理、MenuCardにuserプロパティを渡す）
+- [ ] T011 [US1] エラーハンドリングの追加 src/components/FavoriteButton.tsx（Snackbar + Alert でエラーメッセージ表示、permission-denied/unavailableエラーの処理）
+- [ ] T012 [US1] ローディング状態の表示 src/components/FavoriteButton.tsx（CircularProgressでローディング表示、操作中はボタン無効化）
+
+**Checkpoint**: この時点で、User Story 1は完全に機能し、独立してテスト可能です（お気に入り登録・解除機能が動作）
+
+---
+
+## Phase 4: User Story 2 - お気に入り登録数の表示 (Priority: P2)
+
+**Goal**: 各チェーン店のお気に入り登録数を表示し、人気のチェーンを視覚的に示す。
+
+**Independent Test**: お気に入り登録数が正しくカウントされ、各チェーン店に表示されれば、独立して価値を提供できる。
+
+**Dependencies**: User Story 1（お気に入り登録・解除機能）
+
+### Tests for User Story 2
+
+- [ ] T013 [P] [US2] お気に入り登録数更新のE2Eテストを作成 tests/e2e/favorites.spec.ts（登録→+1、解除→-1、0件時の非表示確認）
+
+### Implementation for User Story 2
+
+- [ ] T014 [P] [US2] お気に入り登録数表示コンポーネントを作成 src/components/FavoriteCount.tsx（count=0の場合は非表示、それ以外は「♥ {count}人がお気に入り登録」を表示）
+- [ ] T015 [US2] メニューカードへのお気に入り登録数の追加 src/components/MenuCard.tsx（FavoriteCountコンポーネントを追加、chain.favoriteCountを渡す）
+- [ ] T016 [US2] Chain型データの取得を更新 src/pages/MenuList.tsx（チェーン情報取得時にfavoriteCountを含める、MenuWithChain型にchain: Chainフィールドを追加）
+- [ ] T017 [US2] お気に入りボタンでの登録数更新 src/components/FavoriteButton.tsx（登録・解除時にfavoriteCountをローカルステートで更新、親コンポーネントへのコールバック追加検討）
+
+**Checkpoint**: この時点で、User Stories 1 AND 2は両方とも独立して動作します（お気に入り登録・解除＋登録数表示）
+
+---
+
+## Phase 5: Polish & Cross-Cutting Concerns
+
+**Purpose**: 複数のユーザーストーリーに影響する改善
+
+- [ ] T018 [P] Firestore Security Rulesのデプロイ確認（Firebase Consoleで設定、またはfirebase deployコマンド）
+- [ ] T019 [P] パフォーマンス検証（1秒以内の操作完了、1秒以内のUI反映を確認）
+- [ ] T020 [P] エラーハンドリングの網羅性確認（permission-denied, unavailable, その他のエラーケース）
+- [ ] T021 [P] アクセシビリティ改善（aria-labelの追加、スクリーンリーダー対応、キーボード操作）
+- [ ] T022 [P] レスポンシブデザインの検証（iOS Safari, Android Chrome、モバイル4G環境）
+- [ ] T023 [P] 複数デバイス同期の確認（別デバイスでログイン後、ページリロードで5秒以内に同期されることを確認）
+- [ ] T024 [P] テストカバレッジの確認（70%以上のターゲット達成確認）
+- [ ] T025 [P] 負荷テスト（100ユーザー想定、お気に入り登録・解除の同時実行テスト）
+- [ ] T026 Firebase Hosting設定を確認 firebase.json（hosting設定が正しいことを確認）
+- [ ] T027 [P] README.mdを更新（お気に入り機能の説明、セットアップ手順、テスト方法）
+- [ ] T028 quickstart.mdの検証（手順通りに動作するか確認）
+
+---
+
+## Dependencies & Execution Order
+
+### Phase Dependencies
+
+- **Setup (Phase 1)**: 依存関係なし - 即座に開始可能（002-menu-listで大部分完了済み）
+- **Foundational (Phase 2)**: Setupの完了に依存 - すべてのユーザーストーリーをブロック
+- **User Stories (Phase 3+)**: すべてFoundationalフェーズの完了に依存
+  - User Story 1: Foundational完了後に開始可能 - 他のストーリーへの依存なし
+  - User Story 2: Foundational完了後に開始可能 - User Story 1と統合し、お気に入り登録・解除機能に依存
+- **Polish (Final Phase)**: すべての希望するユーザーストーリーの完了に依存
+
+### User Story Dependencies
+
+- **User Story 1 (P1)**: Foundational (Phase 2)完了後に開始可能 - 他のストーリーへの依存なし
+- **User Story 2 (P2)**: Foundational (Phase 2)完了後に開始可能 - User Story 1（お気に入り登録・解除）に依存
+
+---
+
+## 成果物の確認
+
+### 総タスク数: 28タスク
+
+### ユーザーストーリーごとのタスク数:
+- **User Story 1（チェーン店のお気に入り登録・解除）**: 7タスク（テスト2 + 実装5）
+- **User Story 2（お気に入り登録数の表示）**: 5タスク（テスト1 + 実装4）
+
+### 各ストーリーの独立テスト基準:
+- **User Story 1**: お気に入り登録・解除が正しく動作し、状態がFirestoreに永続化され、UIに即座に反映される
+- **User Story 2**: お気に入り登録数が正しくカウントされ、各チェーン店に表示される
+
+### 推奨MVPスコープ:
+- **Phase 1 + Phase 2 + Phase 3（User Story 1のみ）**: お気に入り登録・解除機能
+- User Story 2は人気指標として有用だが、User Story 1完了後に追加可能
