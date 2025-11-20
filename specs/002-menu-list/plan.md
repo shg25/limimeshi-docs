@@ -17,15 +17,15 @@
 ## Technical Context
 
 **Language/Version**: TypeScript 5.x, React 18
-**Primary Dependencies**: Firebase JS SDK v9+, Material-UI v5, react-twitter-embed, Vite 5
-**Storage**: Firestore（読み取り専用）
-**Testing**: Vitest, React Testing Library, Playwright
-**Target Platform**: Web（SPA）、モバイル対応（iOS Safari, Android Chrome）
-**Project Type**: Web（limimeshi-web リポジトリ）
-**Performance Goals**: 初期表示3秒以内（モバイル4G環境、X Post埋め込み含む）
-**Constraints**: Firestore読み取り150件以内（1年以内のメニュー、1年経過したメニューは自動非表示）
-**Scale/Scope**: Phase2の160ユーザー、16チェーン、平均メニュー数は変動
-
+**Primary Dependencies**: Firebase JS SDK v9+, Material-UI v5, react-twitter-embed, Vite 5  
+**Storage**: Firestore（読み取り専用）  
+**Testing**: Vitest, React Testing Library, Playwright  
+**Target Platform**: Web（SPA）、モバイル対応（iOS Safari, Android Chrome）  
+**Project Type**: Web（limimeshi-web リポジトリ）  
+**Performance Goals**: 初期表示3秒以内（モバイル4G環境、X Post埋め込み含む）  
+**Constraints**: Firestore読み取り150件以内（1年以内のメニュー、1年経過したメニューは自動非表示）  
+**Scale/Scope**: Phase2の160ユーザー、16チェーン、平均メニュー数は変動  
+  
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*

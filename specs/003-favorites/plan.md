@@ -17,15 +17,15 @@
 
 ## Technical Context
 
-**Language/Version**: TypeScript 5.x, React 18
-**Primary Dependencies**: Firebase JS SDK v9+, Material-UI v5, Vite 5
-**Storage**: Firestore（サブコレクション `/users/{userId}/favorites/{chainId}`）
-**Testing**: Vitest, React Testing Library, Playwright
-**Target Platform**: Web（SPA）、モバイル対応（iOS Safari, Android Chrome）
-**Project Type**: Web（limimeshi-web リポジトリ）
-**Performance Goals**: お気に入り登録・解除操作が1秒以内に完了、UI反映も1秒以内
-**Constraints**: Firestore Transactionの制約（同時実行制御、リトライロジック）
-**Scale/Scope**: Phase2の100ユーザー、平均5〜10件のお気に入り登録、月間3,000 writes（Firestore無料枠内）
+**Language/Version**: TypeScript 5.x, React 18  
+**Primary Dependencies**: Firebase JS SDK v9+, Material-UI v5, Vite 5  
+**Storage**: Firestore（サブコレクション `/users/{userId}/favorites/{chainId}`）  
+**Testing**: Vitest, React Testing Library, Playwright  
+**Target Platform**: Web（SPA）、モバイル対応（iOS Safari, Android Chrome）  
+**Project Type**: Web（limimeshi-web リポジトリ）  
+**Performance Goals**: お気に入り登録・解除操作が1秒以内に完了、UI反映も1秒以内  
+**Constraints**: Firestore Transactionの制約（同時実行制御、リトライロジック）  
+**Scale/Scope**: Phase2の100ユーザー、平均5〜10件のお気に入り登録、月間3,000 writes（Firestore無料枠内）  
 
 ## Constitution Check
 
