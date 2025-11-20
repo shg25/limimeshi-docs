@@ -252,7 +252,6 @@ delete: (resource, params) => {
       chainId: 'abc123',
       name: 'てりたま',
       description: 'たまごとテリヤキソースの期間限定バーガー',
-      price: 390,
       xPostUrl: 'https://x.com/McDonaldsJapan/status/1234567890',
       saleStartTime: '2025-11-01T00:00:00.000Z',
       saleEndTime: '2025-11-30T23:59:59.000Z',
@@ -361,7 +360,6 @@ function calculateStatus(menu: Menu): MenuWithStatus {
     chainId: 'abc123',
     name: 'てりたま',
     description: 'たまごとテリヤキソースの期間限定バーガー',
-    price: 390,
     xPostUrl: 'https://x.com/McDonaldsJapan/status/1234567890',
     saleStartTime: '2025-11-01T00:00:00.000Z',
     saleEndTime: '2025-11-30T23:59:59.000Z',
@@ -433,7 +431,6 @@ db.collection('menus')
     chainId: 'abc123',
     name: 'てりたま',
     description: 'たまごとテリヤキソースの期間限定バーガー',
-    price: 390,
     xPostUrl: 'https://x.com/McDonaldsJapan/status/1234567890',
     saleStartTime: '2025-11-01T00:00:00.000Z',
     saleEndTime: '2025-11-30T23:59:59.000Z'
@@ -449,7 +446,6 @@ db.collection('menus')
     chainId: 'abc123',
     name: 'てりたま',
     description: 'たまごとテリヤキソースの期間限定バーガー',
-    price: 390,
     xPostUrl: 'https://x.com/McDonaldsJapan/status/1234567890',
     saleStartTime: '2025-11-01T00:00:00.000Z',
     saleEndTime: '2025-11-30T23:59:59.000Z',
@@ -471,7 +467,6 @@ await docRef.set({
   chainId: data.chainId,
   name: data.name,
   description: data.description || null,
-  price: data.price || null,
   xPostUrl: data.xPostUrl || null,
   saleStartTime: data.saleStartTime,
   saleEndTime: data.saleEndTime || null,
@@ -484,7 +479,6 @@ await docRef.set({
 - `chainId`: 必須、`/chains/{chainId}` に存在すること
 - `name`: 必須、1〜100文字
 - `description`: 任意、最大500文字
-- `price`: 任意、0以上の整数
 - `xPostUrl`: 任意、URL形式（https://x.com/ または https://twitter.com/）
 - `saleStartTime`: 必須、ISO 8601形式
 - `saleEndTime`: 任意、`saleStartTime` より後であること
@@ -501,7 +495,6 @@ await docRef.set({
   id: 'menu123',
   data: {
     name: 'てりたま（更新）',
-    price: 420
   },
   previousData: { ... }
 }
@@ -515,7 +508,6 @@ await docRef.set({
     chainId: 'abc123',
     name: 'てりたま（更新）',
     description: 'たまごとテリヤキソースの期間限定バーガー',
-    price: 420,
     xPostUrl: 'https://x.com/McDonaldsJapan/status/1234567890',
     saleStartTime: '2025-11-01T00:00:00.000Z',
     saleEndTime: '2025-11-30T23:59:59.000Z',
@@ -534,7 +526,6 @@ await docRef.set({
 ```typescript
 await db.collection('menus').doc('menu123').update({
   name: data.name,
-  price: data.price,
   updatedAt: FieldValue.serverTimestamp()
 });
 ```

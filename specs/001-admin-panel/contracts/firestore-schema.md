@@ -83,7 +83,6 @@
   // 基本情報
   name: string;                  // メニュー名
   description?: string;          // 説明
-  price?: number;                // 価格
 
   // 外部リンク
   xPostUrl?: string;             // X Post URL
@@ -105,7 +104,6 @@
 | `chainId` | string | Yes | - | `/chains/{chainId}` に存在すること |
 | `name` | string | Yes | - | 最大100文字 |
 | `description` | string | No | null | 最大500文字 |
-| `price` | number | No | null | 0以上の整数 |
 | `xPostUrl` | string | No | null | URL形式（https://x.com/ または https://twitter.com/） |
 | `saleStartTime` | Timestamp | Yes | - | ISO 8601形式 |
 | `saleEndTime` | Timestamp | No | null | `saleStartTime` より後 |
@@ -123,7 +121,6 @@
   "chainId": "abc123",
   "name": "てりたま",
   "description": "たまごとテリヤキソースの期間限定バーガー",
-  "price": 390,
   "xPostUrl": "https://x.com/McDonaldsJapan/status/1234567890",
   "saleStartTime": "2025-11-01T00:00:00.000Z",
   "saleEndTime": "2025-11-30T23:59:59.000Z",

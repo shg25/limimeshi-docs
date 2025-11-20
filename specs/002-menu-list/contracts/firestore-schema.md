@@ -26,7 +26,6 @@
   // 基本情報
   name: string;                  // メニュー名
   description?: string;          // 説明
-  price?: number;                // 価格
 
   // 外部リンク
   xPostUrl?: string;             // X Post URL
@@ -48,7 +47,6 @@
 | `chainId` | string | Yes | - | /chains/{chainId}への参照 |
 | `name` | string | Yes | - | 最大200文字 |
 | `description` | string | No | null | 最大1000文字 |
-| `price` | number | No | null | 0以上の整数 |
 | `xPostUrl` | string | No | null | X Post URL形式 |
 | `saleStartTime` | Timestamp | Yes | - | 販売開始日時 |
 | `saleEndTime` | Timestamp | No | null | 販売終了日時（未定の場合はnull） |
@@ -86,7 +84,6 @@
   "chainId": "abc123",
   "name": "月見バーガー",
   "description": "ふんわりたまごとジューシーなビーフパティ",
-  "price": 390,
   "xPostUrl": "https://twitter.com/McDonaldsJapan/status/1234567890",
   "saleStartTime": "2025-09-01T00:00:00.000Z",
   "saleEndTime": "2025-09-30T23:59:59.999Z",
@@ -252,7 +249,6 @@ export interface Menu {
   chainId: string;
   name: string;
   description?: string;
-  price?: number;
   xPostUrl?: string;
   saleStartTime: Timestamp;
   saleEndTime?: Timestamp;

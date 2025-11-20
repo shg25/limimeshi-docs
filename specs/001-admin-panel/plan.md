@@ -213,7 +213,6 @@ limimeshi-docs/          # このリポジトリ（ドキュメント専用）
 - 所属チェーンID（外部キー、必須）
 - メニュー名（必須）
 - 説明（任意）
-- 価格（任意）
 - X Post URL（任意）
 - 販売開始日時（必須）
 - 販売終了日時（任意）
@@ -247,7 +246,6 @@ Admin ─── (認証) ─── System
 - メニュー名: 必須、最大100文字
 - 販売開始日時: 必須、ISO 8601形式
 - 販売終了日時: 任意、販売開始日時より後であること
-- 価格: 任意、0以上の整数
 
 #### State Transitions
 
@@ -278,7 +276,6 @@ Admin ─── (認証) ─── System
   - chainId: reference to /chains/{chainId}
   - name: string
   - description?: string
-  - price?: number
   - xPostUrl?: string
   - saleStartTime: timestamp
   - saleEndTime?: timestamp

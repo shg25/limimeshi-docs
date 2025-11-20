@@ -65,7 +65,7 @@
 
 - [ ] T013 [P] [US1] ステータス判定ロジックを実装 src/utils/menuStatus.ts（calculateMenuStatus関数、現在時刻とsaleStartTime/saleEndTimeを比較）
 - [ ] T014 [US1] メニュー一覧画面を作成 src/pages/MenuList.tsx（Firestoreから1年以内のメニューを取得、販売開始日時降順でソート、ローディング状態、エラーハンドリング）
-- [ ] T015 [US1] メニューカードコンポーネントを作成 src/components/MenuCard.tsx（チェーン名、メニュー名、販売開始日時、販売終了日時（未設定時は非表示）、ステータス、説明、価格を表示）
+- [ ] T015 [US1] メニューカードコンポーネントを作成 src/components/MenuCard.tsx（チェーン名、メニュー名、販売開始日時、販売終了日時（未設定時は非表示）、ステータス、説明を表示）
 - [ ] T016 [US1] X Post埋め込みコンポーネントを作成 src/components/XPostEmbed.tsx（react-twitter-embedを使用、Post ID抽出、エラーハンドリング、Skeleton UI）
 - [ ] T017 [US1] メニューカードにX Post埋め込みを統合 src/components/MenuCard.tsx（X Post URLがあれば表示、なければ非表示）
 - [ ] T018 [US1] 1年経過フィルタを実装 src/pages/MenuList.tsx（Firestoreクエリで`where('saleStartTime', '>=', oneYearAgo)`）

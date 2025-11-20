@@ -277,9 +277,6 @@ export const MenuListPage = () => {
                         {menu.description}
                       </Typography>
                     )}
-                    {menu.price && (
-                      <Typography variant="body2">¥{menu.price}</Typography>
-                    )}
                     {tweetId && (
                       <TwitterTweetEmbed tweetId={tweetId} />
                     )}
@@ -348,7 +345,6 @@ export interface Menu {
   chainId: string;
   name: string;
   description?: string;
-  price?: number;
   xPostUrl?: string;
   saleStartTime: Timestamp;
   saleEndTime?: Timestamp;
