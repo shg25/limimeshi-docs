@@ -1,9 +1,9 @@
 # Firestore Schema: メニュー一覧（Menu List）
 
-**Feature**: 002-menu-list
-**Date**: 2025-11-18
-**Status**: Phase 1 - Contract
-**Related**: [research.md](../research.md), [001-admin-panel Firestore Schema](../../001-admin-panel/contracts/firestore-schema.md)
+**Feature**: 002-menu-list  
+**Date**: 2025-11-18  
+**Status**: Phase 1 - Contract  
+**Related**: [research.md](../research.md), [001-admin-panel Firestore Schema](../../001-admin-panel/contracts/firestore-schema.md)  
 
 ## Overview
 

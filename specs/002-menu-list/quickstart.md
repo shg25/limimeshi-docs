@@ -1,8 +1,8 @@
 # Quickstart: メニュー一覧（Menu List）
 
-**Feature**: 002-menu-list
-**Date**: 2025-11-18
-**Related**: [spec.md](./spec.md), [research.md](./research.md), [contracts/firestore-schema.md](./contracts/firestore-schema.md)
+**Feature**: 002-menu-list  
+**Date**: 2025-11-18  
+**Related**: [spec.md](./spec.md), [research.md](./research.md), [contracts/firestore-schema.md](./contracts/firestore-schema.md)  
 
 ## Prerequisites
 

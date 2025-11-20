@@ -1,8 +1,8 @@
 # Firestore Schema: お気に入り登録（Favorites）
 
-**Feature**: 003-favorites
-**Date**: 2025-11-19
-**Status**: Phase 1 - Contract
+**Feature**: 003-favorites  
+**Date**: 2025-11-19  
+**Status**: Phase 1 - Contract  
 **Related**: [research.md](../research.md), [002-menu-list Firestore Schema](../../002-menu-list/contracts/firestore-schema.md)
 
 ## Overview

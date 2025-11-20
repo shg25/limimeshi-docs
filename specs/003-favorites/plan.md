@@ -1,7 +1,7 @@
 # Implementation Plan: お気に入り登録（Favorites）
 
-**Branch**: `003-favorites` | **Date**: 2025-11-19 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `/specs/003-favorites/spec.md`
+**Branch**: `003-favorites` | **Date**: 2025-11-19 | **Spec**: [spec.md](./spec.md)  
+**Input**: Feature specification from `/specs/003-favorites/spec.md`  
 
 ## Summary
 

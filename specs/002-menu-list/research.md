@@ -1,8 +1,8 @@
 # Research: メニュー一覧（Menu List）
 
-**Feature**: 002-menu-list
-**Date**: 2025-11-18
-**Status**: Phase 0 - Research
+**Feature**: 002-menu-list  
+**Date**: 2025-11-18  
+**Status**: Phase 0 - Research  
 
 ## Overview
 

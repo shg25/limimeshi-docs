@@ -1,7 +1,7 @@
 # Implementation Plan: メニュー一覧（Menu List）
 
-**Branch**: `002-menu-list` | **Date**: 2025-11-19 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `/specs/002-menu-list/spec.md`
+**Branch**: `002-menu-list` | **Date**: 2025-11-19 | **Spec**: [spec.md](./spec.md)  
+**Input**: Feature specification from `/specs/002-menu-list/spec.md`  
 
 ## Summary
 
