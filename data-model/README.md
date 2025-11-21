@@ -2,12 +2,12 @@
 
 Firestoreのコレクション設計、セキュリティルール、インデックス設計を記録します。
 
-## 作成予定
+## ドキュメント一覧
 
-Phase1で以下のドキュメントを作成します：
-- [ ] `firestore-collections.md`：Firestoreコレクション設計
-- [ ] `security-rules.md`：セキュリティルール設計
-- [ ] `indexes.md`：インデックス設計
+- [x] `firestore-best-practices.md`：Firestore公式ベストプラクティスまとめ
+- [x] `firestore-collections.md`：Firestoreコレクション設計
+- [x] `security-rules.md`：セキュリティルール設計
+- [x] `indexes.md`：インデックス設計
 
 ## 参考
 
