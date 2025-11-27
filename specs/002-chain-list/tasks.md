@@ -41,7 +41,7 @@
 
 - [ ] T007 Firestore Security Rulesを確認（/campaigns, /chainsが公開読み取り可能、書き込み不可）
 - [ ] T008 Firestoreインデックスを作成（chains: furigana asc、campaigns: chainId + saleStartTime desc）
-- [ ] T009 Kotlinデータクラス定義を作成 data/model/Chain.kt、Campaign.kt、CampaignStatus.kt、ChainWithCampaigns.kt
+- [ ] T009 Kotlinデータクラス定義を作成 data/model/Chain.kt、Campaign.kt、CampaignStatus.kt、ChainSortOrder.kt（Enum: NEWEST/FURIGANA）、ChainWithCampaigns.kt
 - [ ] T010 ステータス判定ロジックのユーティリティ関数を作成 util/CampaignStatusUtil.kt（getCampaignStatus: saleStartTime, saleEndTimeからステータスを判定）
 
 **Checkpoint**: 基盤が整い、ユーザーストーリーの並列実装が可能になります
@@ -50,23 +50,25 @@
 
 ## Phase 3: User Story 1 - チェーン店一覧の閲覧 (Priority: P1) 🎯 MVP
 
-**Goal**: 一般ユーザーがチェーン店を一覧表示し、各チェーン店に紐づくキャンペーン情報をチェーン店単位で確認できる。
+**Goal**: 一般ユーザーがチェーン店を一覧表示し、各チェーン店に紐づくキャンペーン情報をチェーン店単位で確認できる。ソート順は新着順（デフォルト）/ふりがな順から選択可能。
 
-**Independent Test**: チェーン店の一覧表示が正しく動作し、ふりがな順でソートされ、各チェーン店に紐づくキャンペーンが販売開始日時の降順で表示されれば、独立して価値を提供できる。
+**Independent Test**: チェーン店の一覧表示が正しく動作し、デフォルトで新着順にソートされ、各チェーン店に紐づくキャンペーンが販売開始日時の降順で表示されれば、独立して価値を提供できる。
 
 ### Tests for User Story 1
 
 > **NOTE: これらのテストを最初に書き、実装前に失敗することを確認**
 
 - [ ] T011 [P] [US1] ステータス判定ロジックの単体テストを作成 app/src/test/java/.../util/CampaignStatusUtilTest.kt（「予定」「開始から◯日経過」「終了」の3パターン、販売終了日時未設定時の処理）
-- [ ] T012 [P] [US1] チェーン店一覧表示のUIテストを作成 app/src/androidTest/java/.../ui/chain/ChainListScreenTest.kt（チェーン店がふりがな順で表示、キャンペーンが販売開始日時降順で表示、1年経過キャンペーンは非表示、空リスト時「データなし」表示）
+- [ ] T012 [P] [US1] チェーン店一覧表示のUIテストを作成 app/src/androidTest/java/.../ui/chain/ChainListScreenTest.kt（デフォルトで新着順表示、ソート切り替え（新着順↔ふりがな順）、キャンペーンが販売開始日時降順で表示、1年経過キャンペーンは非表示、空リスト時「データなし」表示）
 
 ### Implementation for User Story 1
 
 - [ ] T013 [P] [US1] ステータス判定ロジックを実装 util/CampaignStatusUtil.kt（getCampaignStatus関数、現在時刻とsaleStartTime/saleEndTimeを比較）
-- [ ] T014 [US1] ChainRepositoryを作成 data/repository/ChainRepository.kt（Firestoreからチェーン店一覧をふりがな順で取得、各チェーン店に紐づくキャンペーンを1年以内・販売開始日時降順で取得）
-- [ ] T015 [US1] ChainListViewModelを作成 ui/chain/ChainListViewModel.kt（UIステート管理、チェーン店一覧取得、エラーハンドリング）
-- [ ] T016 [US1] チェーン店一覧画面を作成 ui/chain/ChainListScreen.kt（LazyColumn、ローディング状態、エラー状態、空リスト状態）
+- [ ] T014 [US1] ChainRepositoryを作成 data/repository/ChainRepository.kt（Firestoreからチェーン店一覧を取得、各チェーン店に紐づくキャンペーンを1年以内・販売開始日時降順で取得、クライアント側でソート）
+- [ ] T015 [US1] ChainListViewModelを作成 ui/chain/ChainListViewModel.kt（UIステート管理、チェーン店一覧取得、ソート順管理、エラーハンドリング）
+- [ ] T016 [US1] チェーン店一覧画面を作成 ui/chain/ChainListScreen.kt（LazyColumn、ソート選択UI、ローディング状態、エラー状態、空リスト状態）
+- [ ] T016a [US1] ソート順選択コンポーネントを作成 ui/components/SortSelector.kt（Material 3 DropdownMenu、新着順/ふりがな順切り替え）
+- [ ] T016b [US1] チェーン店のソートロジックを実装 ui/chain/ChainListViewModel.kt（新着順: 最新キャンペーンのsaleStartTime降順、ふりがな順: furigana昇順）
 - [ ] T017 [US1] チェーン店カードコンポーネントを作成 ui/chain/ChainCard.kt（チェーン名、お気に入り登録数、紐づくキャンペーン一覧を表示）
 - [ ] T018 [US1] キャンペーン項目コンポーネントを作成 ui/chain/CampaignItem.kt（キャンペーン名、販売開始日時、販売終了日時（未設定時は非表示）、ステータス、説明を表示）
 - [ ] T019 [US1] X Post埋め込みコンポーネントを作成 ui/components/XPostEmbed.kt（WebViewでTwitter Widgets使用、Post ID抽出、エラーハンドリング）
@@ -88,17 +90,17 @@
 
 ### Tests for User Story 2
 
-- [ ] T023 [P] [US2] フィルタ選択永続化の単体テストを作成 app/src/test/java/.../data/repository/PreferencesRepositoryTest.kt（DataStoreへの保存・読み込み、デフォルト値の処理）
-- [ ] T024 [P] [US2] お気に入りフィルタのUIテストを作成 app/src/androidTest/java/.../ui/chain/ChainListScreenTest.kt（フィルタON→お気に入りチェーン店のみ表示、フィルタOFF→全チェーン店表示、次回起動時もフィルタ設定保持）
+- [ ] T023 [P] [US2] フィルタ・ソート選択永続化の単体テストを作成 app/src/test/java/.../data/repository/PreferencesRepositoryTest.kt（DataStoreへの保存・読み込み、デフォルト値の処理、ソート順永続化）
+- [ ] T024 [P] [US2] お気に入りフィルタ・ソート永続化のUIテストを作成 app/src/androidTest/java/.../ui/chain/ChainListScreenTest.kt（フィルタON→お気に入りチェーン店のみ表示、フィルタOFF→全チェーン店表示、次回起動時もフィルタ・ソート設定保持）
 
 ### Implementation for User Story 2
 
-- [ ] T025 [P] [US2] PreferencesRepositoryを作成 data/repository/PreferencesRepository.kt（DataStore Preferences、showFavoritesOnly保存・読み込み）
+- [ ] T025 [P] [US2] PreferencesRepositoryを作成 data/repository/PreferencesRepository.kt（DataStore Preferences、showFavoritesOnly + sortOrder保存・読み込み）
 - [ ] T026 [US2] お気に入りフィルタコンポーネントを作成 ui/components/FavoritesFilter.kt（Material 3 Switch、フィルタON/OFF切り替え）
 - [ ] T027 [US2] ChainListViewModelに認証状態を追加 ui/chain/ChainListViewModel.kt（Firebase Auth AuthStateListener、ログインユーザーのみフィルタ表示）
 - [ ] T028 [US2] お気に入りチェーンデータを取得 data/repository/FavoritesRepository.kt（Firestoreから/users/{userId}/favoritesを取得、chainIdリストを作成）
 - [ ] T029 [US2] お気に入りフィルタロジックを実装 data/repository/ChainRepository.kt（フィルタON時は`whereIn("__name__", favoriteChainIds)`でクエリ、10件制限の考慮）
-- [ ] T030 [US2] フィルタ選択永続化を統合 ui/chain/ChainListViewModel.kt（初回起動時にDataStoreから設定を読み込み、フィルタ変更時に保存）
+- [ ] T030 [US2] フィルタ・ソート選択永続化を統合 ui/chain/ChainListViewModel.kt（初回起動時にDataStoreから設定を読み込み、フィルタ・ソート変更時に保存）
 - [ ] T031 [US2] お気に入りチェーン0件時の処理 ui/chain/ChainListScreen.kt（フィルタON時にお気に入り0件の場合は「お気に入り登録したチェーン店がありません」と表示）
 
 **Checkpoint**: この時点で、User Stories 1 AND 2は両方とも独立して動作します（チェーン店一覧表示＋お気に入りフィルタ）
@@ -141,15 +143,15 @@
 
 ## 成果物の確認
 
-### 総タスク数: 40タスク
+### 総タスク数: 42タスク
 
 ### ユーザーストーリーごとのタスク数:
-- **User Story 1（チェーン店一覧の閲覧）**: 12タスク（テスト2 + 実装10）
+- **User Story 1（チェーン店一覧の閲覧）**: 14タスク（テスト2 + 実装12）- ソート機能含む
 - **User Story 2（お気に入りチェーン店フィルタ）**: 9タスク（テスト2 + 実装7）
 
 ### 各ストーリーの独立テスト基準:
-- **User Story 1**: チェーン店の一覧表示が正しく動作し、ふりがな順でソートされ、各チェーン店に紐づくキャンペーンが販売開始日時の降順で表示される
-- **User Story 2**: お気に入りフィルタが正しく動作し、お気に入り登録済みチェーン店のみが表示され、フィルタ選択が次回訪問時も保持される
+- **User Story 1**: チェーン店の一覧表示が正しく動作し、デフォルトで新着順にソートされ（ふりがな順に切り替え可能）、各チェーン店に紐づくキャンペーンが販売開始日時の降順で表示される
+- **User Story 2**: お気に入りフィルタが正しく動作し、お気に入り登録済みチェーン店のみが表示され、フィルタ・ソート選択が次回訪問時も保持される
 
 ### 推奨MVPスコープ:
 - **Phase 1 + Phase 2 + Phase 3（User Story 1のみ）**: チェーン店一覧表示機能

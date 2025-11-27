@@ -5,20 +5,20 @@
 
 ## Summary
 
-一般ユーザー向けのチェーン店一覧画面（Androidアプリ）。チェーン店を一覧表示し、各チェーン店に紐づくキャンペーンをチェーン店単位で確認できる。ログインユーザーはお気に入り登録したチェーン店のみ表示するフィルタを利用可能。チェーン店はふりがな順でソート、キャンペーンは販売開始日時の降順（新しい順）でソート。1年経過したキャンペーンは非表示。ログインユーザーのフィルタ選択は次回訪問時も保持。Phase2 MVPで実装。
+一般ユーザー向けのチェーン店一覧画面（Androidアプリ）。チェーン店を一覧表示し、各チェーン店に紐づくキャンペーンをチェーン店単位で確認できる。ログインユーザーはお気に入り登録したチェーン店のみ表示するフィルタを利用可能。チェーン店のソート順はユーザーが選択可能（新着順/ふりがな順）、デフォルトは新着順（最新キャンペーンがあるチェーンが上）。キャンペーンは販売開始日時の降順（新しい順）でソート。1年経過したキャンペーンは非表示。ユーザーのフィルタ選択・ソート選択は次回訪問時も保持。Phase2 MVPで実装。
 
 **技術アプローチ**:
 - Kotlin + Jetpack Compose + Material 3 のネイティブAndroidアプリ
 - Firebase Android SDK（Firestore、Authentication）でデータ読み取り（管理画面が登録済み）
 - MVVM + Clean Architecture（簡略版）
 - WebView でX Post埋め込み表示
-- DataStore Preferences でフィルタ選択を永続化
+- DataStore Preferences でフィルタ選択・ソート選択を永続化
 
 ## Technical Context
 
 **Language/Version**: Kotlin 1.9+, Android SDK 34 (Android 14)  
 **Primary Dependencies**: Jetpack Compose 1.5+, Material 3, Firebase Android SDK, DataStore, Hilt  
-**Storage**: Firestore（読み取り専用）、DataStore Preferences（フィルタ設定）  
+**Storage**: Firestore（読み取り専用）、DataStore Preferences（フィルタ・ソート設定）  
 **Testing**: JUnit 5, MockK, Turbine, Compose Testing, Robolectric  
 **Target Platform**: Android 8.0+ (API 26+)  
 **Project Type**: Mobile（limimeshi-android リポジトリ）  
@@ -99,6 +99,7 @@ limimeshi-android/
 │   │   │   │   │   │   └── CampaignItem.kt           # キャンペーン項目コンポーネント
 │   │   │   │   │   ├── components/
 │   │   │   │   │   │   ├── FavoritesFilter.kt        # お気に入りフィルタコンポーネント
+│   │   │   │   │   │   ├── SortSelector.kt           # ソート順選択コンポーネント
 │   │   │   │   │   │   └── XPostEmbed.kt             # X Post埋め込みコンポーネント
 │   │   │   │   │   └── theme/
 │   │   │   │   │       └── Theme.kt                  # Material 3テーマ
@@ -111,6 +112,7 @@ limimeshi-android/
 │   │   │   │   │       ├── Chain.kt                  # チェーン店モデル
 │   │   │   │   │       ├── Campaign.kt               # キャンペーンモデル
 │   │   │   │   │       ├── CampaignStatus.kt         # ステータス（Sealed Class）
+│   │   │   │   │       ├── ChainSortOrder.kt         # ソート順（Enum）
 │   │   │   │   │       └── ChainWithCampaigns.kt     # チェーン店+キャンペーン
 │   │   │   │   ├── util/
 │   │   │   │   │   └── CampaignStatusUtil.kt         # ステータス判定ロジック
@@ -175,8 +177,8 @@ N/A - この機能のConstitution違反なし
 - Firestoreコレクション（/chains, /campaigns, /users/{userId}/favorites）
 - 画面設計（チェーン店一覧、お気に入りフィルタ）
 - ステータスロジック設計（saleStartTime、saleEndTime）
-- ソートロジック（チェーン店: furigana順、キャンペーン: saleStartTime降順）
-- Kotlinデータクラス定義（Chain, Campaign, CampaignStatus, ChainWithCampaigns）
+- ソートロジック（チェーン店: 新着順（デフォルト）/ふりがな順（選択可能）、キャンペーン: saleStartTime降順）
+- Kotlinデータクラス定義（Chain, Campaign, CampaignStatus, ChainSortOrder, ChainWithCampaigns）
 - Security Rules（読み取り専用）
 - パフォーマンス最適化（Firestore読み取り最適化、インデックス最適化）
 
@@ -200,13 +202,15 @@ N/A - この機能のConstitution違反なし
    - チェーン店一覧画面（ChainListScreen.kt）実装
    - キャンペーン項目コンポーネント（CampaignItem.kt）実装
    - お気に入りフィルタ（FavoritesFilter.kt）実装
+   - ソート順選択（SortSelector.kt）実装
    - X Post埋め込み（XPostEmbed.kt）実装
-   - フィルタ選択の永続化（PreferencesRepository.kt）実装
+   - フィルタ・ソート選択の永続化（PreferencesRepository.kt）実装
 
 3. **UIテスト**
    - チェーン店一覧表示のUIテスト
    - お気に入りフィルタのUIテスト
-   - フィルタ選択永続化のテスト
+   - ソート順切り替えのUIテスト
+   - フィルタ・ソート選択永続化のテスト
 
 4. **パフォーマンス最適化**
    - Firestore読み取り最適化（インデックス最適化）
@@ -270,8 +274,9 @@ N/A - この機能のConstitution違反なし
 - ✅ チェーン店一覧の初期表示が3秒以内（モバイル4G環境、X Post埋め込み部分を除く）
 - ✅ チェーン店がスムーズにスクロールできる（16チェーン店ある場合）
 - ✅ お気に入りフィルタの切り替えが1秒以内に反映される
+- ✅ ソート順の切り替えが1秒以内に反映される
 - ✅ チェーン店が0件の場合は正しい表示がされる（空リストではなく「データなし」と表示）
-- ✅ フィルタ選択が次回訪問時も保持される確率が100%である（DataStoreで永続化）
+- ✅ フィルタ選択・ソート選択が次回訪問時も保持される確率が100%である（DataStoreで永続化）
 - ✅ 単体テストカバレッジ70%以上
 - ✅ UIテストが全て合格
 

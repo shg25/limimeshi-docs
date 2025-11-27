@@ -193,6 +193,16 @@ sealed class CampaignStatus {
 }
 ```
 
+`app/src/main/java/com/limimeshi/android/data/model/ChainSortOrder.kt`:
+```kotlin
+package com.limimeshi.android.data.model
+
+enum class ChainSortOrder(val displayName: String) {
+    NEWEST("新着順"),
+    FURIGANA("ふりがな順")
+}
+```
+
 `app/src/main/java/com/limimeshi/android/data/model/ChainWithCampaigns.kt`:
 ```kotlin
 package com.limimeshi.android.data.model
@@ -200,7 +210,11 @@ package com.limimeshi.android.data.model
 data class ChainWithCampaigns(
     val chain: Chain,
     val campaigns: List<CampaignWithStatus>
-)
+) {
+    // 新着順ソート用: 最新キャンペーンのsaleStartTime
+    val latestCampaignTime: Long
+        get() = campaigns.maxOfOrNull { it.campaign.saleStartTime.toDate().time } ?: 0L
+}
 
 data class CampaignWithStatus(
     val campaign: Campaign,
@@ -341,6 +355,7 @@ package com.limimeshi.android.ui.chain
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.limimeshi.android.data.model.ChainSortOrder
 import com.limimeshi.android.data.model.ChainWithCampaigns
 import com.limimeshi.android.data.repository.ChainRepository
 import com.limimeshi.android.data.repository.PreferencesRepository
@@ -356,6 +371,7 @@ data class ChainListUiState(
     val chainsWithCampaigns: List<ChainWithCampaigns> = emptyList(),
     val isLoading: Boolean = true,
     val showFavoritesOnly: Boolean = false,
+    val sortOrder: ChainSortOrder = ChainSortOrder.NEWEST,
     val error: String? = null
 )
 
@@ -368,10 +384,17 @@ class ChainListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ChainListUiState())
     val uiState: StateFlow<ChainListUiState> = _uiState.asStateFlow()
 
+    // ソート前のデータを保持
+    private var rawChainsWithCampaigns: List<ChainWithCampaigns> = emptyList()
+
     init {
         viewModelScope.launch {
             val savedFilter = preferencesRepository.showFavoritesOnly.first()
-            _uiState.value = _uiState.value.copy(showFavoritesOnly = savedFilter)
+            val savedSortOrder = preferencesRepository.sortOrder.first()
+            _uiState.value = _uiState.value.copy(
+                showFavoritesOnly = savedFilter,
+                sortOrder = savedSortOrder
+            )
             loadChains()
         }
     }
@@ -388,17 +411,33 @@ class ChainListViewModel @Inject constructor(
                     null
                 }
 
-                val chainsWithCampaigns = chainRepository.getChainsWithCampaigns(favoriteChainIds)
-                _uiState.value = _uiState.value.copy(
-                    chainsWithCampaigns = chainsWithCampaigns,
-                    isLoading = false
-                )
+                rawChainsWithCampaigns = chainRepository.getChainsWithCampaigns(favoriteChainIds)
+                applySortOrder()
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     error = e.message,
                     isLoading = false
                 )
             }
+        }
+    }
+
+    private fun applySortOrder() {
+        val sorted = when (_uiState.value.sortOrder) {
+            ChainSortOrder.NEWEST -> rawChainsWithCampaigns.sortedByDescending { it.latestCampaignTime }
+            ChainSortOrder.FURIGANA -> rawChainsWithCampaigns.sortedBy { it.chain.furigana }
+        }
+        _uiState.value = _uiState.value.copy(
+            chainsWithCampaigns = sorted,
+            isLoading = false
+        )
+    }
+
+    fun setSortOrder(sortOrder: ChainSortOrder) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(sortOrder = sortOrder)
+            preferencesRepository.setSortOrder(sortOrder)
+            applySortOrder()
         }
     }
 
@@ -422,14 +461,15 @@ package com.limimeshi.android.ui.chain
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.limimeshi.android.data.model.ChainSortOrder
 import com.limimeshi.android.data.model.ChainWithCampaigns
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -451,7 +491,7 @@ fun ChainListScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // お気に入りフィルタ
+            // フィルタ・ソートバー
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -459,11 +499,20 @@ fun ChainListScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("お気に入りのみ表示")
-                Switch(
-                    checked = uiState.showFavoritesOnly,
-                    onCheckedChange = { viewModel.toggleFavoritesFilter() }
+                // ソート選択
+                SortSelector(
+                    selectedSortOrder = uiState.sortOrder,
+                    onSortOrderSelected = { viewModel.setSortOrder(it) }
                 )
+
+                // お気に入りフィルタ
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("お気に入りのみ", style = MaterialTheme.typography.bodySmall)
+                    Switch(
+                        checked = uiState.showFavoritesOnly,
+                        onCheckedChange = { viewModel.toggleFavoritesFilter() }
+                    )
+                }
             }
 
             when {
@@ -623,6 +672,49 @@ fun CampaignItem(campaignWithStatus: CampaignWithStatus) {
 }
 ```
 
+`app/src/main/java/com/limimeshi/android/ui/components/SortSelector.kt`:
+```kotlin
+package com.limimeshi.android.ui.components
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import com.limimeshi.android.data.model.ChainSortOrder
+
+@Composable
+fun SortSelector(
+    selectedSortOrder: ChainSortOrder,
+    onSortOrderSelected: (ChainSortOrder) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = modifier) {
+        TextButton(onClick = { expanded = true }) {
+            Text(selectedSortOrder.displayName)
+            Icon(Icons.Default.ArrowDropDown, contentDescription = "ソート順を選択")
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            ChainSortOrder.entries.forEach { sortOrder ->
+                DropdownMenuItem(
+                    text = { Text(sortOrder.displayName) },
+                    onClick = {
+                        onSortOrderSelected(sortOrder)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+```
+
 ---
 
 ## Testing
@@ -715,6 +807,21 @@ class ChainListScreenTest {
     fun お気に入りフィルタの切り替えが動作する() {
         // TODO: ViewModelをモック化してテスト
     }
+
+    @Test
+    fun デフォルトで新着順でソートされる() {
+        // TODO: ViewModelをモック化してテスト
+    }
+
+    @Test
+    fun ソート順をふりがな順に切り替えられる() {
+        // TODO: ViewModelをモック化してテスト
+    }
+
+    @Test
+    fun ソート順設定が次回起動時も保持される() {
+        // TODO: ViewModelをモック化してテスト
+    }
 }
 ```
 
@@ -758,7 +865,10 @@ firebase emulators:start
 - **A**: Firebase Consoleからダウンロードして `app/` 直下に配置。
 
 ### Q6: チェーン店がふりがな順で表示されない
-- **A**: Firestoreインデックス（chains: furigana ascending）が作成されているか確認。
+- **A**: ソート順が「ふりがな順」に設定されているか確認。デフォルトは「新着順」。
+
+### Q7: ソート順設定が保存されない
+- **A**: DataStoreの初期化が正しいか確認。アプリを再インストールすると設定はリセットされる。
 
 ---
 

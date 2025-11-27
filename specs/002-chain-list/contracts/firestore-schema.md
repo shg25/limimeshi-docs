@@ -40,12 +40,14 @@ data class Chain(
 
 **Queries Used**:
 
-1. **全チェーン店取得（ふりがな順）**:
+1. **全チェーン店取得**:
    ```kotlin
    db.collection("chains")
-       .orderBy("furigana", Query.Direction.ASCENDING)
        .get()
        .await()
+   // クライアント側でソート:
+   // - 新着順（デフォルト）: 最新キャンペーンのsaleStartTime降順
+   // - ふりがな順: furigana昇順
    ```
 
 2. **お気に入りフィルタ（chainIdの配列でフィルタ）**:
@@ -54,8 +56,10 @@ data class Chain(
        .whereIn("__name__", favoriteChainIds)  // 最大10個
        .get()
        .await()
-   // 取得後にクライアント側でふりがな順ソート
+   // クライアント側でソート（新着順 or ふりがな順）
    ```
+
+**Note**: ソート順はユーザーが選択可能（新着順/ふりがな順）。デフォルトは新着順。ソートはクライアント側で実行。
 
 **Indexes Required**:
 - Single field index: `furigana` (ascending)
