@@ -182,7 +182,7 @@ Constitution V. Legal Risk Zeroより：
 **データ検証**:
 
 - 登録前: 公式サイトで情報を確認
-- 登録後: limimeshi-web で表示を確認
+- 登録後: limimeshi-android で表示を確認
 
 ### Phase3以降の展開
 

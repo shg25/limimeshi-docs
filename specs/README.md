@@ -229,7 +229,7 @@ specs/
 4. テストが成功することを確認
 5. コミット
 
-**Note**: 実装フェーズでは、specs/ディレクトリではなく、実装リポジトリ（limimeshi-web、limimeshi-admin等）でコードを書く
+**Note**: 実装フェーズでは、specs/ディレクトリではなく、実装リポジトリ（limimeshi-android、limimeshi-admin等）でコードを書く
 
 ---
 
@@ -264,11 +264,12 @@ specs/
 **目的**: 技術選定の理由を文書化し、後から振り返れるようにする
 
 **例**:
-- React + TypeScript（フロントエンド）
+- Kotlin + Jetpack Compose（Androidアプリ）
+- React + TypeScript（Webアプリ・管理画面）
 - Firestore SDK（データ読み取り）
 - Firebase Authentication（ログイン状態の管理）
-- Material-UI（UIコンポーネント）
-- Vitest + Playwright（テスト戦略）
+- Material 3（Androidアプリ）/ Material-UI（Webアプリ）
+- JUnit 5 + MockK（Android）/ Vitest + Playwright（Web）
 
 ---
 

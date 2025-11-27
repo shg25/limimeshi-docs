@@ -119,7 +119,7 @@ limimeshi-docs/          # このリポジトリ（ドキュメント専用）
 ```
 
 **Structure Decision**:
-- 管理画面は別リポジトリ `limimeshi-admin` として実装（一般向けWebアプリ `limimeshi-web` と分離）
+- 管理画面は別リポジトリ `limimeshi-admin` として実装（一般向けAndroidアプリ `limimeshi-android` と分離）
 - Web application構造を採用（frontend: 管理画面フレームワーク、backend: Firestore + Cloud Functions）
 - **Feature-based（機能ベース）ディレクトリ構造を採用**（React公式推奨、React Admin公式デモに準拠）
   - 参考: [React公式 - Grouping by features or routes](https://react.dev/learn/thinking-in-react#step-5-add-inverse-data-flow)

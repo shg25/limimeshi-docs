@@ -6,11 +6,13 @@ Accepted
 
 ## Context
 
-期間限定めし（リミメシ）は、以下の複数のWebアプリケーションで構成される：
+期間限定めし（リミメシ）は、以下の複数のアプリケーションで構成される：
 
-1. **管理画面（limimeshi-admin）**: チェーン店・メニューの登録・編集
-2. **一般向けWebアプリ（limimeshi-web）**: メニュー一覧・お気に入り登録
+1. **管理画面（limimeshi-admin）**: チェーン店・キャンペーンの登録・編集（Web）
+2. **一般向けAndroidアプリ（limimeshi-android）**: キャンペーン一覧・お気に入り登録（Google Play Store配信）
 3. **定期処理（limimeshi-jobs）**: Cloud Functions（スケジューラ）
+
+**Note**: Phase2では一般向けアプリをAndroidネイティブで実装するため、Firebase Hostingは管理画面（limimeshi-admin）のみに使用する。一般向けWebアプリ（limimeshi-web）はPhase3以降で検討。
 
 これらのアプリケーションは、共通のFirestoreデータベースを使用する。
 
@@ -51,7 +53,7 @@ Accepted
 
 **Option α: limimeshi-admin に配置**
 - メリット: Phase2ではシンプル、管理画面が最も使う
-- デメリット: limimeshi-web も使う場合、別リポジトリに設定がある
+- デメリット: 将来limimeshi-web を追加する場合、別リポジトリに設定がある
 
 **Option β: limimeshi-infra（新規リポジトリ）に配置**
 - メリット: インフラ設定を一元管理、各リポジトリの責務明確
@@ -94,7 +96,7 @@ Firebase Project: limimeshi-dev
 ├── Cloud Functions（開発用）
 ├── Hosting Site 1: limimeshi-admin-dev
 │   └── URL: limimeshi-admin-dev.web.app
-└── Hosting Site 2: limimeshi-web-dev
+└── Hosting Site 2: limimeshi-web-dev（Phase3以降）
     └── URL: limimeshi-web-dev.web.app
 ```
 
@@ -107,9 +109,11 @@ Firebase Project: limimeshi-prod
 ├── Hosting Site 1: limimeshi-admin
 │   └── URL: limimeshi-admin.web.app
 │   └── Custom Domain: admin.limimeshi.com（Phase3以降）
-└── Hosting Site 2: limimeshi-web
+└── Hosting Site 2: limimeshi-web（Phase3以降）
     └── URL: limimeshi-web.web.app
     └── Custom Domain: limimeshi.com（Phase3以降）
+
+Note: Phase2ではlimimeshi-androidがGoogle Play Storeで配信されるため、Hosting Site 2は使用しない。
 ```
 
 **理由**:
@@ -131,13 +135,13 @@ limimeshi-admin/
 ```
 
 **理由**:
-- Phase2では limimeshi-web が未実装
+- Phase2では limimeshi-android がAndroidアプリとして実装され、limimeshi-web は未実装
 - すぐに開発開始できる
 - シンプル
 
 **Phase3（移行）: limimeshi-infra に分離**
 
-移行タイミング: limimeshi-web リポジトリ作成の直前
+移行タイミング: limimeshi-web リポジトリ作成の直前（Phase3以降）
 
 ```
 limimeshi-infra/              # ★新設
@@ -154,7 +158,7 @@ limimeshi-infra/              # ★新設
 **理由**:
 - 共有リソースの一元管理
 - 各リポジトリの責務明確化（admin/web はアプリロジックに専念）
-- limimeshi-web が Rules を参照する前に分離することで、二重管理を回避
+- 将来 limimeshi-web が Rules を参照する前に分離することで、二重管理を回避
 
 ## Consequences
 
@@ -166,7 +170,7 @@ limimeshi-infra/              # ★新設
 
 **明確な移行パス**:
 - Phase3で limimeshi-infra に移行するタイミングが明確
-- limimeshi-web 作成前に移行することで、二重管理を回避
+- 将来 limimeshi-web 作成前に移行することで、二重管理を回避
 
 **環境分離**:
 - Dev/Prod で別Firebase Project
@@ -192,7 +196,7 @@ limimeshi-infra/              # ★新設
 
 **一時的な二重配置**:
 - 制約: Phase2では limimeshi-admin に firestore.rules/indexes、Phase3では limimeshi-infra に移行
-- 対策: 移行期間は短く保つ（limimeshi-web 作成の直前に移行）
+- 対策: 移行期間は短く保つ（将来 limimeshi-web 作成の直前に移行）
 
 ### リポジトリ構成
 
@@ -202,10 +206,15 @@ limimeshi-admin/              # 管理画面（hosting:admin のみ）
 ├── firebase.json            # hosting 設定のみ
 └── .firebaserc
 
-limimeshi-web/                # 一般向けWebアプリ（hosting:web のみ）
+limimeshi-web/                # 一般向けWebアプリ（Phase3以降、hosting:web のみ）
 ├── src/
 ├── firebase.json            # hosting 設定のみ
 └── .firebaserc
+
+limimeshi-android/            # 一般向けAndroidアプリ（Phase2、Google Play Store配信）
+├── app/
+├── build.gradle.kts
+└── google-services.json
 
 limimeshi-infra/              # インフラ設定（Phase3以降）
 ├── firestore.rules
@@ -249,11 +258,18 @@ firebase use dev
 firebase deploy --only hosting:admin
 ```
 
-一般向けWebアプリ更新時:
+一般向けWebアプリ更新時（Phase3以降）:
 ```bash
 cd limimeshi-web
 firebase use dev
 firebase deploy --only hosting:web
+```
+
+一般向けAndroidアプリ更新時（Phase2）:
+```bash
+cd limimeshi-android
+./gradlew assembleRelease
+# Google Play Console で APK/AAB をアップロード
 ```
 
 ### カスタムドメイン設定（Phase3以降）

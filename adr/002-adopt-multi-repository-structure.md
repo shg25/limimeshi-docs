@@ -10,10 +10,10 @@ Accepted
 
 1. **limimeshi-docs**: 企画・設計・ADR・仕様書（公開リポジトリ）
 2. **limimeshi-admin**: 管理画面（React Admin）
-3. **limimeshi-web**: 一般向けWebアプリ（React）
+3. **limimeshi-android**: 一般向けAndroidアプリ（Kotlin + Jetpack Compose）
 4. **limimeshi-jobs**: 定期処理・差分検知（Cloud Functions）
 5. **（将来）limimeshi-api**: 共通API / BFF（Cloud Functions）
-6. **（将来）limimeshi-expo/ios/android**: モバイルアプリ
+6. **（将来）limimeshi-ios**: iOSアプリ
 
 これらのアプリケーションは、共通のFirestoreデータベースを使用する。
 
@@ -45,7 +45,7 @@ limimeshi/
 ```
 limimeshi-docs/       # 公開リポジトリ
 limimeshi-admin/      # 公開リポジトリ
-limimeshi-web/        # 公開リポジトリ
+limimeshi-android/    # 公開リポジトリ
 limimeshi-jobs/       # 公開リポジトリ
 limimeshi-shared/     # 共通ライブラリ（公開リポジトリ）
 ```
@@ -77,7 +77,7 @@ limimeshi-shared/     # 共通ライブラリ（公開リポジトリ）
 #### 1. デプロイの独立性（最重要）
 
 - 各アプリケーションを独立してデプロイ
-- limimeshi-admin の変更が limimeshi-web に影響しない
+- limimeshi-admin の変更が limimeshi-android に影響しない
 - リリース管理が簡単（各リポジトリで独立したバージョン）
 
 #### 2. CI/CDの単純化
@@ -95,7 +95,7 @@ limimeshi-shared/     # 共通ライブラリ（公開リポジトリ）
 #### 4. Phase2での判断
 
 Phase2（MVP）では以下の特性がマルチリポに有利：
-- デプロイの独立性: 管理画面と一般向けWebアプリを独立してデプロイ
+- デプロイの独立性: 管理画面と一般向けAndroidアプリを独立してデプロイ
 - CI/CDの単純化: 各リポジトリで独立したGitHub Actions
 - 個人開発: 1名運用、リポジトリごとに集中できる方が効率的
 
@@ -105,7 +105,7 @@ Phase2（MVP）では以下の特性がマルチリポに有利：
 
 **デプロイの独立性**:
 - 各アプリケーションを独立してデプロイ
-- limimeshi-admin の変更が limimeshi-web に影響しない
+- limimeshi-admin の変更が limimeshi-android に影響しない
 - リリース管理が簡単
 
 **CI/CDの単純化**:
@@ -130,7 +130,7 @@ Phase2（MVP）では以下の特性がマルチリポに有利：
 - 対策: セマンティックバージョニングを採用（v1.0.0, v1.1.0等）
 
 **リポジトリ間の依存関係**:
-- 制約: limimeshi-web が limimeshi-jobs の更新に依存する場合がある
+- 制約: limimeshi-android が limimeshi-jobs の更新に依存する場合がある
 - 対策: Firestoreスキーマを明確に定義、破壊的変更は慎重に実施
 
 **公開リポジトリのセキュリティ管理**:

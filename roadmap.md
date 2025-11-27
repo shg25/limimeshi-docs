@@ -195,7 +195,7 @@ Phase2 MVP機能（実装優先順位順）：
   - タグ管理・入力補助機能をOut of Scopeに移動
   - ふりがな、X Post URL、ステータス自動判定など詳細要件確定
   - 002との整合性確保（ステータス表示ロジック統一）
-- ✅ `specs/002-menu-list/`：メニュー一覧機能
+- ✅ `specs/002-campaign-list/`：キャンペーン一覧機能
   - spec.md完成（2025/11/16）
   - ✅ Phase 0: Research完了（2025/11/19）
   - ✅ Phase 1: Design & Contracts完了（2025/11/19）
@@ -229,14 +229,14 @@ Phase2 MVP機能（実装優先順位順）：
 
 **理由**:
 1. **ADRの依存関係**: ADR-005（Firebase Hosting構成）を作成した際、ADR-001（Firebase選定）とADR-002（マルチリポ選定）を前提としていることが判明
-2. **論理的整合性**: 002, 003はlimimeshi-web（別リポジトリ）に実装するが、その判断根拠（ADR-002: マルチリポ選定）が未記録
+2. **論理的整合性**: 002, 003はlimimeshi-android（別リポジトリ）に実装するが、その判断根拠（ADR-002: マルチリポ選定）が未記録
 3. **基本方針の明文化**: 全機能の前提となる技術選定（Firebase, マルチリポ, React Admin, 手動運用）を先に文書化
 
 **実施順序**:
 1. ✅ 001-admin-panel: spec.md, plan.md, research.md, data-model.md, contracts/, quickstart.md完成
 2. ✅ ADR-005: Firebase Hosting構成完成
 3. ✅ ADR-001〜004作成（基本方針の明文化）
-4. ✅ 002-menu-list: Phase 0, Phase 1, tasks.md生成完了
+4. ✅ 002-campaign-list: Phase 0, Phase 1, tasks.md生成完了
 5. ✅ 003-favorites: Phase 0, Phase 1, tasks.md生成完了
 
 ---
@@ -250,7 +250,7 @@ Phase2 MVP機能（実装優先順位順）：
 #### 背景
 
 Phase1-2でGitHub Spec Kit形式の機能設計を進める中で、以下の不自然さに気づいた：
-- limimeshi-docsに001-admin-panel（管理画面）、002-menu-list（Web）、003-favorites（Web）が混在
+- limimeshi-docsに001-admin-panel（管理画面）、002-campaign-list（Android）、003-favorites（Android）が混在
 - 実装先リポジトリが異なる機能の仕様が1つのリポジトリに集約されている
 - GitHub Spec Kitの公式構造（`.specify/`）は実装リポジトリと同居することを前提としている
 
@@ -264,7 +264,7 @@ limimeshi-docs/
 ├── templates/            # Spec Kitテンプレート
 ├── specs/                # 全機能の仕様書
 │   ├── 001-admin-panel/
-│   ├── 002-menu-list/
+│   ├── 002-campaign-list/
 │   └── 003-favorites/
 ├── planning/             # Phase0企画ドキュメント
 ├── adr/                  # ADR
@@ -287,15 +287,15 @@ limimeshi-admin/            # 管理画面リポジトリ
 │   └── .claude/commands/
 └── src/
 
-limimeshi-web/              # Webアプリリポジトリ
+limimeshi-android/          # Androidアプリリポジトリ
 ├── .specify/
 │   ├── specs/
-│   │   ├── 002-menu-list/
+│   │   ├── 002-campaign-list/
 │   │   └── 003-favorites/
 │   ├── memory/constitution.md  # シンボリックリンク
 │   ├── templates/
 │   └── .claude/commands/
-└── src/
+└── app/
 ```
 
 #### 理由
