@@ -1,12 +1,12 @@
-# Research: キャンペーン一覧（Campaign List）
+# Research: チェーン店一覧（Chain List）
 
-**Feature**: 002-campaign-list  
-**Date**: 2025-11-28  
-**Status**: Phase 0 - Research  
+**Feature**: 002-chain-list
+**Date**: 2025-11-28
+**Status**: Phase 0 - Research
 
 ## Overview
 
-キャンペーン一覧機能（Androidアプリ）の実装に必要な技術選定と設計パターンの調査結果
+チェーン店一覧機能（Androidアプリ）の実装に必要な技術選定と設計パターンの調査結果。チェーン店を一覧表示し、各チェーン店に紐づくキャンペーンをチェーン店単位で確認できる画面。
 
 ## 1. Kotlin + Jetpack Compose（Androidフロントエンド）
 
@@ -47,11 +47,19 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
-// キャンペーン一覧取得（1年以内、販売開始日時降順）
+// チェーン店一覧取得（ふりがな順）
 val db = Firebase.firestore
+val chains = db.collection("chains")
+    .orderBy("furigana", Query.Direction.ASCENDING)
+    .get()
+    .await()
+    .toObjects(Chain::class.java)
+
+// キャンペーン取得（チェーン店ごと、1年以内、販売開始日時降順）
 val oneYearAgo = Timestamp(Date(System.currentTimeMillis() - 365L * 24 * 60 * 60 * 1000))
 
 val campaigns = db.collection("campaigns")
+    .whereEqualTo("chainId", chainId)
     .whereGreaterThanOrEqualTo("saleStartTime", oneYearAgo)
     .orderBy("saleStartTime", Query.Direction.DESCENDING)
     .get()
@@ -61,10 +69,8 @@ val campaigns = db.collection("campaigns")
 
 ### Firestore Indexes
 以下の複合インデックスが必要：
-- `saleStartTime` (descending)
-
-お気に入りフィルタ用（chainIdの配列でフィルタ）：
-- `chainId` (ascending) + `saleStartTime` (descending)
+- `/chains`: `furigana` (ascending)
+- `/campaigns`: `chainId` (ascending) + `saleStartTime` (descending)
 
 ### Alternatives Considered
 - **Realtime Database**: NoSQLだがクエリ機能が弱い、Firestoreが推奨
@@ -234,11 +240,23 @@ suspend fun saveFilterPreference(showFavoritesOnly: Boolean) {
 
 ### Query Patterns
 
-#### パターン1: 全キャンペーン表示（1年以内、販売開始日時降順）
+#### パターン1: チェーン店一覧取得（ふりがな順）
+```kotlin
+db.collection("chains")
+    .orderBy("furigana", Query.Direction.ASCENDING)
+    .get()
+    .await()
+```
+
+**必要なインデックス**:
+- `furigana` (ascending) - 単一フィールドインデックス（自動作成）
+
+#### パターン2: チェーン店のキャンペーン取得（1年以内、販売開始日時降順）
 ```kotlin
 val oneYearAgo = Timestamp(Date(System.currentTimeMillis() - 365L * 24 * 60 * 60 * 1000))
 
 db.collection("campaigns")
+    .whereEqualTo("chainId", chainId)
     .whereGreaterThanOrEqualTo("saleStartTime", oneYearAgo)
     .orderBy("saleStartTime", Query.Direction.DESCENDING)
     .get()
@@ -246,18 +264,17 @@ db.collection("campaigns")
 ```
 
 **必要なインデックス**:
-- `saleStartTime` (descending)
+- `chainId` (ascending) + `saleStartTime` (descending)
 
-#### パターン2: お気に入りフィルタ（chainIdの配列でフィルタ）
+#### パターン3: お気に入りフィルタ（チェーン店IDの配列でフィルタ）
 ```kotlin
 // お気に入りチェーンIDを取得（003-favoritesの機能）
 val favoriteChainIds = getFavoriteChainIds(user.uid)
 
-// chainIdが配列に含まれるキャンペーンを取得
-db.collection("campaigns")
-    .whereIn("chainId", favoriteChainIds)
-    .whereGreaterThanOrEqualTo("saleStartTime", oneYearAgo)
-    .orderBy("saleStartTime", Query.Direction.DESCENDING)
+// chainIdが配列に含まれるチェーン店を取得
+db.collection("chains")
+    .whereIn(FieldPath.documentId(), favoriteChainIds)
+    .orderBy("furigana", Query.Direction.ASCENDING)
     .get()
     .await()
 ```
@@ -266,12 +283,9 @@ db.collection("campaigns")
 - `whereIn` は最大10個まで
 - お気に入りチェーンが10個を超える場合は、クライアント側でフィルタリング
 
-**必要なインデックス**:
-- `chainId` (ascending) + `saleStartTime` (descending)
-
 ### Performance Considerations
 - **キャッシュ活用**: Firestoreのキャッシュ機能を有効化（デフォルトで有効）
-- **ページネーション**: Phase2では不要（キャンペーン数160件程度）、500件超えたら検討
+- **データ量**: Phase2では16チェーン店 + 各チェーンあたり1〜5件のキャンペーン
 
 ### Alternatives Considered
 - **Cloud Functions経由**: Phase2ではオーバーエンジニアリング
@@ -366,23 +380,24 @@ model/        # ドメインモデル
 ### Key Components
 ```kotlin
 // UIステート
-data class CampaignListUiState(
-    val campaigns: List<CampaignWithChain> = emptyList(),
+data class ChainListUiState(
+    val chainsWithCampaigns: List<ChainWithCampaigns> = emptyList(),
     val isLoading: Boolean = true,
     val showFavoritesOnly: Boolean = false,
     val error: String? = null
 )
 
 // ViewModel
-class CampaignListViewModel(
+class ChainListViewModel(
+    private val chainRepository: ChainRepository,
     private val campaignRepository: CampaignRepository,
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CampaignListUiState())
-    val uiState: StateFlow<CampaignListUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(ChainListUiState())
+    val uiState: StateFlow<ChainListUiState> = _uiState.asStateFlow()
 
-    fun loadCampaigns() { /* ... */ }
+    fun loadChains() { /* ... */ }
     fun toggleFavoritesFilter() { /* ... */ }
 }
 ```
@@ -410,19 +425,19 @@ class CampaignListViewModel(
 ### Pattern
 ```kotlin
 // ViewModel
-private val _uiState = MutableStateFlow(CampaignListUiState())
-val uiState: StateFlow<CampaignListUiState> = _uiState.asStateFlow()
+private val _uiState = MutableStateFlow(ChainListUiState())
+val uiState: StateFlow<ChainListUiState> = _uiState.asStateFlow()
 
 // Composable
 @Composable
-fun CampaignListScreen(viewModel: CampaignListViewModel) {
+fun ChainListScreen(viewModel: ChainListViewModel) {
     val uiState by viewModel.uiState.collectAsState()
 
     when {
         uiState.isLoading -> LoadingIndicator()
         uiState.error != null -> ErrorMessage(uiState.error)
-        uiState.campaigns.isEmpty() -> EmptyState()
-        else -> CampaignList(uiState.campaigns)
+        uiState.chainsWithCampaigns.isEmpty() -> EmptyState()
+        else -> ChainList(uiState.chainsWithCampaigns)
     }
 }
 ```
@@ -454,7 +469,8 @@ fun CampaignListScreen(viewModel: CampaignListViewModel) {
   - 1年フィルタロジック
   - ViewModel状態遷移
 - **UIテスト**:
-  - キャンペーン一覧表示
+  - チェーン店一覧表示
+  - キャンペーン一覧表示（チェーン店ごと）
   - お気に入りフィルタのON/OFF
   - 空リスト表示
 - **E2Eテスト**:

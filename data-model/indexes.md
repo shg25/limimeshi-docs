@@ -2,7 +2,7 @@
 
 **作成日**: 2025-11-19  
 **ベストプラクティス**: [firestore-best-practices.md](./firestore-best-practices.md)  
-**関連仕様**: [002-campaign-list](../specs/002-campaign-list/), [003-favorites](../specs/003-favorites/)  
+**関連仕様**: [002-chain-list](../specs/002-chain-list/), [003-favorites](../specs/003-favorites/)  
   
 ---
 

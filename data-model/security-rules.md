@@ -2,7 +2,7 @@
 
 **作成日**: 2025-11-19  
 **ベストプラクティス**: [firestore-best-practices.md](./firestore-best-practices.md)  
-**関連仕様**: [001-admin-panel](../specs/001-admin-panel/), [002-campaign-list](../specs/002-campaign-list/), [003-favorites](../specs/003-favorites/)  
+**関連仕様**: [001-admin-panel](../specs/001-admin-panel/), [002-chain-list](../specs/002-chain-list/), [003-favorites](../specs/003-favorites/)  
   
 ---
 
@@ -132,7 +132,7 @@ service cloud.firestore {
 
 | 操作 | 条件 | 理由 |
 |------|------|------|
-| read | 全ユーザー | 002-campaign-listでチェーン名表示に必要 |
+| read | 全ユーザー | 002-chain-listでチェーン名表示に必要 |
 | create | 管理者のみ | 001-admin-panelで登録 |
 | update | 管理者のみ | 001-admin-panelで編集、003-favoritesでfavoriteCount更新 |
 | delete | 禁止 | Phase2では削除機能なし、誤削除防止 |
@@ -143,7 +143,7 @@ service cloud.firestore {
 
 | 操作 | 条件 | 理由 |
 |------|------|------|
-| read | 全ユーザー | 002-campaign-listでキャンペーン一覧表示 |
+| read | 全ユーザー | 002-chain-listでキャンペーン一覧表示 |
 | create | 管理者のみ | 001-admin-panelで登録 |
 | update | 管理者のみ | 001-admin-panelで編集 |
 | delete | 管理者のみ | 001-admin-panelで削除 |

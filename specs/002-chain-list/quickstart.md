@@ -1,8 +1,8 @@
-# Quickstart: キャンペーン一覧（Campaign List）
+# Quickstart: チェーン店一覧（Chain List）
 
-**Feature**: 002-campaign-list  
-**Date**: 2025-11-28  
-**Related**: [spec.md](./spec.md), [research.md](./research.md), [contracts/firestore-schema.md](./contracts/firestore-schema.md)  
+**Feature**: 002-chain-list
+**Date**: 2025-11-28
+**Related**: [spec.md](./spec.md), [research.md](./research.md), [contracts/firestore-schema.md](./contracts/firestore-schema.md)
 
 ## Prerequisites
 
@@ -121,9 +121,9 @@ plugins {
 
 Firebase Consoleで以下のインデックスを作成:
 
-#### Index 1: saleStartTime（降順）
-- Collection: `campaigns`
-- Fields: `saleStartTime` (Descending)
+#### Index 1: furigana（昇順）
+- Collection: `chains`
+- Fields: `furigana` (Ascending)
 
 #### Index 2: chainId + saleStartTime
 - Collection: `campaigns`
@@ -136,6 +136,24 @@ Firebase Consoleで以下のインデックスを作成:
 ## Core Implementation
 
 ### 1. データモデル
+
+`app/src/main/java/com/limimeshi/android/data/model/Chain.kt`:
+```kotlin
+package com.limimeshi.android.data.model
+
+import com.google.firebase.Timestamp
+
+data class Chain(
+    val id: String = "",
+    val name: String = "",
+    val furigana: String = "",
+    val officialUrl: String? = null,
+    val logoUrl: String? = null,
+    val favoriteCount: Int = 0,
+    val createdAt: Timestamp = Timestamp.now(),
+    val updatedAt: Timestamp = Timestamp.now()
+)
+```
 
 `app/src/main/java/com/limimeshi/android/data/model/Campaign.kt`:
 ```kotlin
@@ -173,6 +191,21 @@ sealed class CampaignStatus {
         is Ended -> "終了"
     }
 }
+```
+
+`app/src/main/java/com/limimeshi/android/data/model/ChainWithCampaigns.kt`:
+```kotlin
+package com.limimeshi.android.data.model
+
+data class ChainWithCampaigns(
+    val chain: Chain,
+    val campaigns: List<CampaignWithStatus>
+)
+
+data class CampaignWithStatus(
+    val campaign: Campaign,
+    val status: CampaignStatus
+)
 ```
 
 ### 2. ステータス判定ユーティリティ
@@ -220,7 +253,7 @@ fun getCampaignStatus(
 
 ### 3. Repository
 
-`app/src/main/java/com/limimeshi/android/data/repository/CampaignRepository.kt`:
+`app/src/main/java/com/limimeshi/android/data/repository/ChainRepository.kt`:
 ```kotlin
 package com.limimeshi.android.data.repository
 
@@ -229,7 +262,9 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.limimeshi.android.data.model.Campaign
-import com.limimeshi.android.data.model.CampaignWithChain
+import com.limimeshi.android.data.model.CampaignWithStatus
+import com.limimeshi.android.data.model.Chain
+import com.limimeshi.android.data.model.ChainWithCampaigns
 import com.limimeshi.android.util.getCampaignStatus
 import kotlinx.coroutines.tasks.await
 import java.util.Date
@@ -237,58 +272,77 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CampaignRepository @Inject constructor() {
+class ChainRepository @Inject constructor() {
     private val db = Firebase.firestore
-    private val chainsCache = mutableMapOf<String, String>()
 
-    suspend fun getCampaigns(favoriteChainIds: List<String>? = null): List<CampaignWithChain> {
+    suspend fun getChainsWithCampaigns(favoriteChainIds: List<String>? = null): List<ChainWithCampaigns> {
         val oneYearAgo = Timestamp(Date(System.currentTimeMillis() - 365L * 24 * 60 * 60 * 1000))
 
-        val query = if (favoriteChainIds != null && favoriteChainIds.isNotEmpty()) {
-            db.collection("campaigns")
-                .whereIn("chainId", favoriteChainIds.take(10))
-                .whereGreaterThanOrEqualTo("saleStartTime", oneYearAgo)
-                .orderBy("saleStartTime", Query.Direction.DESCENDING)
+        // チェーン店一覧を取得（ふりがな順）
+        val chainsQuery = if (favoriteChainIds != null && favoriteChainIds.isNotEmpty()) {
+            // お気に入りフィルタON
+            db.collection("chains")
+                .whereIn("__name__", favoriteChainIds.take(10))
         } else {
-            db.collection("campaigns")
-                .whereGreaterThanOrEqualTo("saleStartTime", oneYearAgo)
-                .orderBy("saleStartTime", Query.Direction.DESCENDING)
+            // 全チェーン店
+            db.collection("chains")
+                .orderBy("furigana", Query.Direction.ASCENDING)
         }
 
-        val snapshot = query.get().await()
-        val campaigns = snapshot.toObjects(Campaign::class.java)
-            .mapIndexed { index, campaign ->
-                campaign.copy(id = snapshot.documents[index].id)
+        val chainsSnapshot = chainsQuery.get().await()
+        val chains = chainsSnapshot.toObjects(Chain::class.java)
+            .mapIndexed { index, chain ->
+                chain.copy(id = chainsSnapshot.documents[index].id)
+            }
+            .let { chainList ->
+                if (favoriteChainIds != null) {
+                    // お気に入りフィルタ時もふりがな順でソート
+                    chainList.sortedBy { it.furigana }
+                } else {
+                    chainList
+                }
             }
 
-        return campaigns.map { campaign ->
-            val chainName = getChainName(campaign.chainId)
-            val status = getCampaignStatus(campaign.saleStartTime, campaign.saleEndTime)
-            CampaignWithChain(campaign, chainName, status)
+        // 各チェーン店に紐づくキャンペーンを取得
+        return chains.map { chain ->
+            val campaignsSnapshot = db.collection("campaigns")
+                .whereEqualTo("chainId", chain.id)
+                .whereGreaterThanOrEqualTo("saleStartTime", oneYearAgo)
+                .orderBy("saleStartTime", Query.Direction.DESCENDING)
+                .get()
+                .await()
+
+            val campaigns = campaignsSnapshot.toObjects(Campaign::class.java)
+                .mapIndexed { index, campaign ->
+                    campaign.copy(id = campaignsSnapshot.documents[index].id)
+                }
+
+            val campaignsWithStatus = campaigns.map { campaign ->
+                CampaignWithStatus(
+                    campaign = campaign,
+                    status = getCampaignStatus(campaign.saleStartTime, campaign.saleEndTime)
+                )
+            }
+
+            ChainWithCampaigns(
+                chain = chain,
+                campaigns = campaignsWithStatus
+            )
         }
-    }
-
-    private suspend fun getChainName(chainId: String): String {
-        chainsCache[chainId]?.let { return it }
-
-        val chainDoc = db.collection("chains").document(chainId).get().await()
-        val name = chainDoc.getString("name") ?: "不明"
-        chainsCache[chainId] = name
-        return name
     }
 }
 ```
 
 ### 4. ViewModel
 
-`app/src/main/java/com/limimeshi/android/ui/campaign/CampaignListViewModel.kt`:
+`app/src/main/java/com/limimeshi/android/ui/chain/ChainListViewModel.kt`:
 ```kotlin
-package com.limimeshi.android.ui.campaign
+package com.limimeshi.android.ui.chain
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.limimeshi.android.data.model.CampaignWithChain
-import com.limimeshi.android.data.repository.CampaignRepository
+import com.limimeshi.android.data.model.ChainWithCampaigns
+import com.limimeshi.android.data.repository.ChainRepository
 import com.limimeshi.android.data.repository.PreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -298,31 +352,31 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class CampaignListUiState(
-    val campaigns: List<CampaignWithChain> = emptyList(),
+data class ChainListUiState(
+    val chainsWithCampaigns: List<ChainWithCampaigns> = emptyList(),
     val isLoading: Boolean = true,
     val showFavoritesOnly: Boolean = false,
     val error: String? = null
 )
 
 @HiltViewModel
-class CampaignListViewModel @Inject constructor(
-    private val campaignRepository: CampaignRepository,
+class ChainListViewModel @Inject constructor(
+    private val chainRepository: ChainRepository,
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CampaignListUiState())
-    val uiState: StateFlow<CampaignListUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(ChainListUiState())
+    val uiState: StateFlow<ChainListUiState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             val savedFilter = preferencesRepository.showFavoritesOnly.first()
             _uiState.value = _uiState.value.copy(showFavoritesOnly = savedFilter)
-            loadCampaigns()
+            loadChains()
         }
     }
 
-    fun loadCampaigns() {
+    fun loadChains() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
 
@@ -334,9 +388,9 @@ class CampaignListViewModel @Inject constructor(
                     null
                 }
 
-                val campaigns = campaignRepository.getCampaigns(favoriteChainIds)
+                val chainsWithCampaigns = chainRepository.getChainsWithCampaigns(favoriteChainIds)
                 _uiState.value = _uiState.value.copy(
-                    campaigns = campaigns,
+                    chainsWithCampaigns = chainsWithCampaigns,
                     isLoading = false
                 )
             } catch (e: Exception) {
@@ -353,7 +407,7 @@ class CampaignListViewModel @Inject constructor(
             val newValue = !_uiState.value.showFavoritesOnly
             _uiState.value = _uiState.value.copy(showFavoritesOnly = newValue)
             preferencesRepository.setShowFavoritesOnly(newValue)
-            loadCampaigns()
+            loadChains()
         }
     }
 }
@@ -361,9 +415,9 @@ class CampaignListViewModel @Inject constructor(
 
 ### 5. 画面
 
-`app/src/main/java/com/limimeshi/android/ui/campaign/CampaignListScreen.kt`:
+`app/src/main/java/com/limimeshi/android/ui/chain/ChainListScreen.kt`:
 ```kotlin
-package com.limimeshi.android.ui.campaign
+package com.limimeshi.android.ui.chain
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -376,19 +430,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.limimeshi.android.data.model.CampaignWithChain
+import com.limimeshi.android.data.model.ChainWithCampaigns
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CampaignListScreen(
-    viewModel: CampaignListViewModel = hiltViewModel()
+fun ChainListScreen(
+    viewModel: ChainListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("期間限定キャンペーン一覧") }
+                title = { Text("チェーン店一覧") }
             )
         }
     ) { paddingValues ->
@@ -429,21 +483,26 @@ fun CampaignListScreen(
                         Text("エラー: ${uiState.error}")
                     }
                 }
-                uiState.campaigns.isEmpty() -> {
+                uiState.chainsWithCampaigns.isEmpty() -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("データなし")
+                        Text(
+                            if (uiState.showFavoritesOnly)
+                                "お気に入り登録したチェーン店がありません"
+                            else
+                                "データなし"
+                        )
                     }
                 }
                 else -> {
                     LazyColumn(
                         contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        items(uiState.campaigns) { campaign ->
-                            CampaignCard(campaign = campaign)
+                        items(uiState.chainsWithCampaigns) { chainWithCampaigns ->
+                            ChainCard(chainWithCampaigns = chainWithCampaigns)
                         }
                     }
                 }
@@ -451,39 +510,107 @@ fun CampaignListScreen(
         }
     }
 }
+```
+
+`app/src/main/java/com/limimeshi/android/ui/chain/ChainCard.kt`:
+```kotlin
+package com.limimeshi.android.ui.chain
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.limimeshi.android.data.model.ChainWithCampaigns
 
 @Composable
-fun CampaignCard(campaign: CampaignWithChain) {
+fun ChainCard(chainWithCampaigns: ChainWithCampaigns) {
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
+            // チェーン店情報
             Text(
-                text = campaign.campaign.name,
-                style = MaterialTheme.typography.titleMedium
+                text = chainWithCampaigns.chain.name,
+                style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = campaign.chainName,
+                text = "お気に入り: ${chainWithCampaigns.chain.favoriteCount}人",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // キャンペーン一覧
+            if (chainWithCampaigns.campaigns.isEmpty()) {
+                Text(
+                    text = "現在キャンペーンはありません",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                chainWithCampaigns.campaigns.forEach { campaignWithStatus ->
+                    CampaignItem(campaignWithStatus = campaignWithStatus)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+        }
+    }
+}
+```
+
+`app/src/main/java/com/limimeshi/android/ui/chain/CampaignItem.kt`:
+```kotlin
+package com.limimeshi.android.ui.chain
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.limimeshi.android.data.model.CampaignWithStatus
+
+@Composable
+fun CampaignItem(campaignWithStatus: CampaignWithStatus) {
+    val campaign = campaignWithStatus.campaign
+
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        shape = MaterialTheme.shapes.small
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        ) {
             Text(
-                text = campaign.status.toDisplayString(),
-                style = MaterialTheme.typography.bodySmall
+                text = campaign.name,
+                style = MaterialTheme.typography.titleMedium
             )
-            Text(
-                text = "販売開始: ${campaign.campaign.saleStartTime.toDate()}",
-                style = MaterialTheme.typography.bodySmall
-            )
-            campaign.campaign.saleEndTime?.let {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "販売開始: ${campaign.saleStartTime.toDate()}",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = campaignWithStatus.status.toDisplayString(),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            campaign.saleEndTime?.let {
                 Text(
                     text = "販売終了: ${it.toDate()}",
                     style = MaterialTheme.typography.bodySmall
                 )
             }
-            campaign.campaign.description?.let {
+            campaign.description?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyMedium,
@@ -555,27 +682,32 @@ class CampaignStatusUtilTest {
 
 ### UIテスト
 
-`app/src/androidTest/java/com/limimeshi/android/ui/campaign/CampaignListScreenTest.kt`:
+`app/src/androidTest/java/com/limimeshi/android/ui/chain/ChainListScreenTest.kt`:
 ```kotlin
-package com.limimeshi.android.ui.campaign
+package com.limimeshi.android.ui.chain
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import org.junit.Rule
 import org.junit.Test
 
-class CampaignListScreenTest {
+class ChainListScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
-    fun キャンペーン一覧が表示される() {
+    fun チェーン店一覧が表示される() {
         // TODO: ViewModelをモック化してテスト
     }
 
     @Test
-    fun キャンペーン0件時にデータなしと表示される() {
+    fun チェーン店0件時にデータなしと表示される() {
+        // TODO: ViewModelをモック化してテスト
+    }
+
+    @Test
+    fun キャンペーン0件時に現在キャンペーンはありませんと表示される() {
         // TODO: ViewModelをモック化してテスト
     }
 
@@ -624,6 +756,9 @@ firebase emulators:start
 
 ### Q5: google-services.jsonが見つからない
 - **A**: Firebase Consoleからダウンロードして `app/` 直下に配置。
+
+### Q6: チェーン店がふりがな順で表示されない
+- **A**: Firestoreインデックス（chains: furigana ascending）が作成されているか確認。
 
 ---
 

@@ -22,7 +22,7 @@
 
 ## Phase 1: Setup（共有インフラストラクチャ）
 
-**Purpose**: プロジェクトの初期化と基本構造の構築（002-campaign-listで大部分が完了済み）
+**Purpose**: プロジェクトの初期化と基本構造の構築（002-chain-listで大部分が完了済み）
 
 - [ ] T001 limimeshi-androidリポジトリのプロジェクト構造を確認（ui/, data/repository/, data/model/, util/, di/が存在することを確認）
 - [ ] T002 [P] Material Icons依存関係が追加されていることを確認（androidx.compose.material:material-icons-extended）、未追加の場合は追加
@@ -45,7 +45,7 @@
 
 ## Phase 3: User Story 1 - チェーン店のお気に入り登録・解除 (Priority: P1) 🎯 MVP
 
-**Goal**: ログインユーザーがチェーン店をお気に入り登録・解除でき、お気に入り状態が即座にUIに反映される。お気に入り登録したチェーンは002のキャンペーン一覧フィルタで使用される。
+**Goal**: ログインユーザーがチェーン店をお気に入り登録・解除でき、お気に入り状態が即座にUIに反映される。お気に入り登録したチェーンは002のチェーン店一覧フィルタで使用される。
 
 **Independent Test**: お気に入り登録・解除が正しく動作し、状態がFirestoreに永続化され、UIに即座に反映されれば、独立して価値を提供できる。
 
@@ -60,11 +60,11 @@
 
 - [ ] T008 [P] [US1] お気に入りボタンコンポーネントを作成 ui/components/FavoriteButton.kt（Material 3 IconButton + Favorite/FavoriteBorderアイコン、ローディング状態、無効化状態）
 - [ ] T009 [US1] FavoritesRepositoryを作成 data/repository/FavoritesRepository.kt（Firestoreからお気に入り状態を取得、登録・解除処理、Transactionでカウント更新）
-- [ ] T010 [US1] CampaignListViewModelに認証状態を追加 ui/campaign/CampaignListViewModel.kt（Firebase Auth AuthStateListener、ログインユーザーのみお気に入りボタン有効化）
-- [ ] T011 [US1] CampaignListViewModelにお気に入り状態を追加 ui/campaign/CampaignListViewModel.kt（お気に入りチェーンIDリストを管理、登録・解除処理）
-- [ ] T012 [US1] CampaignCardへのお気に入りボタン統合 ui/campaign/CampaignCard.kt（FavoriteButtonコンポーネントを追加、chainIdごとのお気に入り状態を表示）
-- [ ] T013 [US1] エラーハンドリングの追加 ui/campaign/CampaignListScreen.kt（Snackbar + SnackbarHostState でエラーメッセージ表示、permission-denied/unavailableエラーの処理）
-- [ ] T014 [US1] ローディング状態の管理 ui/campaign/CampaignListViewModel.kt（chainIdごとのローディング状態をMapで管理）
+- [ ] T010 [US1] ChainListViewModelに認証状態を追加 ui/chain/ChainListViewModel.kt（Firebase Auth AuthStateListener、ログインユーザーのみお気に入りボタン有効化）
+- [ ] T011 [US1] ChainListViewModelにお気に入り状態を追加 ui/chain/ChainListViewModel.kt（お気に入りチェーンIDリストを管理、登録・解除処理）
+- [ ] T012 [US1] ChainCardへのお気に入りボタン統合 ui/chain/ChainCard.kt（FavoriteButtonコンポーネントを追加、chainIdごとのお気に入り状態を表示）
+- [ ] T013 [US1] エラーハンドリングの追加 ui/chain/ChainListScreen.kt（Snackbar + SnackbarHostState でエラーメッセージ表示、permission-denied/unavailableエラーの処理）
+- [ ] T014 [US1] ローディング状態の管理 ui/chain/ChainListViewModel.kt（chainIdごとのローディング状態をMapで管理）
 
 **Checkpoint**: この時点で、User Story 1は完全に機能し、独立してテスト可能です（お気に入り登録・解除機能が動作）
 
@@ -85,8 +85,8 @@
 ### Implementation for User Story 2
 
 - [ ] T016 [P] [US2] お気に入り登録数表示コンポーネントを作成 ui/components/FavoriteCount.kt（count=0の場合は非表示、それ以外は「♥ {count}人がお気に入り登録」を表示）
-- [ ] T017 [US2] CampaignCardへのお気に入り登録数の追加 ui/campaign/CampaignCard.kt（FavoriteCountコンポーネントを追加、chain.favoriteCountを渡す）
-- [ ] T018 [US2] お気に入りボタンでの登録数ローカル更新 ui/campaign/CampaignListViewModel.kt（登録・解除時にfavoriteCountをローカルステートで即座に更新、Optimistic UI）
+- [ ] T017 [US2] ChainCardへのお気に入り登録数の追加 ui/chain/ChainCard.kt（FavoriteCountコンポーネントを追加、chain.favoriteCountを渡す）
+- [ ] T018 [US2] お気に入りボタンでの登録数ローカル更新 ui/chain/ChainListViewModel.kt（登録・解除時にfavoriteCountをローカルステートで即座に更新、Optimistic UI）
 
 **Checkpoint**: この時点で、User Stories 1 AND 2は両方とも独立して動作します（お気に入り登録・解除＋登録数表示）
 
@@ -111,7 +111,7 @@
 
 ### Phase Dependencies
 
-- **Setup (Phase 1)**: 依存関係なし - 即座に開始可能（002-campaign-listで大部分完了済み）
+- **Setup (Phase 1)**: 依存関係なし - 即座に開始可能（002-chain-listで大部分完了済み）
 - **Foundational (Phase 2)**: Setupの完了に依存 - すべてのユーザーストーリーをブロック
 - **User Stories (Phase 3+)**: すべてFoundationalフェーズの完了に依存
   - User Story 1: Foundational完了後に開始可能 - 他のストーリーへの依存なし

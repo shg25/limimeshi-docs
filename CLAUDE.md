@@ -56,7 +56,7 @@ limimeshi-docs/
 │   └── inception-deck.md      # インセプションデッキ（10の質問）
 ├── specs/               # 機能設計書（GitHub Spec Kit形式）
 │   ├── 001-admin-panel/       # 管理画面機能
-│   ├── 002-campaign-list/     # キャンペーン一覧機能（Android）
+│   ├── 002-chain-list/        # チェーン店一覧機能（Android）
 │   └── 003-favorites/         # お気に入り登録機能（Android）
 ├── adr/                 # Architecture Decision Records
 ├── api/                 # API仕様書
@@ -134,7 +134,7 @@ limimeshi-docs/
 
 ### 1-2. GitHub Spec Kitで機能設計 ✅ 完了
 - 管理画面機能 → `specs/001-admin-panel/`
-- キャンペーン一覧機能 → `specs/002-campaign-list/`（Android向け）
+- チェーン店一覧機能 → `specs/002-chain-list/`（Android向け）
 - お気に入り登録機能 → `specs/003-favorites/`（Android向け）
 
 ### 1-3. ADRで技術選定記録 ✅ 完了

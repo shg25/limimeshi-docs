@@ -2,7 +2,7 @@
 
 **作成日**: 2025-11-19  
 **ベストプラクティス**: [firestore-best-practices.md](./firestore-best-practices.md)  
-**関連仕様**: [001-admin-panel](../specs/001-admin-panel/), [002-campaign-list](../specs/002-campaign-list/), [003-favorites](../specs/003-favorites/)  
+**関連仕様**: [001-admin-panel](../specs/001-admin-panel/), [002-chain-list](../specs/002-chain-list/), [003-favorites](../specs/003-favorites/)  
   
 ---
 
@@ -25,7 +25,7 @@
 ```
 管理者 → 001-admin-panel → /chains, /campaigns (書き込み)
                               ↓
-一般ユーザー → 002-campaign-list → /chains, /campaigns (読み取り)
+一般ユーザー → 002-chain-list → /chains, /campaigns (読み取り)
                               ↓
 ログインユーザー → 003-favorites → /users/{userId}/favorites (読み書き)
                                    ↓
@@ -96,7 +96,7 @@ interface Chain {
 
 ### 概要
 
-キャンペーンの情報を管理。001-admin-panelで登録、002-campaign-listで表示。
+キャンペーンの情報を管理。001-admin-panelで登録、002-chain-listで表示。
 
 ### スキーマ
 
@@ -327,5 +327,5 @@ interface Review {
 
 - [Firestore設計ベストプラクティス](./firestore-best-practices.md)
 - [001-admin-panel Firestoreスキーマ](../specs/001-admin-panel/contracts/firestore-schema.md)
-- [002-campaign-list Firestoreスキーマ](../specs/002-campaign-list/contracts/firestore-schema.md)
+- [002-chain-list Firestoreスキーマ](../specs/002-chain-list/contracts/firestore-schema.md)
 - [003-favorites Firestoreスキーマ](../specs/003-favorites/contracts/firestore-schema.md)

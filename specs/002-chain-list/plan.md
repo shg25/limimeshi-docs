@@ -1,11 +1,11 @@
-# Implementation Plan: キャンペーン一覧（Campaign List）
+# Implementation Plan: チェーン店一覧（Chain List）
 
-**Branch**: `002-campaign-list` | **Date**: 2025-11-28 | **Spec**: [spec.md](./spec.md)  
-**Input**: Feature specification from `/specs/002-campaign-list/spec.md`  
+**Branch**: `002-chain-list` | **Date**: 2025-11-28 | **Spec**: [spec.md](./spec.md)  
+**Input**: Feature specification from `/specs/002-chain-list/spec.md`  
 
 ## Summary
 
-一般ユーザー向けのキャンペーン一覧画面（Androidアプリ）。期間限定キャンペーンを一覧表示し、ログインユーザーはお気に入り登録したチェーンのみ表示するフィルタを利用可能。各キャンペーンにはチェーン名、キャンペーン名、販売開始日時、販売終了日時（未設定時は非表示）、ステータス（予定/開始から◯日経過/終了）、説明を表示。X Post URLがあれば埋め込み表示（商品画像代わり）。販売開始日時の降順（新しい順）でソート。1年経過したキャンペーンは非表示。ログインユーザーのフィルタ選択は次回訪問時も保持。Phase2 MVPで実装。
+一般ユーザー向けのチェーン店一覧画面（Androidアプリ）。チェーン店を一覧表示し、各チェーン店に紐づくキャンペーンをチェーン店単位で確認できる。ログインユーザーはお気に入り登録したチェーン店のみ表示するフィルタを利用可能。チェーン店はふりがな順でソート、キャンペーンは販売開始日時の降順（新しい順）でソート。1年経過したキャンペーンは非表示。ログインユーザーのフィルタ選択は次回訪問時も保持。Phase2 MVPで実装。
 
 **技術アプローチ**:
 - Kotlin + Jetpack Compose + Material 3 のネイティブAndroidアプリ
@@ -23,8 +23,8 @@
 **Target Platform**: Android 8.0+ (API 26+)  
 **Project Type**: Mobile（limimeshi-android リポジトリ）  
 **Performance Goals**: 初期表示3秒以内（モバイル4G環境、X Post埋め込み部分を除く）  
-**Constraints**: Firestore読み取り150件以内（1年以内のキャンペーン、1年経過したキャンペーンは自動非表示）  
-**Scale/Scope**: Phase2の160ユーザー、16チェーン、平均キャンペーン数は変動  
+**Constraints**: Phase2では16チェーン店固定、各チェーンあたり1〜5件程度のキャンペーン  
+**Scale/Scope**: Phase2の160ユーザー、16チェーン店、平均キャンペーン数は変動  
 
 ## Constitution Check
 
@@ -56,7 +56,7 @@
 
 ### ✅ VII. Cost Awareness（コスト意識）
 - **Status**: PASS
-- **Evidence**: Firestore読み取り最適化（インデックス最適化）、Phase2では144回読み取り（ユーザー数想定）
+- **Evidence**: Firestore読み取り最適化（インデックス最適化）、Phase2では少量の読み取り（16チェーン + キャンペーン）
 
 ### ✅ VIII. Security & Privacy First
 - **Status**: PASS
@@ -73,7 +73,7 @@
 ### Documentation (this feature)
 
 ```text
-specs/002-campaign-list/
+specs/002-chain-list/
 ├── spec.md              # 機能仕様書（既存）
 ├── plan.md              # 実装計画（/speckit-plan コマンドで生成）
 ├── research.md          # Phase 0 研究（既存）
@@ -92,43 +92,46 @@ limimeshi-android/
 │   │   ├── main/
 │   │   │   ├── java/com/limimeshi/android/
 │   │   │   │   ├── ui/
-│   │   │   │   │   ├── campaign/
-│   │   │   │   │   │   ├── CampaignListScreen.kt      # キャンペーン一覧画面
-│   │   │   │   │   │   ├── CampaignListViewModel.kt   # ViewModel
-│   │   │   │   │   │   └── CampaignCard.kt            # キャンペーンカードコンポーネント
+│   │   │   │   │   ├── chain/
+│   │   │   │   │   │   ├── ChainListScreen.kt        # チェーン店一覧画面
+│   │   │   │   │   │   ├── ChainListViewModel.kt     # ViewModel
+│   │   │   │   │   │   ├── ChainCard.kt              # チェーン店カードコンポーネント
+│   │   │   │   │   │   └── CampaignItem.kt           # キャンペーン項目コンポーネント
 │   │   │   │   │   ├── components/
-│   │   │   │   │   │   ├── FavoritesFilter.kt         # お気に入りフィルタコンポーネント
-│   │   │   │   │   │   └── XPostEmbed.kt              # X Post埋め込みコンポーネント
+│   │   │   │   │   │   ├── FavoritesFilter.kt        # お気に入りフィルタコンポーネント
+│   │   │   │   │   │   └── XPostEmbed.kt             # X Post埋め込みコンポーネント
 │   │   │   │   │   └── theme/
-│   │   │   │   │       └── Theme.kt                   # Material 3テーマ
+│   │   │   │   │       └── Theme.kt                  # Material 3テーマ
 │   │   │   │   ├── data/
 │   │   │   │   │   ├── repository/
-│   │   │   │   │   │   ├── CampaignRepository.kt      # キャンペーンデータ取得
-│   │   │   │   │   │   └── PreferencesRepository.kt   # フィルタ設定永続化
+│   │   │   │   │   │   ├── ChainRepository.kt        # チェーン店データ取得
+│   │   │   │   │   │   ├── CampaignRepository.kt     # キャンペーンデータ取得
+│   │   │   │   │   │   └── PreferencesRepository.kt  # フィルタ設定永続化
 │   │   │   │   │   └── model/
-│   │   │   │   │       ├── Campaign.kt                # キャンペーンモデル
-│   │   │   │   │       ├── Chain.kt                   # チェーンモデル
-│   │   │   │   │       └── CampaignStatus.kt          # ステータス（Sealed Class）
+│   │   │   │   │       ├── Chain.kt                  # チェーン店モデル
+│   │   │   │   │       ├── Campaign.kt               # キャンペーンモデル
+│   │   │   │   │       ├── CampaignStatus.kt         # ステータス（Sealed Class）
+│   │   │   │   │       └── ChainWithCampaigns.kt     # チェーン店+キャンペーン
 │   │   │   │   ├── util/
-│   │   │   │   │   └── CampaignStatusUtil.kt          # ステータス判定ロジック
+│   │   │   │   │   └── CampaignStatusUtil.kt         # ステータス判定ロジック
 │   │   │   │   ├── di/
-│   │   │   │   │   └── AppModule.kt                   # Hilt DI設定
-│   │   │   │   └── LimimeshiApp.kt                    # Applicationクラス
+│   │   │   │   │   └── AppModule.kt                  # Hilt DI設定
+│   │   │   │   └── LimimeshiApp.kt                   # Applicationクラス
 │   │   │   └── res/
 │   │   │       └── values/
 │   │   │           └── strings.xml
 │   │   ├── test/
 │   │   │   └── java/com/limimeshi/android/
 │   │   │       ├── util/
-│   │   │       │   └── CampaignStatusUtilTest.kt      # ステータス判定の単体テスト
-│   │   │       └── ui/campaign/
-│   │   │           └── CampaignListViewModelTest.kt   # ViewModelの単体テスト
+│   │   │       │   └── CampaignStatusUtilTest.kt     # ステータス判定の単体テスト
+│   │   │       └── ui/chain/
+│   │   │           └── ChainListViewModelTest.kt     # ViewModelの単体テスト
 │   │   └── androidTest/
 │   │       └── java/com/limimeshi/android/
-│   │           └── ui/campaign/
-│   │               └── CampaignListScreenTest.kt      # UIテスト
+│   │           └── ui/chain/
+│   │               └── ChainListScreenTest.kt        # UIテスト
 │   ├── build.gradle.kts
-│   └── google-services.json                           # Firebase設定（.gitignore）
+│   └── google-services.json                          # Firebase設定（.gitignore）
 ├── build.gradle.kts
 ├── settings.gradle.kts
 └── gradle.properties
@@ -169,15 +172,15 @@ N/A - この機能のConstitution違反なし
 - ✅ `quickstart.md`: 開発環境構築、実装例、テスト例
 
 **設計内容**:
-- Firestoreコレクション（/campaigns, /chains, /users/{userId}/favorites）
-- 画面設計（キャンペーン一覧、お気に入りフィルタ）
+- Firestoreコレクション（/chains, /campaigns, /users/{userId}/favorites）
+- 画面設計（チェーン店一覧、お気に入りフィルタ）
 - ステータスロジック設計（saleStartTime、saleEndTime）
-- ソートロジック（chainId + saleStartTime）
-- Kotlinデータクラス定義（Campaign, Chain, CampaignStatus, CampaignWithChain）
+- ソートロジック（チェーン店: furigana順、キャンペーン: saleStartTime降順）
+- Kotlinデータクラス定義（Chain, Campaign, CampaignStatus, ChainWithCampaigns）
 - Security Rules（読み取り専用）
 - パフォーマンス最適化（Firestore読み取り最適化、インデックス最適化）
 
-**001-admin-panelとの整合性**: /campaigns, /chainsのスキーマは001-admin-panelと完全一致
+**001-admin-panelとの整合性**: /chains, /campaignsのスキーマは001-admin-panelと完全一致
 
 ### Phase 2: Implementation（tasks.md生成）
 
@@ -194,13 +197,14 @@ N/A - この機能のConstitution違反なし
 2. **実装順序（TDD）**
    - ステータス判定ロジック（CampaignStatusUtil.kt）の単体テスト作成
    - ステータス判定ロジック実装
-   - キャンペーン一覧画面（CampaignListScreen.kt）実装
+   - チェーン店一覧画面（ChainListScreen.kt）実装
+   - キャンペーン項目コンポーネント（CampaignItem.kt）実装
    - お気に入りフィルタ（FavoritesFilter.kt）実装
    - X Post埋め込み（XPostEmbed.kt）実装
    - フィルタ選択の永続化（PreferencesRepository.kt）実装
 
 3. **UIテスト**
-   - キャンペーン一覧表示のUIテスト
+   - チェーン店一覧表示のUIテスト
    - お気に入りフィルタのUIテスト
    - フィルタ選択永続化のテスト
 
@@ -221,7 +225,7 @@ N/A - この機能のConstitution違反なし
 - **003-favorites**: お気に入りデータが必要（前提条件、お気に入りフィルタ機能）
 
 ### 提供するデータ
-- **003-favorites**: お気に入り機能がキャンペーン一覧画面（002）を表示
+- **003-favorites**: お気に入り機能がチェーン店一覧画面（002）を表示
 
 ### 並行作業の可能性
 - 001-admin-panelが完了すれば並行作業可能、ただしFirestoreスキーマの整合性に注意
@@ -239,7 +243,7 @@ N/A - この機能のConstitution違反なし
 
 ### Risk 2: Firestore読み取り回数が想定超過
 - **Impact**: コスト増加
-- **Probability**: 低（Phase2では144回程度、150回以内）
+- **Probability**: 低（Phase2では16チェーン + キャンペーン程度）
 - **Mitigation**:
   - Firestore読み取り最適化（インデックス最適化）
   - Firestoreキャッシュ活用
@@ -250,12 +254,12 @@ N/A - この機能のConstitution違反なし
 - **Probability**: 中（X Post埋め込みの影響）
 - **Mitigation**:
   - X Post埋め込みは非同期ロード
-  - キャンペーン一覧は先に表示、X Postは後から表示
+  - チェーン店一覧は先に表示、X Postは後から表示
   - Skeleton UIで読み込み中を表示
 
-### Risk 4: お気に入りチェーンが10件超過
+### Risk 4: お気に入りチェーン店が10件超過
 - **Impact**: Firestoreの`whereIn`制約（最大10件）
-- **Probability**: 低（Phase2では一般ユーザーがそこまで登録しない）
+- **Probability**: 低（Phase2では16チェーン店のみ）
 - **Mitigation**:
   - Phase2ではお気に入りチェーン10件までに制限
   - Phase3で複数回クエリに分割する実装に変更
@@ -263,10 +267,10 @@ N/A - この機能のConstitution違反なし
 ## Success Metrics
 
 ### Phase2完了時の基準
-- ✅ キャンペーン一覧の初期表示が3秒以内（モバイル4G環境、X Post埋め込み部分を除く）
-- ✅ キャンペーンがスムーズにスクロールできる（10件以上ある場合）
+- ✅ チェーン店一覧の初期表示が3秒以内（モバイル4G環境、X Post埋め込み部分を除く）
+- ✅ チェーン店がスムーズにスクロールできる（16チェーン店ある場合）
 - ✅ お気に入りフィルタの切り替えが1秒以内に反映される
-- ✅ キャンペーンが0件の場合は正しい表示がされる（空リストではなく「データなし」と表示）
+- ✅ チェーン店が0件の場合は正しい表示がされる（空リストではなく「データなし」と表示）
 - ✅ フィルタ選択が次回訪問時も保持される確率が100%である（DataStoreで永続化）
 - ✅ 単体テストカバレッジ70%以上
 - ✅ UIテストが全て合格
@@ -279,9 +283,10 @@ N/A - この機能のConstitution違反なし
 
 ## Notes
 
-- **読み取り専用**: 002-campaign-listはキャンペーンの読み取り専用機能（書き込みは001-admin-panelと003-favoritesが担当）
-- **001との整合性**: /campaigns、/chainsのスキーマは001-admin-panelと完全一致
+- **読み取り専用**: 002-chain-listはチェーン店とキャンペーンの読み取り専用機能（書き込みは001-admin-panelと003-favoritesが担当）
+- **001との整合性**: /chains、/campaignsのスキーマは001-admin-panelと完全一致
 - **003との依存関係**: お気に入りフィルタは003-favorites機能に依存（003が未完了の場合はフィルタ選択不可）
 - **X Post埋め込み**: Phase2で商品画像の代わりに実装（代替画像なし）
 - **1年経過フィルタ**: 販売開始日時から1年経過したキャンペーンは自動的に非表示（1年経過したキャンペーンは削除しない、非表示のみ）
 - **Android優先**: Phase2ではAndroidアプリを優先（Webアプリ対応はPhase3以降）
+- **画面構成**: チェーン店一覧（メイン画面）→ 各チェーン店のキャンペーン一覧（チェーン店単位で確認）

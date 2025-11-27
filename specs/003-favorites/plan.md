@@ -5,7 +5,7 @@
 
 ## Summary
 
-ログインユーザーがチェーン店をお気に入り登録・解除できる機能。お気に入り登録したチェーンは002のキャンペーン一覧フィルタで使用される。お気に入り状態はFirestoreに永続化され、複数デバイス間で同期される。お気に入り登録数を各チェーンに表示し、人気指標として提供。Phase2 MVPで実装。
+ログインユーザーがチェーン店をお気に入り登録・解除できる機能。お気に入り登録したチェーンは002のチェーン店一覧フィルタで使用される。お気に入り状態はFirestoreに永続化され、複数デバイス間で同期される。お気に入り登録数を各チェーンに表示し、人気指標として提供。Phase2 MVPで実装。
 
 **技術アプローチ**:
 - Kotlin 1.9+ + Jetpack Compose 1.5+ のAndroidアプリケーション
@@ -91,10 +91,10 @@ limimeshi-android/
 ├── app/
 │   ├── src/main/java/com/limimeshi/android/
 │   │   ├── ui/
-│   │   │   ├── campaign/
-│   │   │   │   ├── CampaignListScreen.kt     # キャンペーン一覧（002で作成済み、お気に入りボタン統合）
-│   │   │   │   ├── CampaignListViewModel.kt  # ViewModel（002で作成済み、認証状態追加）
-│   │   │   │   └── CampaignCard.kt           # キャンペーンカード（002で作成済み、お気に入りボタン追加）
+│   │   │   ├── chain/
+│   │   │   │   ├── ChainListScreen.kt        # チェーン店一覧（002で作成済み、お気に入りボタン統合）
+│   │   │   │   ├── ChainListViewModel.kt     # ViewModel（002で作成済み、認証状態追加）
+│   │   │   │   └── ChainCard.kt              # チェーン店カード（002で作成済み、お気に入りボタン追加）
 │   │   │   ├── components/
 │   │   │   │   ├── FavoriteButton.kt         # お気に入りボタンコンポーネント
 │   │   │   │   └── FavoriteCount.kt          # お気に入り登録数表示コンポーネント
@@ -148,7 +148,7 @@ limimeshi-android/
 ## Dependencies
 
 ### 前提条件
-- **002-campaign-list**: キャンペーン一覧画面が実装済み（お気に入りフィルタは003完了後に追加）
+- **002-chain-list**: チェーン店一覧画面が実装済み（お気に入りフィルタは003完了後に追加）
 - **001-admin-panel**: チェーン店マスタが登録済み（/chainsコレクション）
 
 ### 提供データ
@@ -168,7 +168,7 @@ limimeshi-android/
 ## Notes
 
 - **読み書き可能**: 003-favoritesはお気に入りデータの読み書きを行う
-- **002との連携**: 002-campaign-listはお気に入りデータを読み取り専用で使用
+- **002との連携**: 002-chain-listはお気に入りデータを読み取り専用で使用
 - **001との整合性**: /chainsのスキーマは001-admin-panelと完全一致（favoriteCountフィールドを追加）
 - **Transaction使用**: お気に入り登録・解除時はTransactionを使用してデータ整合性を保証
 - **集約データ**: favoriteCountは集約データとして管理（リアルタイムカウントではない）

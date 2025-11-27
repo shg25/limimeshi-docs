@@ -11,8 +11,8 @@
 - Firebase Project作成済み（`limimeshi-dev` or `limimeshi-prod`）
 - Firestore有効化済み
 - Firebase Authentication有効化済み（Googleログイン、匿名認証）
-- limimeshi-android リポジトリがセットアップ済み（002-campaign-listで構築）
-- 002-campaign-list機能が実装済み（お気に入りフィルタとの連携のため）
+- limimeshi-android リポジトリがセットアップ済み（002-chain-listで構築）
+- 002-chain-list機能が実装済み（お気に入りフィルタとの連携のため）
 
 ---
 
@@ -360,7 +360,7 @@ fun CampaignCard(
 
 ## Notes
 
-- **002-campaign-listとの統合**: お気に入りボタンは002で作成したCampaignCardに追加
+- **002-chain-listとの統合**: お気に入りボタンは002で作成したChainCardに追加
 - **認証状態の管理**: ViewModelでFirebase Auth AuthStateListenerを使用
 - **エラーハンドリング**: Snackbarでエラーメッセージを表示
 - **パフォーマンス**: お気に入り状態は画面表示時に一括取得

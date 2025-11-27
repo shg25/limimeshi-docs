@@ -3,7 +3,7 @@
 **Feature**: 003-favorites  
 **Date**: 2025-11-28  
 **Status**: Phase 1 - Contract  
-**Related**: [research.md](../research.md), [002-campaign-list Firestore Schema](../../002-campaign-list/contracts/firestore-schema.md)  
+**Related**: [research.md](../research.md), [002-chain-list Firestore Schema](../../002-chain-list/contracts/firestore-schema.md)  
 
 ## Overview
 
@@ -13,7 +13,7 @@
 
 ### /users/{userId}/favorites/{chainId}
 
-ユーザーごとのお気に入りチェーン店（003-favoritesで登録、002-campaign-listで読み取り）
+ユーザーごとのお気に入りチェーン店（003-favoritesで登録、002-chain-listで読み取り）
 
 ```kotlin
 data class Favorite(
@@ -166,7 +166,7 @@ data class Chain(
 
 #### シナリオ3: お気に入り状態の初期化（画面表示時）
 - **チェーンごとのお気に入り状態確認**: 1 read / チェーン
-- **16チェーンの場合**: 16 reads（ただし、002-campaign-listのお気に入りフィルタで一括取得する場合は1回のクエリで済む）
+- **16チェーンの場合**: 16 reads（ただし、002-chain-listのお気に入りフィルタで一括取得する場合は1回のクエリで済む）
 
 ### コスト試算（Phase2想定）
 - **DAU**: 100人
@@ -181,7 +181,7 @@ data class Chain(
 ## Notes
 
 - **読み書き可能**: 003-favoritesはお気に入りデータの読み書きを行う
-- **002との連携**: 002-campaign-listはお気に入りデータを読み取り専用で使用
+- **002との連携**: 002-chain-listはお気に入りデータを読み取り専用で使用
 - **001との整合性**: /chainsのスキーマは001-admin-panelと完全一致（favoriteCountフィールドを追加）
 - **Transaction使用**: お気に入り登録・解除時はTransactionを使用してデータ整合性を保証
 - **Android優先**: Phase2ではAndroidアプリを優先（Webアプリ対応はPhase3以降）
