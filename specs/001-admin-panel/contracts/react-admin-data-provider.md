@@ -228,11 +228,11 @@ delete: (resource, params) => {
 
 ---
 
-## Resource: menus
+## Resource: campaigns
 
 ### getList
 
-メニュー一覧を取得（1年以内のメニューのみ）
+キャンペーン一覧を取得（1年以内のキャンペーンのみ）
 
 **Request**:
 ```typescript
@@ -248,10 +248,10 @@ delete: (resource, params) => {
 {
   data: [
     {
-      id: 'menu123',
+      id: 'campaign123',
       chainId: 'abc123',
       name: 'てりたま',
-      description: 'たまごとテリヤキソースの期間限定バーガー',
+      description: 'たまごとテリヤキソースの期間限定キャンペーン',
       xPostUrl: 'https://x.com/McDonaldsJapan/status/1234567890',
       saleStartTime: '2025-11-01T00:00:00.000Z',
       saleEndTime: '2025-11-30T23:59:59.000Z',
@@ -274,7 +274,7 @@ delete: (resource, params) => {
 const oneYearAgo = new Date();
 oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
-let query = db.collection('menus')
+let query = db.collection('campaigns')
   .where('saleStartTime', '>=', oneYearAgo)
   .orderBy('saleStartTime', 'desc');
 
@@ -288,51 +288,51 @@ const snapshot = await query.limit(25).get();
 
 **Status Calculation**:
 ```typescript
-function calculateStatus(menu: Menu): MenuWithStatus {
+function calculateStatus(campaign: Campaign): CampaignWithStatus {
   const now = new Date();
-  const saleStart = new Date(menu.saleStartTime);
-  const saleEnd = menu.saleEndTime ? new Date(menu.saleEndTime) : null;
+  const saleStart = new Date(campaign.saleStartTime);
+  const saleEnd = campaign.saleEndTime ? new Date(campaign.saleEndTime) : null;
 
   // 予定
   if (now < saleStart) {
     return {
-      ...menu,
+      ...campaign,
       status: 'scheduled',
       statusDisplay: '予定',
       elapsedDays: null
     };
   }
 
-  // 販売終了
+  // 終了
   if (saleEnd && now > saleEnd) {
     return {
-      ...menu,
+      ...campaign,
       status: 'ended',
-      statusDisplay: '販売終了',
+      statusDisplay: '終了',
       elapsedDays: null
     };
   }
 
-  // 発売からの経過日数
+  // 開始からの経過日数
   const elapsedMs = now.getTime() - saleStart.getTime();
   const elapsedDays = Math.floor(elapsedMs / (1000 * 60 * 60 * 24));
 
-  // 発売から◯日経過（1ヶ月未満）
+  // 開始から◯日経過（1ヶ月未満）
   if (elapsedDays < 30) {
     return {
-      ...menu,
+      ...campaign,
       status: 'days_elapsed',
-      statusDisplay: `発売から${elapsedDays}日経過`,
+      statusDisplay: `開始から${elapsedDays}日経過`,
       elapsedDays
     };
   }
 
-  // 発売から◯ヶ月以上経過
+  // 開始から◯ヶ月以上経過
   const elapsedMonths = Math.floor(elapsedDays / 30);
   return {
-    ...menu,
+    ...campaign,
     status: 'months_elapsed',
-    statusDisplay: `発売から${elapsedMonths}ヶ月以上経過`,
+    statusDisplay: `開始から${elapsedMonths}ヶ月以上経過`,
     elapsedDays,
     elapsedMonths
   };
@@ -343,12 +343,12 @@ function calculateStatus(menu: Menu): MenuWithStatus {
 
 ### getOne
 
-特定のメニューを取得
+特定のキャンペーンを取得
 
 **Request**:
 ```typescript
 {
-  id: 'menu123'
+  id: 'campaign123'
 }
 ```
 
@@ -356,10 +356,10 @@ function calculateStatus(menu: Menu): MenuWithStatus {
 ```typescript
 {
   data: {
-    id: 'menu123',
+    id: 'campaign123',
     chainId: 'abc123',
     name: 'てりたま',
-    description: 'たまごとテリヤキソースの期間限定バーガー',
+    description: 'たまごとテリヤキソースの期間限定キャンペーン',
     xPostUrl: 'https://x.com/McDonaldsJapan/status/1234567890',
     saleStartTime: '2025-11-01T00:00:00.000Z',
     saleEndTime: '2025-11-30T23:59:59.000Z',
@@ -376,16 +376,16 @@ function calculateStatus(menu: Menu): MenuWithStatus {
 
 **Firestore Query**:
 ```typescript
-const doc = await db.collection('menus').doc('menu123').get();
-const menu = doc.data();
-return calculateStatus(menu);
+const doc = await db.collection('campaigns').doc('campaign123').get();
+const campaign = doc.data();
+return calculateStatus(campaign);
 ```
 
 ---
 
 ### getManyReference
 
-特定チェーンのメニュー一覧を取得
+特定チェーンのキャンペーン一覧を取得
 
 **Request**:
 ```typescript
@@ -401,14 +401,14 @@ return calculateStatus(menu);
 **Response**:
 ```typescript
 {
-  data: [ /* メニュー一覧 */ ],
+  data: [ /* キャンペーン一覧 */ ],
   total: 10
 }
 ```
 
 **Firestore Query**:
 ```typescript
-db.collection('menus')
+db.collection('campaigns')
   .where('chainId', '==', 'abc123')
   .orderBy('saleStartTime', 'desc')
   .limit(25)
@@ -416,13 +416,13 @@ db.collection('menus')
 
 **Use Case**:
 - React Admin の `<ReferenceManyField>` で使用
-- チェーン詳細ページでメニュー一覧を表示
+- チェーン詳細ページでキャンペーン一覧を表示
 
 ---
 
 ### create
 
-新しいメニューを作成
+新しいキャンペーンを作成
 
 **Request**:
 ```typescript
@@ -430,7 +430,7 @@ db.collection('menus')
   data: {
     chainId: 'abc123',
     name: 'てりたま',
-    description: 'たまごとテリヤキソースの期間限定バーガー',
+    description: 'たまごとテリヤキソースの期間限定キャンペーン',
     xPostUrl: 'https://x.com/McDonaldsJapan/status/1234567890',
     saleStartTime: '2025-11-01T00:00:00.000Z',
     saleEndTime: '2025-11-30T23:59:59.000Z'
@@ -445,7 +445,7 @@ db.collection('menus')
     id: 'auto-generated-id',
     chainId: 'abc123',
     name: 'てりたま',
-    description: 'たまごとテリヤキソースの期間限定バーガー',
+    description: 'たまごとテリヤキソースの期間限定キャンペーン',
     xPostUrl: 'https://x.com/McDonaldsJapan/status/1234567890',
     saleStartTime: '2025-11-01T00:00:00.000Z',
     saleEndTime: '2025-11-30T23:59:59.000Z',
@@ -462,7 +462,7 @@ db.collection('menus')
 
 **Firestore Operation**:
 ```typescript
-const docRef = db.collection('menus').doc();
+const docRef = db.collection('campaigns').doc();
 await docRef.set({
   chainId: data.chainId,
   name: data.name,
@@ -487,12 +487,12 @@ await docRef.set({
 
 ### update
 
-既存のメニューを更新
+既存のキャンペーンを更新
 
 **Request**:
 ```typescript
 {
-  id: 'menu123',
+  id: 'campaign123',
   data: {
     name: 'てりたま（更新）',
   },
@@ -504,10 +504,10 @@ await docRef.set({
 ```typescript
 {
   data: {
-    id: 'menu123',
+    id: 'campaign123',
     chainId: 'abc123',
     name: 'てりたま（更新）',
-    description: 'たまごとテリヤキソースの期間限定バーガー',
+    description: 'たまごとテリヤキソースの期間限定キャンペーン',
     xPostUrl: 'https://x.com/McDonaldsJapan/status/1234567890',
     saleStartTime: '2025-11-01T00:00:00.000Z',
     saleEndTime: '2025-11-30T23:59:59.000Z',
@@ -524,7 +524,7 @@ await docRef.set({
 
 **Firestore Operation**:
 ```typescript
-await db.collection('menus').doc('menu123').update({
+await db.collection('campaigns').doc('campaign123').update({
   name: data.name,
   updatedAt: FieldValue.serverTimestamp()
 });
@@ -538,12 +538,12 @@ await db.collection('menus').doc('menu123').update({
 
 ### delete
 
-メニューを削除
+キャンペーンを削除
 
 **Request**:
 ```typescript
 {
-  id: 'menu123',
+  id: 'campaign123',
   previousData: { ... }
 }
 ```
@@ -552,14 +552,14 @@ await db.collection('menus').doc('menu123').update({
 ```typescript
 {
   data: {
-    id: 'menu123'
+    id: 'campaign123'
   }
 }
 ```
 
 **Firestore Operation**:
 ```typescript
-await db.collection('menus').doc('menu123').delete();
+await db.collection('campaigns').doc('campaign123').delete();
 ```
 
 **Notes**:
@@ -695,9 +695,9 @@ create: (resource, params) => {
 
 ## Notes
 
-- **Phase2 MVP範囲**: chains、menus、admins のみ
-- **Out of Scope**: favorites、tags、menu_tags（Phase3以降）
+- **Phase2 MVP範囲**: chains、campaigns、admins のみ
+- **Out of Scope**: favorites、tags、campaign_tags（Phase3以降）
 - **計算フィールド**: `status` と `statusDisplay` は getList/getOne で追加（Firestoreには保存しない）
-- **削除機能**: メニューのみ削除可能、チェーン店・管理者は削除不可（Phase2）
+- **削除機能**: キャンペーンのみ削除可能、チェーン店・管理者は削除不可（Phase2）
 - **react-admin-firebase**: `react-admin-firebase` パッケージを使用し、一部カスタマイズ
 - **タイムスタンプ**: Firebase Server Timestamp を使用（クライアント時刻非依存）

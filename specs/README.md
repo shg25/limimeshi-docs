@@ -17,7 +17,7 @@ specs/
 │   ├── tasks.md                 # タスクリスト
 │   └── checklists/              # チェックリスト
 │       └── requirements.md
-├── 002-menu-list/               # メニュー一覧機能
+├── 002-campaign-list/           # キャンペーン一覧機能
 │   ├── spec.md
 │   ├── research.md
 │   ├── contracts/
@@ -376,7 +376,7 @@ specs/
 **使い方**:
 ```bash
 # Phase 0: 仕様書作成
-/speckit-specify "一般ユーザー向けのメニュー一覧画面。期間限定メニューを一覧表示..."
+/speckit-specify "一般ユーザー向けのキャンペーン一覧画面。キャンペーンを一覧表示..."
 
 # Phase 0: 曖昧な点を明確化
 /speckit-clarify
@@ -403,19 +403,19 @@ specs/
 4. `/speckit-tasks` → tasks.md生成
 5. `/speckit-implement` → 実装（limimeshi-adminリポジトリ）
 
-### 002-menu-list（メニュー一覧機能）
+### 002-campaign-list（キャンペーン一覧機能）
 
 1. `/speckit-specify` → spec.md生成
 2. `/speckit-plan` → research.md, contracts/, quickstart.md, plan.md生成
-3. `/speckit-tasks` → tasks.md生成（37タスク）
-4. `/speckit-implement` → 実装（limimeshi-webリポジトリ）
+3. `/speckit-tasks` → tasks.md生成
+4. `/speckit-implement` → 実装（limimeshi-androidリポジトリ）
 
 ### 003-favorites（お気に入り登録機能）
 
 1. `/speckit-specify` → spec.md生成
 2. `/speckit-plan` → research.md, contracts/, quickstart.md, plan.md生成
-3. `/speckit-tasks` → tasks.md生成（28タスク）
-4. `/speckit-implement` → 実装（limimeshi-webリポジトリ）
+3. `/speckit-tasks` → tasks.md生成
+4. `/speckit-implement` → 実装（limimeshi-androidリポジトリ）
 
 ---
 
@@ -448,4 +448,4 @@ plan.mdの「Constitution Check」セクションで、各原則への準拠を�
 
 ---
 
-**最終更新**: 2025-11-19
+**最終更新**: 2025-11-28

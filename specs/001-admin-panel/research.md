@@ -148,11 +148,11 @@ const authProvider = FirebaseAuthProvider(firebaseConfig);
 ```typescript
 // Firestoreコレクション構造
 /chains/{chainId}
-/menus/{menuId}
+/campaigns/{campaignId}
 
 // react-admin-firebase は自動的にコレクションをマッピング
 <Resource name="chains" list={ChainList} edit={ChainEdit} create={ChainCreate} />
-<Resource name="menus" list={MenuList} edit={MenuEdit} create={MenuCreate} />
+<Resource name="campaigns" list={CampaignList} edit={CampaignEdit} create={CampaignCreate} />
 ```
 
 **注意点**:
@@ -200,7 +200,7 @@ export const ChainEdit = () => (
 ```
 
 **本プロジェクトの方針**:
-- React Adminの標準パターンに従い、ChainCreate/ChainEdit、MenuCreate/MenuEdit を個別に実装
+- React Adminの標準パターンに従い、ChainCreate/ChainEdit、CampaignCreate/CampaignEdit を個別に実装
 - コード量は各コンポーネント10行程度で済む
 - 必要に応じてカスタムFormコンポーネントで共通化可能
 
@@ -257,7 +257,7 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
 
-    match /menus/{menuId} {
+    match /campaigns/{campaignId} {
       allow read, write: if isAdmin();
     }
   }

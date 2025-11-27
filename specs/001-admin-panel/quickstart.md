@@ -193,7 +193,7 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    match /menus/{menuId} {
+    match /campaigns/{campaignId} {
       allow read, write, delete: if isAdmin();
     }
 
@@ -216,7 +216,7 @@ firebase deploy --only firestore:indexes
 {
   "indexes": [
     {
-      "collectionGroup": "menus",
+      "collectionGroup": "campaigns",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "chainId", "order": "ASCENDING" },
@@ -408,14 +408,13 @@ npm run test:e2e
    - Official URL: `https://www.mcdonalds.co.jp/`
 6. 「SAVE」をクリック
 
-**メニューを追加**:
-1. 「Menus」メニューをクリック
+**キャンペーンを追加**:
+1. 「Campaigns」メニューをクリック
 2. 「CREATE」ボタンをクリック
 3. フォームに入力:
    - Chain: `マクドナルド` を選択
    - Name: `てりたま`
-   - Description: `たまごとテリヤキソースの期間限定バーガー`
-   - Price: `390`
+   - Description: `たまごとテリヤキソースの期間限定キャンペーン`
    - Sale Start Time: `2025-11-01 00:00`
    - Sale End Time: `2025-11-30 23:59`
 4. 「SAVE」をクリック
@@ -507,7 +506,7 @@ npm run dev -- --port 3001
 
 ## Notes
 
-- **Phase2 MVP範囲**: チェーン店管理、メニュー管理、管理者認証
+- **Phase2 MVP範囲**: チェーン店管理、キャンペーン管理、管理者認証
 - **Out of Scope**: タグ管理、入力補助機能、チェーン店削除機能
 - **開発環境**: `limimeshi-admin-dev`（Firebase プロジェクト）
 - **本番環境**: Phase3以降でセットアップ

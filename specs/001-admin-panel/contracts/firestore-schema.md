@@ -68,9 +68,9 @@
 
 ---
 
-### /menus/{menuId}
+### /campaigns/{campaignId}
 
-期間限定メニュー
+キャンペーン
 
 ```typescript
 {
@@ -81,7 +81,7 @@
   chainId: string;               // 所属チェーンID（/chains/{chainId}への参照）
 
   // 基本情報
-  name: string;                  // メニュー名
+  name: string;                  // キャンペーン名
   description?: string;          // 説明
 
   // 外部リンク
@@ -120,7 +120,7 @@
 {
   "chainId": "abc123",
   "name": "てりたま",
-  "description": "たまごとテリヤキソースの期間限定バーガー",
+  "description": "たまごとテリヤキソースの期間限定キャンペーン",
   "xPostUrl": "https://x.com/McDonaldsJapan/status/1234567890",
   "saleStartTime": "2025-11-01T00:00:00.000Z",
   "saleEndTime": "2025-11-30T23:59:59.000Z",
@@ -209,8 +209,8 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // メニュー
-    match /menus/{menuId} {
+    // キャンペーン
+    match /campaigns/{campaignId} {
       // 管理者のみ読み書き可能
       allow read: if isAdmin();
       allow create: if isAdmin() &&
@@ -245,7 +245,7 @@ service cloud.firestore {
    - クライアント側で任意のタイムスタンプを設定不可
 
 3. **外部キー整合性チェック**:
-   - `Menu.chainId` は `/chains/{chainId}` に存在することを確認
+   - `Campaign.chainId` は `/chains/{chainId}` に存在することを確認
    - `exists()` 関数で参照整合性を保証
 
 4. **Phase2の制約**:
@@ -262,7 +262,7 @@ service cloud.firestore {
 {
   "indexes": [
     {
-      "collectionGroup": "menus",
+      "collectionGroup": "campaigns",
       "queryScope": "COLLECTION",
       "fields": [
         {
@@ -282,10 +282,10 @@ service cloud.firestore {
 
 **Index Explanation**:
 - **Composite index**: `chainId` (ascending) + `saleStartTime` (descending)
-- **Use case**: チェーン別メニュー一覧を販売開始日時の降順でソート
+- **Use case**: チェーン別キャンペーン一覧を販売開始日時の降順でソート
 - **Example query**:
   ```typescript
-  db.collection('menus')
+  db.collection('campaigns')
     .where('chainId', '==', 'abc123')
     .orderBy('saleStartTime', 'desc')
   ```
@@ -302,22 +302,22 @@ const chains = await db.collection('chains')
   .get();
 ```
 
-### メニュー一覧を販売開始日時の降順で取得（1年以内のみ）
+### キャンペーン一覧を販売開始日時の降順で取得（1年以内のみ）
 
 ```typescript
 const oneYearAgo = new Date();
 oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
-const menus = await db.collection('menus')
+const campaigns = await db.collection('campaigns')
   .where('saleStartTime', '>=', oneYearAgo)
   .orderBy('saleStartTime', 'desc')
   .get();
 ```
 
-### 特定チェーンのメニュー一覧を取得
+### 特定チェーンのキャンペーン一覧を取得
 
 ```typescript
-const menus = await db.collection('menus')
+const campaigns = await db.collection('campaigns')
   .where('chainId', '==', 'abc123')
   .orderBy('saleStartTime', 'desc')
   .get();
@@ -338,17 +338,17 @@ const admin = await db.collection('admins')
 Phase2では新規構築のため、マイグレーションは不要
 
 Phase3以降で以下のコレクションを追加予定：
-- `/favorites/{favoriteId}`: お気に入り登録
+- `/users/{userId}/favorites`: お気に入り登録
 - `/tags/{tagId}`: タグマスタ
-- `/menu_tags/{menuTagId}`: メニュータグ中間テーブル
+- `/campaign_tags/{campaignTagId}`: キャンペーンタグ中間テーブル
 
 ---
 
 ## Notes
 
-- **Phase2 MVP範囲**: `/chains`, `/menus`, `/admins` のみ
-- **Out of Scope**: `/favorites`, `/tags`, `/menu_tags`（Phase3以降）
-- **削除機能**: メニューのみ削除可能、チェーン店は削除不可（Phase2）
+- **Phase2 MVP範囲**: `/chains`, `/campaigns`, `/admins` のみ
+- **Out of Scope**: `/users/{userId}/favorites`, `/tags`, `/campaign_tags`（Phase3以降）
+- **削除機能**: キャンペーンのみ削除可能、チェーン店は削除不可（Phase2）
 - **Custom Claims**: Firebase Authentication の Custom Claims で管理者を識別
 - **セキュリティルール**: 管理者以外は一切アクセス不可
 - **タイムスタンプ**: Firebase Server Timestamp を使用（クライアント時刻非依存）

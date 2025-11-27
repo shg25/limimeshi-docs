@@ -5,7 +5,7 @@
 
 ## Summary
 
-管理者がチェーン店と期間限定メニューを手動で登録・編集・削除できる管理画面を提供する。管理画面フレームワーク（React Admin、Refine、自作等から選定）とFirebase Authentication（Custom Claims）を使用し、管理者認証を実装。チェーン店16店舗、各店舗あたり平均10件のメニューを管理する想定。Phase2 MVPの最優先機能として、手動データ登録の基盤を提供する。
+管理者がチェーン店とキャンペーンを手動で登録・編集・削除できる管理画面を提供する。管理画面フレームワーク（React Admin、Refine、自作等から選定）とFirebase Authentication（Custom Claims）を使用し、管理者認証を実装。チェーン店16店舗、各店舗あたり平均10件のキャンペーンを管理する想定。Phase2 MVPの最優先機能として、手動データ登録の基盤を提供する。
 
 ## Technical Context
 
@@ -17,7 +17,7 @@
 **Project Type**: Web application (frontend + backend)  
 **Performance Goals**: ページ読み込み時間 3秒以内、保存・削除操作 1秒以内  
 **Constraints**: モバイル4G環境での動作、Phase2は1名運用（同時編集考慮不要)  
-**Scale/Scope**: 16チェーン店、平均160メニュー、1名の管理者（Phase2）    
+**Scale/Scope**: 16チェーン店、平均160キャンペーン、1名の管理者（Phase2）    
 
 ## Constitution Check
 
@@ -35,11 +35,11 @@
 ### III. Simplicity ✅ PASS
 - React Adminのデフォルト機能を活用（不要なラッパー作成なし）
 - Firestoreの標準クエリを使用（複雑な抽象化なし）
-- Phase2では最小機能に限定（タグ管理・入力補助機能は Out of Scope）
+- Phase2では最小機能に限定（タグ管理・入力補助機能はOut of Scope）
 
 ### IV. Firebase-First ✅ PASS
 - Firebase Authentication: 管理者認証（Custom Claims）
-- Firestore: チェーン店・メニューデータ
+- Firestore: チェーン店・キャンペーンデータ
 - Firebase Hosting: デプロイ（将来）
 
 ### V. Legal Risk Zero ✅ PASS
@@ -83,10 +83,10 @@ limimeshi-admin/         # 管理画面リポジトリ（別リポジトリ）
 │   │   ├── ChainList.tsx
 │   │   ├── ChainEdit.tsx
 │   │   └── ChainCreate.tsx
-│   ├── menus/           # メニューリソース
-│   │   ├── MenuList.tsx
-│   │   ├── MenuEdit.tsx
-│   │   ├── MenuCreate.tsx
+│   ├── campaigns/       # キャンペーンリソース
+│   │   ├── CampaignList.tsx
+│   │   ├── CampaignEdit.tsx
+│   │   ├── CampaignCreate.tsx
 │   │   └── StatusField.tsx  # ステータス自動判定
 │   ├── auth/            # 認証
 │   │   └── LoginPage.tsx
@@ -103,11 +103,11 @@ limimeshi-admin/         # 管理画面リポジトリ（別リポジトリ）
 │   │   └── statusUtils.test.ts
 │   ├── integration/     # 統合テスト（React Testing Library）
 │   │   ├── ChainList.test.tsx
-│   │   └── MenuList.test.tsx
+│   │   └── CampaignList.test.tsx
 │   └── e2e/             # E2Eテスト（Playwright）
 │       ├── auth.spec.ts
 │       ├── chains.spec.ts
-│       └── menus.spec.ts
+│       └── campaigns.spec.ts
 ├── firestore.rules      # Firestoreセキュリティルール
 ├── firestore.indexes.json  # Firestoreインデックス
 ├── vite.config.ts       # Vite設定
@@ -124,7 +124,7 @@ limimeshi-docs/          # このリポジトリ（ドキュメント専用）
 - **Feature-based（機能ベース）ディレクトリ構造を採用**（React公式推奨、React Admin公式デモに準拠）
   - 参考: [React公式 - Grouping by features or routes](https://react.dev/learn/thinking-in-react#step-5-add-inverse-data-flow)
   - 参考: [React Admin公式デモ](https://github.com/marmelab/react-admin/tree/master/examples/demo/src)
-  - 機能（chains, menus, auth）ごとにファイルをグループ化し、凝集度を高める
+  - 機能（chains, campaigns, auth）ごとにファイルをグループ化し、凝集度を高める
 
 ## Complexity Tracking
 
@@ -208,10 +208,10 @@ limimeshi-docs/          # このリポジトリ（ドキュメント専用）
 - 作成日時（自動）
 - 更新日時（自動）
 
-**Menu（メニュー）**
-- メニューID（自動生成）
+**Campaign（キャンペーン）**
+- キャンペーンID（自動生成）
 - 所属チェーンID（外部キー、必須）
-- メニュー名（必須）
+- キャンペーン名（必須）
 - 説明（任意）
 - X Post URL（任意）
 - 販売開始日時（必須）
@@ -230,7 +230,7 @@ limimeshi-docs/          # このリポジトリ（ドキュメント専用）
 #### Relationships
 
 ```
-Chain (1) ─── (N) Menu
+Chain (1) ─── (N) Campaign
   ↑
   └─ ふりがなでソート、お気に入り登録数を集約
 
@@ -243,17 +243,17 @@ Admin ─── (認証) ─── System
 
 - チェーン名: 必須、最大100文字
 - ふりがな: 必須、最大100文字、ひらがなのみ
-- メニュー名: 必須、最大100文字
+- キャンペーン名: 必須、最大100文字
 - 販売開始日時: 必須、ISO 8601形式
 - 販売終了日時: 任意、販売開始日時より後であること
 
 #### State Transitions
 
-**メニューのステータス自動判定**:
+**キャンペーンのステータス自動判定**:
 - 予定: `current_time < sale_start_time`
-- 発売から◯日経過: `sale_end_time == null && (current_time - sale_start_time) < 1 month`
-- 発売から◯ヶ月以上経過: `sale_end_time == null && (current_time - sale_start_time) >= 1 month`
-- 販売終了: `current_time > sale_end_time`
+- 開始から◯日経過: `sale_end_time == null && (current_time - sale_start_time) < 1 month`
+- 開始から◯ヶ月以上経過: `sale_end_time == null && (current_time - sale_start_time) >= 1 month`
+- 終了: `current_time > sale_end_time`
 
 ### 1.2 API Contracts
 
@@ -272,7 +272,7 @@ Admin ─── (認証) ─── System
   - createdAt: timestamp
   - updatedAt: timestamp
 
-/menus/{menuId}
+/campaigns/{campaignId}
   - chainId: reference to /chains/{chainId}
   - name: string
   - description?: string
@@ -300,16 +300,16 @@ interface DataProvider {
   update(resource: 'chains', params: UpdateParams): Promise<UpdateResult>
   // Phase2では削除機能なし（deleteは実装しない）
 
-  // メニュー
-  getList(resource: 'menus', params: GetListParams): Promise<GetListResult>
-  getOne(resource: 'menus', params: GetOneParams): Promise<GetOneResult>
-  create(resource: 'menus', params: CreateParams): Promise<CreateResult>
-  update(resource: 'menus', params: UpdateParams): Promise<UpdateResult>
-  delete(resource: 'menus', params: DeleteParams): Promise<DeleteResult>
+  // キャンペーン
+  getList(resource: 'campaigns', params: GetListParams): Promise<GetListResult>
+  getOne(resource: 'campaigns', params: GetOneParams): Promise<GetOneResult>
+  create(resource: 'campaigns', params: CreateParams): Promise<CreateResult>
+  update(resource: 'campaigns', params: UpdateParams): Promise<UpdateResult>
+  delete(resource: 'campaigns', params: DeleteParams): Promise<DeleteResult>
 }
 
 // ステータスは計算フィールドとして getList/getOne で追加
-interface MenuWithStatus extends Menu {
+interface CampaignWithStatus extends Campaign {
   status: 'scheduled' | 'days_elapsed' | 'months_elapsed' | 'ended'
   statusDisplay: string  // 表示用文字列
 }
@@ -349,7 +349,7 @@ interface MenuWithStatus extends Menu {
 
 ## Notes
 
-- **Phase2 MVP範囲**: チェーン店管理、メニュー管理、管理者認証
+- **Phase2 MVP範囲**: チェーン店管理、キャンペーン管理、管理者認証
 - **Out of Scope**: タグ管理、入力補助機能、チェーン店削除機能
 - **依存関係**: なし（最初に実装する機能）
 - **実装リポジトリ**: `limimeshi-admin`（別リポジトリ、このドキュメントリポジトリとは分離）
