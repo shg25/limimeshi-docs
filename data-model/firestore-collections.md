@@ -15,7 +15,7 @@
 | コレクション | 用途 | 担当機能 | Phase |
 |-------------|------|---------|-------|
 | `/chains` | チェーン店マスタ | 001-admin-panel | Phase2 |
-| `/menus` | 期間限定メニュー | 001-admin-panel | Phase2 |
+| `/campaigns` | キャンペーン | 001-admin-panel | Phase2 |
 | `/admins` | 管理者情報 | 001-admin-panel | Phase2 |
 | `/users/{userId}/favorites` | お気に入りチェーン | 003-favorites | Phase2 |
 | `/reviews` | レビュー | - | Phase3以降 |
@@ -23,9 +23,9 @@
 ### データフロー
 
 ```
-管理者 → 001-admin-panel → /chains, /menus (書き込み)
+管理者 → 001-admin-panel → /chains, /campaigns (書き込み)
                               ↓
-一般ユーザー → 002-menu-list → /chains, /menus (読み取り)
+一般ユーザー → 002-campaign-list → /chains, /campaigns (読み取り)
                               ↓
 ログインユーザー → 003-favorites → /users/{userId}/favorites (読み書き)
                                    ↓
@@ -92,16 +92,16 @@ interface Chain {
 
 ---
 
-## /menus（期間限定メニュー）
+## /campaigns（キャンペーン）
 
 ### 概要
 
-期間限定メニューの情報を管理。001-admin-panelで登録、002-menu-listで表示。
+キャンペーンの情報を管理。001-admin-panelで登録、002-campaign-listで表示。
 
 ### スキーマ
 
 ```typescript
-interface Menu {
+interface Campaign {
   // ドキュメントID（Firestore自動生成）
   id: string;
 
@@ -109,11 +109,11 @@ interface Menu {
   chainId: string;               // 所属チェーンID（/chains/{chainId}への参照）
 
   // 基本情報
-  name: string;                  // メニュー名（必須、最大100文字）
-  description?: string;          // 説明（任意、最大500文字）
+  name: string;                  // キャンペーン名（必須、最大100文字）
+  description?: string;          // 説明（任意、最大500文字、キャンペーン内のメニュー詳細などを記載可能）
 
   // 外部リンク
-  xPostUrl?: string;             // X Post URL（任意）
+  xPostUrl?: string;             // X Post URL（任意、代表的な1投稿）
 
   // 販売期間
   saleStartTime: Timestamp;      // 販売開始日時（必須）
@@ -142,8 +142,8 @@ interface Menu {
 
 | パターン | クエリ | 用途 | 頻度 |
 |---------|-------|------|------|
-| 1年以内（新しい順） | `where('saleStartTime', '>=', oneYearAgo).orderBy('saleStartTime', 'desc')` | メニュー一覧 | 高 |
-| お気に入りフィルタ | `where('chainId', 'in', [...]).where('saleStartTime', '>=', oneYearAgo).orderBy(...)` | お気に入りチェーンのメニュー | 中 |
+| 1年以内（新しい順） | `where('saleStartTime', '>=', oneYearAgo).orderBy('saleStartTime', 'desc')` | キャンペーン一覧 | 高 |
+| お気に入りフィルタ | `where('chainId', 'in', [...]).where('saleStartTime', '>=', oneYearAgo).orderBy(...)` | お気に入りチェーンのキャンペーン | 中 |
 | チェーン別一覧 | `where('chainId', '==', chainId).orderBy('saleStartTime', 'desc')` | 管理画面 | 低 |
 | 検索 | `where('name', '>=', keyword)` | 管理画面検索 | 低 |
 
@@ -152,7 +152,6 @@ interface Menu {
 - **トップレベルコレクション**：チェーンのサブコレクションにしない（クロスチェーンクエリが必要）
 - **chainIdフィールド**：参照ではなく文字列（クエリ簡素化）
 - **ステータスは保存しない**：saleStartTime/saleEndTimeから計算（クライアント側）
-- **価格フィールドなし**：地域差・時期変動を考慮し削除
 
 ---
 
@@ -269,7 +268,7 @@ interface User {
 
 ### 概要
 
-Phase3以降で実装予定。メニューに対するユーザーレビュー。
+Phase3以降で実装予定。キャンペーンに対するユーザーレビュー。
 
 ### スキーマ（予定）
 
@@ -279,7 +278,7 @@ interface Review {
   id: string;
 
   // 関連
-  menuId: string;                // レビュー対象メニューID
+  campaignId: string;            // レビュー対象キャンペーンID
   userId: string;                // レビュー投稿者UID
 
   // レビュー内容
@@ -300,7 +299,7 @@ interface Review {
 /chains/{chainId}
     ↑ chainId で参照
     │
-/menus/{menuId}
+/campaigns/{campaignId}
     │
     ↓ フィルタ用に chainId を保持
     │
@@ -318,7 +317,7 @@ interface Review {
 | コレクション | 見積もり数 | 根拠 |
 |-------------|-----------|------|
 | /chains | 16件 | 対象チェーン店数 |
-| /menus | 160件 | 16チェーン × 平均10メニュー |
+| /campaigns | 160件 | 16チェーン × 平均10キャンペーン |
 | /admins | 1件 | 1名運用 |
 | /users/{userId}/favorites | 500〜1,000件 | 100ユーザー × 平均5〜10件 |
 
@@ -328,5 +327,5 @@ interface Review {
 
 - [Firestore設計ベストプラクティス](./firestore-best-practices.md)
 - [001-admin-panel Firestoreスキーマ](../specs/001-admin-panel/contracts/firestore-schema.md)
-- [002-menu-list Firestoreスキーマ](../specs/002-menu-list/contracts/firestore-schema.md)
+- [002-campaign-list Firestoreスキーマ](../specs/002-campaign-list/contracts/firestore-schema.md)
 - [003-favorites Firestoreスキーマ](../specs/003-favorites/contracts/firestore-schema.md)

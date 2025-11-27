@@ -15,7 +15,7 @@
 | コレクション | 一般ユーザー | ログインユーザー | 管理者 |
 |-------------|-------------|----------------|--------|
 | /chains | read | read | read, create, update |
-| /menus | read | read | read, create, update, delete |
+| /campaigns | read | read | read, create, update, delete |
 | /admins | - | - | read |
 | /users/{userId}/favorites | - | read, write（自分のみ） | - |
 
@@ -62,9 +62,9 @@ service cloud.firestore {
     }
 
     // ============================================
-    // /menus - 期間限定メニュー
+    // /campaigns - キャンペーン
     // ============================================
-    match /menus/{menuId} {
+    match /campaigns/{campaignId} {
       // 全ユーザーが読み取り可能
       allow read: if true;
 
@@ -139,11 +139,11 @@ service cloud.firestore {
 
 **注意**: `favoriteCount`の更新は、003-favoritesのTransactionで実行される。セキュリティルール上は`update`を許可するが、クライアント側でTransactionを使用して整合性を保証する。
 
-### /menus
+### /campaigns
 
 | 操作 | 条件 | 理由 |
 |------|------|------|
-| read | 全ユーザー | 002-menu-listでメニュー一覧表示 |
+| read | 全ユーザー | 002-campaign-listでキャンペーン一覧表示 |
 | create | 管理者のみ | 001-admin-panelで登録 |
 | update | 管理者のみ | 001-admin-panelで編集 |
 | delete | 管理者のみ | 001-admin-panelで削除 |
@@ -201,7 +201,7 @@ service cloud.firestore {
           && data.favoriteCount >= 0;
     }
 
-    function isValidMenu() {
+    function isValidCampaign() {
       let data = request.resource.data;
       return data.chainId is string
           && data.name is string
@@ -224,10 +224,10 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // /menus
-    match /menus/{menuId} {
+    // /campaigns
+    match /campaigns/{campaignId} {
       allow read: if true;
-      allow create: if isAdmin() && isValidMenu();
+      allow create: if isAdmin() && isValidCampaign();
       allow update, delete: if isAdmin();
     }
 
@@ -267,10 +267,10 @@ firebase emulators:exec --only firestore "npm run test:rules"
 | テストケース | 期待結果 |
 |-------------|---------|
 | 未認証ユーザーが/chainsを読み取り | 許可 |
-| 未認証ユーザーが/menusを読み取り | 許可 |
+| 未認証ユーザーが/campaignsを読み取り | 許可 |
 | 未認証ユーザーが/chainsに書き込み | 拒否 |
 | 管理者が/chainsに書き込み | 許可 |
-| 管理者が/menusに書き込み | 許可 |
+| 管理者が/campaignsに書き込み | 許可 |
 | ログインユーザーが自分のfavoritesを読み取り | 許可 |
 | ログインユーザーが他人のfavoritesを読み取り | 拒否 |
 | ログインユーザーがfavoritesを作成 | 許可 |

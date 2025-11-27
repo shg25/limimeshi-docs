@@ -25,20 +25,20 @@
 
 | コレクション | フィールド | 用途 |
 |-------------|-----------|------|
-| /menus | `chainId` (asc) + `saleStartTime` (desc) | お気に入りフィルタ+新しい順ソート |
+| /campaigns | `chainId` (asc) + `saleStartTime` (desc) | お気に入りフィルタ+新しい順ソート |
 
 ### 単一フィールドインデックス（自動作成）
 
 | コレクション | フィールド | 用途 |
 |-------------|-----------|------|
-| /menus | `saleStartTime` (desc) | 新しい順ソート |
+| /campaigns | `saleStartTime` (desc) | 新しい順ソート |
 | /chains | `furigana` (asc) | 50音順ソート |
 
 ---
 
 ## 詳細設計
 
-### /menus コレクション
+### /campaigns コレクション
 
 #### 複合インデックス: chainId + saleStartTime
 
@@ -50,7 +50,7 @@
 const oneYearAgo = Timestamp.fromDate(new Date(Date.now() - 365 * 24 * 60 * 60 * 1000));
 
 const q = query(
-  collection(db, 'menus'),
+  collection(db, 'campaigns'),
   where('chainId', 'in', favoriteChainIds),  // 最大10件
   where('saleStartTime', '>=', oneYearAgo),
   orderBy('saleStartTime', 'desc')
@@ -60,7 +60,7 @@ const q = query(
 **インデックス定義**:
 ```json
 {
-  "collectionGroup": "menus",
+  "collectionGroup": "campaigns",
   "queryScope": "COLLECTION",
   "fields": [
     { "fieldPath": "chainId", "order": "ASCENDING" },
@@ -75,13 +75,13 @@ const q = query(
 
 #### 単一フィールドインデックス: saleStartTime (desc)
 
-**用途**: 全メニュー取得（新しい順）
+**用途**: 全キャンペーン取得（新しい順）
 
 **クエリ例**:
 ```typescript
-// お気に入りフィルタOFF（全メニュー）
+// お気に入りフィルタOFF（全キャンペーン）
 const q = query(
-  collection(db, 'menus'),
+  collection(db, 'campaigns'),
   where('saleStartTime', '>=', oneYearAgo),
   orderBy('saleStartTime', 'desc')
 );
@@ -120,8 +120,8 @@ const q = query(
 
 | コレクション | フィールド | 除外理由 |
 |-------------|-----------|---------|
-| /menus | description | 検索に使用しない、長文字列 |
-| /menus | xPostUrl | 検索に使用しない |
+| /campaigns | description | 検索に使用しない、長文字列 |
+| /campaigns | xPostUrl | 検索に使用しない |
 | /chains | officialUrl | 検索に使用しない |
 | /chains | logoUrl | 検索に使用しない |
 
@@ -136,7 +136,7 @@ Firebase Consoleで「インデックス除外」を設定、またはfirestore.
 {
   "indexes": [
     {
-      "collectionGroup": "menus",
+      "collectionGroup": "campaigns",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "chainId", "order": "ASCENDING" },
@@ -146,12 +146,12 @@ Firebase Consoleで「インデックス除外」を設定、またはfirestore.
   ],
   "fieldOverrides": [
     {
-      "collectionGroup": "menus",
+      "collectionGroup": "campaigns",
       "fieldPath": "description",
       "indexes": []
     },
     {
-      "collectionGroup": "menus",
+      "collectionGroup": "campaigns",
       "fieldPath": "xPostUrl",
       "indexes": []
     },
@@ -212,8 +212,8 @@ gcloud firestore indexes list --project=limimeshi-dev
 
 | インデックス | 必須/推奨 | 理由 |
 |-------------|---------|------|
-| menus: chainId + saleStartTime | **必須** | お気に入りフィルタ機能に必要 |
-| menus: saleStartTime (desc) | 自動 | 全メニュー取得に使用 |
+| campaigns: chainId + saleStartTime | **必須** | お気に入りフィルタ機能に必要 |
+| campaigns: saleStartTime (desc) | 自動 | 全キャンペーン取得に使用 |
 | chains: furigana (asc) | 自動 | 管理画面一覧に使用 |
 
 ---
@@ -223,7 +223,7 @@ gcloud firestore indexes list --project=limimeshi-dev
 ### インデックスのストレージコスト
 
 - 各インデックスはストレージを消費
-- Phase2の規模（160メニュー、16チェーン）では無視できるレベル
+- Phase2の規模（160キャンペーン、16チェーン）では無視できるレベル
 - 不要なインデックスは除外設定で削減
 
 ### インデックス構築の注意
