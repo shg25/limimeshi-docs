@@ -389,6 +389,66 @@ limimeshi-web/              # Webアプリリポジトリ
 
 ---
 
+### 重要な方針変更：データモデルと開発優先順位の見直し
+
+#### 日付
+
+2025/11/27
+
+#### 背景
+
+Phase1完了後、実際のチェーン店の情報発信形態を調査した結果、以下の課題が判明：
+- 1回のキャンペーンで複数メニューが販売されるのが基本（例：マクドナルドのグラコロは2種類のバーガー + シーズニング）
+- 個別メニュー単位での管理は運用負荷が高く、現実的でない
+- チェーン店ごとに情報発信の粒度が異なる
+
+また、開発者の就活に伴い、Androidネイティブアプリ（Kotlin + Jetpack Compose）のポートフォリオが必要となった。
+
+#### 決定事項
+
+**1. データモデルの変更：「メニュー」→「キャンペーン」単位**
+
+| 項目 | 変更前 | 変更後 |
+|------|--------|--------|
+| 管理単位 | 個別メニュー | キャンペーン |
+| キャンペーンの定義 | - | 運用者の判断に委ねる |
+| お気に入り対象 | メニュー | チェーン店 |
+| 画面構成 | メニュー一覧（フィルタ） | チェーン一覧 → キャンペーン |
+| X Post | 1メニュー1投稿 | 1キャンペーン1投稿 |
+| レギュラーメニュー対応 | 将来的に検討 | 完全に取り下げ |
+
+**2. 開発優先順位の変更：Android開発を優先**
+
+| 順序 | 変更前 | 変更後 |
+|------|--------|--------|
+| Phase2-1 | 管理画面 | 管理画面（変更なし） |
+| Phase2-2 | Webアプリ | **Androidアプリ** |
+| Phase3以降 | - | Webアプリ（延期） |
+
+**3. specs移行先の変更**
+
+| specs | 変更前の移行先 | 変更後の移行先 |
+|-------|---------------|---------------|
+| 001-admin-panel | limimeshi-admin | limimeshi-admin（変更なし） |
+| 002-menu-list | limimeshi-web | **limimeshi-android**（大幅修正） |
+| 003-favorites | limimeshi-web | **limimeshi-android**（大幅修正） |
+
+#### 理由
+
+1. **運用負荷の軽減**：キャンペーン単位の方が手動運用に適している
+2. **現実のデータ構造との整合性**：チェーン店の公式サイト自体がキャンペーン単位で情報発信
+3. **就活目的**：Jetpack Compose + 最新Jetpackライブラリの実践経験が必要
+4. **Firebase親和性**：FirebaseはAndroidとの統合が最も充実している
+
+#### 影響範囲
+
+- specs/002-menu-list、003-favorites：大幅修正が必要（メニュー→キャンペーン、お気に入り→チェーン店）
+- data-model/：Firestoreスキーマの修正が必要
+- first-idea.md：基本設計の更新が必要
+- limimeshi-webリポジトリ：Phase3以降に延期
+
+---
+
 ## Phase2：MVP実装 🚧 未着手
 
 ### 2-0. リポジトリ作成と仕様書移行
@@ -398,17 +458,17 @@ limimeshi-web/              # Webアプリリポジトリ
 #### タスク
 
 1. **limimeshi-adminリポジトリ作成**
-   - [ ] リポジトリ作成（GitHub）
+   - [ ] リポジトリ作成（GitHub、public）
    - [ ] `.specify/`ディレクトリ構成作成（specs/, memory/, templates/, .claude/commands/）
    - [ ] `specs/001-admin-panel/`を移行（limimeshi-docsから）
    - [ ] `memory/constitution.md`をシンボリックリンクで参照
    - [ ] templates/、.claude/commands/をコピー
 
-2. **limimeshi-webリポジトリ作成**
-   - [ ] リポジトリ作成（GitHub）
+2. **limimeshi-androidリポジトリ作成**
+   - [ ] リポジトリ作成（GitHub、public）
    - [ ] `.specify/`ディレクトリ構成作成
-   - [ ] `specs/002-menu-list/`を移行（limimeshi-docsから）
-   - [ ] `specs/003-favorites/`を移行（limimeshi-docsから）
+   - [ ] `specs/002-menu-list/`を移行・大幅修正（メニュー→キャンペーン、チェーン一覧ベースに変更）
+   - [ ] `specs/003-favorites/`を移行・大幅修正（メニューお気に入り→チェーン店お気に入りに変更）
    - [ ] `memory/constitution.md`をシンボリックリンクで参照
    - [ ] templates/、.claude/commands/をコピー
 
@@ -422,26 +482,39 @@ limimeshi-web/              # Webアプリリポジトリ
 
 - **limimeshi-docs**：ガバナンス専用（planning/, adr/, memory/constitution.md）
 - **limimeshi-admin**：管理画面の実装と仕様（.specify/specs/001-admin-panel/）
-- **limimeshi-web**：Webアプリの実装と仕様（.specify/specs/002-menu-list/, 003-favorites/）
+- **limimeshi-android**：Androidアプリの実装と仕様（.specify/specs/002-campaign-list/, 003-chain-favorites/）
 
 ---
 
 ### 2-1. リポジトリセットアップ
 
 #### 対象リポジトリ
-- `limimeshi-web`（仕様書移行後に初期化）
-- `limimeshi-admin`（仕様書移行後に初期化）
-- `limimeshi-jobs`（スケジューラ実行用）
+- `limimeshi-admin`（React Admin、管理画面）
+- `limimeshi-android`（Kotlin + Jetpack Compose、Androidアプリ）
 - `limimeshi-infra`（Firestoreルール・インデックス管理）
+- `limimeshi-jobs`（スケジューラ実行用）※Phase3以降
 
 ### 2-2. MVP開発
+
+#### 開発順序
+
+1. **limimeshi-admin（管理画面）**
+   - チェーン店CRUD
+   - キャンペーンCRUD（旧メニュー）
+   - React Admin + Firebase
+
+2. **limimeshi-android（Androidアプリ）**
+   - チェーン一覧表示
+   - キャンペーン一覧表示（チェーン別）
+   - チェーン店お気に入り登録
+   - Kotlin + Jetpack Compose + Firebase
 
 #### 初期リリース対象
 - 16チェーン店（`first-idea.md` 参照）
 - Phase2（MVP）必須機能
-  - メニュー一覧表示
-  - お気に入り登録
-  - 管理画面（入力補助機能含む）
+  - チェーン一覧 → キャンペーン一覧表示
+  - チェーン店お気に入り登録
+  - 管理画面
 - 運用効率化の補助ツール
   - Googleアラート
   - RSSリーダー
@@ -455,7 +528,17 @@ limimeshi-web/              # Webアプリリポジトリ
 
 ## Phase3：ベータリリース・フィードバック収集 🚀 未着手
 
-### 3-0. インフラ分離（limimeshi-web 作成前に実施）
+### 3-0. Webアプリ開発（延期）
+
+**前提**：Phase2でAndroidアプリを優先したため、Webアプリ開発はPhase3以降に延期
+
+#### タスク
+- [ ] limimeshi-webリポジトリ作成（GitHub、public）
+- [ ] `.specify/`ディレクトリ構成作成
+- [ ] specs作成（002-campaign-list、003-chain-favoritesをWeb用に調整）
+- [ ] React + TypeScript + Firebase
+
+### 3-1. インフラ分離（limimeshi-web 作成前に実施）
 
 **詳細**: [ADR-005](./adr/005-firebase-hosting-multi-site.md) 参照
 
@@ -470,9 +553,9 @@ limimeshi-web/              # Webアプリリポジトリ
 
 ---
 
-### 3-1. ベータリリース
-### 3-2. フィードバック収集
-### 3-3. 改善実施
+### 3-2. ベータリリース
+### 3-3. フィードバック収集
+### 3-4. 改善実施
 
 ---
 
@@ -487,9 +570,9 @@ limimeshi-web/              # Webアプリリポジトリ
 
 ## Phase5以降：スケールアップ・機能拡張 🚀 未着手
 
-### 5-1. レビュー機能の実装
+### 5-1. レビュー機能の実装（キャンペーン単位）
 ### 5-2. 位置情報機能の実装
-### 5-3. モバイルアプリ展開
+### 5-3. iOSアプリ展開
 ### 5-4. チェーン店との提携
 
 ---
@@ -669,3 +752,4 @@ limimeshi-web/              # Webアプリリポジトリ
 - 2025/11/19：Phase1-2完了（002-menu-list、003-favoritesのPhase 0, Phase 1, tasks.md生成完了）
 - 2025/11/19：リポジトリアーキテクチャの見直し決定（Phase2開始時に各仕様書を実装リポジトリに移行、limimeshi-docsはガバナンス専用に整理）
 - 2025/11/22：Phase1-4完了（Firestoreデータベース設計、firestore-best-practices.md、firestore-collections.md、security-rules.md、indexes.md作成）、Phase1完了
+- 2025/11/27：重要な方針変更（データモデル：メニュー→キャンペーン単位、開発優先順位：Android優先、Webアプリ延期）
