@@ -471,6 +471,7 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
    - [ ] `specs/003-favorites/`を移行（大幅修正済み）
    - [ ] `memory/constitution.md`をシンボリックリンクで参照
    - [ ] templates/、.claude/commands/をコピー
+   - [ ] **Android技術選定の再確認**（詳細は下記「Android技術選定」セクション参照）
 
 3. **limimeshi-docsの整理**
    - [ ] specs/ディレクトリを削除（全仕様書を移行済み）
@@ -483,6 +484,50 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 - **limimeshi-docs**：ガバナンス専用（planning/, adr/, memory/constitution.md）
 - **limimeshi-admin**：管理画面の実装と仕様（.specify/specs/001-admin-panel/）
 - **limimeshi-android**：Androidアプリの実装と仕様（.specify/specs/002-chain-list/, 003-favorites/）
+
+---
+
+### Android技術選定（limimeshi-android着手前に再確認）
+
+#### 背景
+
+Phase1（2025/11）時点で`specs/002-chain-list/research.md`に技術選定を記録済み。ただし、Android実装はlimimeshi-admin完了後となるため、着手時点で以下を再確認する。
+
+#### 再確認が必要な理由
+
+1. **Androidエコシステムの変化**: Jetpackライブラリは頻繁に更新される
+2. **就活での市場調査**: 求人で求められているライブラリを把握してから選定
+3. **公式推奨の最新化**: Android Developersサイトの推奨が変わる可能性
+
+#### 現時点の選定（2025/11、Phase1時点）
+
+| カテゴリ | 選定技術 | 選定根拠 |
+|---------|---------|---------|
+| 言語 | Kotlin | Android公式推奨 |
+| UIフレームワーク | Jetpack Compose + Material 3 | Android公式推奨 |
+| データ読み取り | Firebase Android SDK | Firebase公式ドキュメント |
+| 認証 | Firebase Authentication | Firebase公式ドキュメント |
+| 設定永続化 | DataStore Preferences | Android公式推奨（SharedPreferencesの後継） |
+| アーキテクチャ | MVVM + Clean Architecture | Android Architecture Guide |
+| 状態管理 | StateFlow + Compose State | Kotlin公式 + Android公式 |
+| DI | Hilt | Android公式推奨 |
+| テスト | JUnit 5 + MockK + Turbine | ※要再確認（公式はJUnit 4 + Mockito） |
+| UIテスト | Compose Testing | Android公式 |
+
+#### 着手時の確認タスク
+
+- [ ] [Android Developers - Testing](https://developer.android.com/training/testing)で推奨ライブラリを確認
+- [ ] [Android Developers - App architecture](https://developer.android.com/topic/architecture)で最新パターンを確認
+- [ ] 就活求人で求められているライブラリを調査・反映
+- [ ] `specs/002-chain-list/research.md`を最新化
+- [ ] `specs/003-favorites/research.md`を最新化（002と整合性を取る）
+
+#### 参考リンク
+
+- [Android Developers](https://developer.android.com/)
+- [Firebase Android Setup](https://firebase.google.com/docs/android/setup)
+- [Jetpack Compose](https://developer.android.com/jetpack/compose)
+- [Material 3 for Android](https://m3.material.io/)
 
 ---
 
@@ -753,3 +798,4 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 - 2025/11/19：リポジトリアーキテクチャの見直し決定（Phase2開始時に各仕様書を実装リポジトリに移行、limimeshi-docsはガバナンス専用に整理）
 - 2025/11/22：Phase1-4完了（Firestoreデータベース設計、firestore-best-practices.md、firestore-collections.md、security-rules.md、indexes.md作成）、Phase1完了
 - 2025/11/27：重要な方針変更（データモデル：メニュー→キャンペーン単位、開発優先順位：Android優先、Webアプリ延期）
+- 2025/11/28：Android技術選定の再確認タスクを追加（limimeshi-android着手前に実施、現時点の選定根拠を記録）
