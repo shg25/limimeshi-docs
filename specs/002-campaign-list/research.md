@@ -1,59 +1,62 @@
-# Research: メニュー一覧（Menu List）
+# Research: キャンペーン一覧（Campaign List）
 
-**Feature**: 002-menu-list  
-**Date**: 2025-11-18  
-**Status**: Phase 0 - Research  
+**Feature**: 002-campaign-list
+**Date**: 2025-11-28
+**Status**: Phase 0 - Research
 
 ## Overview
 
-メニュー一覧機能の実装に必要な技術選定と設計パターンの調査結果
+キャンペーン一覧機能（Androidアプリ）の実装に必要な技術選定と設計パターンの調査結果
 
-## 1. React + TypeScript（フロントエンド）
+## 1. Kotlin + Jetpack Compose（Androidフロントエンド）
 
 ### Decision
-React 18 + TypeScript + Vite を使用
+Kotlin + Jetpack Compose + Material 3 を使用
 
 ### Rationale
-- **React 18**: Constitution で React を採用済み
-- **TypeScript**: Constitution VII で型安全性の確保を要求
-- **Vite**: 高速な開発体験、HMR（Hot Module Replacement）、Phase1で選定予定のビルドツール
+- **Kotlin**: Android公式推奨言語、Null安全性、コルーチンによる非同期処理
+- **Jetpack Compose**: Android公式のモダンUIフレームワーク、宣言的UI、リコンポジション
+- **Material 3**: 最新のMaterial Designガイドライン、Dynamic Color対応
 
 ### Alternatives Considered
-- **Next.js**: SSR（Server Side Rendering）が不要なため過剰（Phase2はSPA、SEO対策はPhase3以降）
-- **Create React App**: Vite より遅い、メンテナンス終了の懸念
+- **React Native / Flutter**: クロスプラットフォームだが、Phase2ではAndroid専用でネイティブ品質を優先
+- **View System（XML）**: Composeの方がコード量削減、状態管理が容易
+- **Material 2**: Material 3の方が最新でAndroid 12+に適合
 
 ### Reference
-- [React公式](https://react.dev/)
-- [Vite公式](https://vitejs.dev/)
+- [Kotlin公式](https://kotlinlang.org/)
+- [Jetpack Compose公式](https://developer.android.com/jetpack/compose)
+- [Material 3 for Android](https://m3.material.io/)
 
 ---
 
-## 2. Firestore SDK（データ読み取り）
+## 2. Firebase SDK for Android（データ読み取り）
 
 ### Decision
-Firebase JS SDK v9+ のモジュラー形式を使用
+Firebase Android SDK（Firestore、Authentication）を使用
 
 ### Rationale
-- **Tree-shaking対応**: バンドルサイズ削減（Constitution VI: Mobile & Performance First）
-- **TypeScript完全対応**: 型安全性の確保
-- **オフライン対応**: キャッシュ機能が標準搭載
-- **リアルタイム更新**: `onSnapshot` でリアルタイムリスニング可能（Phase3以降で活用）
+- **Kotlinネイティブ対応**: Firebase SDKはKotlinフレンドリーAPI提供
+- **コルーチン対応**: `kotlinx-coroutines-play-services` で非同期処理
+- **オフライン対応**: Firestoreのキャッシュ機能が標準搭載
+- **リアルタイム更新**: `addSnapshotListener` でリアルタイムリスニング可能（Phase3以降で活用）
 
 ### Key APIs
-```typescript
-import { collection, query, where, orderBy, limit, getDocs, Timestamp } from 'firebase/firestore';
+```kotlin
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 
-// メニュー一覧取得（1年以内、販売開始日時降順）
-const menusRef = collection(db, 'menus');
-const oneYearAgo = Timestamp.fromDate(new Date(Date.now() - 365 * 24 * 60 * 60 * 1000));
+// キャンペーン一覧取得（1年以内、販売開始日時降順）
+val db = Firebase.firestore
+val oneYearAgo = Timestamp(Date(System.currentTimeMillis() - 365L * 24 * 60 * 60 * 1000))
 
-const q = query(
-  menusRef,
-  where('saleStartTime', '>=', oneYearAgo),
-  orderBy('saleStartTime', 'desc')
-);
-
-const snapshot = await getDocs(q);
+val campaigns = db.collection("campaigns")
+    .whereGreaterThanOrEqualTo("saleStartTime", oneYearAgo)
+    .orderBy("saleStartTime", Query.Direction.DESCENDING)
+    .get()
+    .await()
+    .toObjects(Campaign::class.java)
 ```
 
 ### Firestore Indexes
@@ -66,131 +69,161 @@ const snapshot = await getDocs(q);
 ### Alternatives Considered
 - **Realtime Database**: NoSQLだがクエリ機能が弱い、Firestoreが推奨
 - **Cloud Functions経由**: Phase2ではオーバーエンジニアリング
+- **Retrofit + REST API**: Firestore SDKの方がリアルタイム更新やキャッシュが容易
 
 ### Reference
-- [Firestore公式](https://firebase.google.com/docs/firestore)
-- [Firestore Queries](https://firebase.google.com/docs/firestore/query-data/queries)
+- [Firebase Android SDK](https://firebase.google.com/docs/android/setup)
+- [Firestore Kotlin Extensions](https://firebase.google.com/docs/reference/kotlin/com/google/firebase/firestore/ktx/package-summary)
 
 ---
 
 ## 3. Firebase Authentication（ログインユーザー判定）
 
 ### Decision
-Firebase Authentication の `onAuthStateChanged` を使用
+Firebase Authentication の `AuthStateListener` を使用
 
 ### Rationale
 - **リアルタイム認証状態監視**: ログイン/ログアウトを即座に検知
-- **匿名認証対応**: Constitution で匿名認証 → Googleログインの移行を想定
-- **型安全**: TypeScript完全対応
+- **Googleログイン対応**: One Tap Sign-In + 従来のGoogleログイン
+- **Kotlinコルーチン対応**: 非同期処理がシンプル
 
 ### Key APIs
-```typescript
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+```kotlin
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
-const auth = getAuth();
+val auth = Firebase.auth
 
-onAuthStateChanged(auth, (user: User | null) => {
-  if (user) {
-    // ログイン済み
-    console.log('Logged in:', user.uid);
-  } else {
-    // 未ログイン
-    console.log('Not logged in');
-  }
-});
+// 認証状態の監視（Compose）
+@Composable
+fun rememberAuthState(): State<FirebaseUser?> {
+    val user = remember { mutableStateOf(auth.currentUser) }
+    DisposableEffect(Unit) {
+        val listener = FirebaseAuth.AuthStateListener {
+            user.value = it.currentUser
+        }
+        auth.addAuthStateListener(listener)
+        onDispose { auth.removeAuthStateListener(listener) }
+    }
+    return user
+}
 ```
 
 ### Alternatives Considered
 - **Custom Auth**: Phase2ではFirebase Authで十分
+- **Credential Manager API**: Phase3以降で検討（Passkey対応）
 
 ### Reference
-- [Firebase Authentication](https://firebase.google.com/docs/auth)
+- [Firebase Authentication Android](https://firebase.google.com/docs/auth/android/start)
 
 ---
 
 ## 4. X（Twitter）Post埋め込み
 
 ### Decision
-X（Twitter）公式の `oEmbed API` + `react-twitter-embed` ライブラリを使用
+**Android WebView** でX公式の埋め込み表示を使用
 
 ### Rationale
-- **公式API**: 利用規約遵守、埋め込み表示が公式に許可されている
-- **react-twitter-embed**: React向けの軽量ライブラリ、TypeScript対応
-- **レスポンシブ対応**: モバイル表示に最適化
-- **画像自動表示**: Postに画像が添付されていれば自動的に埋め込まれる
+- **公式API**: Twitter/X公式の埋め込み方式、利用規約遵守
+- **WebViewで埋め込み**: ネイティブSDKは提供されていないため、WebViewが標準的アプローチ
+- **画像自動表示**: Postに画像が添付されていれば自動的に表示
+- **レスポンシブ対応**: WebViewでCSS制御可能
 
-### Installation
-```bash
-npm install react-twitter-embed
-```
+### Implementation
+```kotlin
+@Composable
+fun XPostEmbed(postUrl: String) {
+    val tweetId = extractTweetId(postUrl) ?: return
 
-### Usage Example
-```tsx
-import { TwitterTweetEmbed } from 'react-twitter-embed';
+    AndroidView(
+        factory = { context ->
+            WebView(context).apply {
+                settings.javaScriptEnabled = true
+                settings.domStorageEnabled = true
+                loadData(
+                    """
+                    <html>
+                    <head>
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                    </head>
+                    <body style="margin:0">
+                        <blockquote class="twitter-tweet">
+                            <a href="$postUrl"></a>
+                        </blockquote>
+                        <script async src="https://platform.twitter.com/widgets.js"></script>
+                    </body>
+                    </html>
+                    """.trimIndent(),
+                    "text/html",
+                    "UTF-8"
+                )
+            }
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
 
-// X Post URLからPost IDを抽出
-const extractTweetId = (url: string): string | null => {
-  const match = url.match(/status\/(\d+)/);
-  return match ? match[1] : null;
-};
-
-// 埋め込み表示
-const tweetId = extractTweetId(menu.xPostUrl);
-if (tweetId) {
-  <TwitterTweetEmbed tweetId={tweetId} />
+fun extractTweetId(url: String): String? {
+    val regex = """status/(\d+)""".toRegex()
+    return regex.find(url)?.groupValues?.getOrNull(1)
 }
 ```
 
 ### Edge Cases
-- **Post削除**: Post作成者が削除した場合、埋め込み表示できなくなる（外部依存の制約として受け入れる）
+- **Post削除**: Post作成者が削除した場合、埋め込み表示ができなくなる（外部依存の制約として受け入れる）
 - **画像なし**: 画像がない場合でもPostテキストのみ表示される
-- **読み込み遅延**: X APIの応答が遅い場合があるが、ページ本体の読み込みとは分離される
+- **読み込み遅延**: X APIの応答が遅い場合があるが、UI本体の読み込みとは分離される
 
 ### Alternatives Considered
-- **手動iframe**: oEmbed APIの方が簡単で推奨
+- **Twitter SDK**: 2023年にサポート終了、現在は非推奨
 - **画像のみ保存**: 著作権リスク、利用規約違反の可能性
+- **oEmbed API直接呼び出し**: 追加のネットワークリクエストが必要、WebViewの方がシンプル
 
 ### Reference
-- [Twitter oEmbed API](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/overview)
-- [react-twitter-embed](https://www.npmjs.com/package/react-twitter-embed)
+- [Twitter Embedded Tweets](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/overview)
 
 ---
 
 ## 5. フィルタ選択の永続化
 
 ### Decision
-`localStorage` を使用してフィルタ選択（全て表示/お気に入りのみ表示）を保存
+`DataStore Preferences` を使用してフィルタ選択（全て表示/お気に入りのみ表示）を保存
 
 ### Rationale
-- **ブラウザ標準API**: 追加ライブラリ不要、シンプル
-- **永続化**: ブラウザを閉じても設定が保持される
+- **Googleの推奨**: SharedPreferencesの後継、型安全、コルーチン対応
+- **永続化**: アプリを閉じても設定が保持される
 - **ログインユーザー専用**: Phase2ではログインユーザーのみフィルタ機能を提供
 
 ### Key Pattern
-```typescript
-// フィルタ設定の保存
-const saveFilterPreference = (showFavoritesOnly: boolean) => {
-  localStorage.setItem('menuFilter', JSON.stringify({ showFavoritesOnly }));
-};
+```kotlin
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+
+private val SHOW_FAVORITES_ONLY = booleanPreferencesKey("show_favorites_only")
 
 // フィルタ設定の読み込み
-const loadFilterPreference = (): boolean => {
-  const saved = localStorage.getItem('menuFilter');
-  if (saved) {
-    const { showFavoritesOnly } = JSON.parse(saved);
-    return showFavoritesOnly;
-  }
-  return false; // デフォルトは全て表示
-};
+val showFavoritesOnlyFlow: Flow<Boolean> = context.dataStore.data
+    .map { preferences ->
+        preferences[SHOW_FAVORITES_ONLY] ?: false
+    }
+
+// フィルタ設定の保存
+suspend fun saveFilterPreference(showFavoritesOnly: Boolean) {
+    context.dataStore.edit { preferences ->
+        preferences[SHOW_FAVORITES_ONLY] = showFavoritesOnly
+    }
+}
 ```
 
 ### Alternatives Considered
+- **SharedPreferences**: 非推奨、メインスレッドでのブロッキングリスク
 - **Firestore保存**: Phase2では不要（ユーザーごとに設定を保存するとFirestore読み取り回数が増える）
-- **sessionStorage**: ブラウザを閉じると消えるため不適切
-- **Cookie**: localStorageの方がシンプル
+- **Room Database**: キーバリューストアにはDataStoreの方がシンプル
 
 ### Reference
-- [MDN localStorage](https://developer.mozilla.org/ja/docs/Web/API/Window/localStorage)
+- [DataStore Preferences](https://developer.android.com/topic/libraries/architecture/datastore)
 
 ---
 
@@ -201,36 +234,36 @@ const loadFilterPreference = (): boolean => {
 
 ### Query Patterns
 
-#### パターン1: 全メニュー表示（1年以内、販売開始日時降順）
-```typescript
-const oneYearAgo = Timestamp.fromDate(new Date(Date.now() - 365 * 24 * 60 * 60 * 1000));
+#### パターン1: 全キャンペーン表示（1年以内、販売開始日時降順）
+```kotlin
+val oneYearAgo = Timestamp(Date(System.currentTimeMillis() - 365L * 24 * 60 * 60 * 1000))
 
-const q = query(
-  collection(db, 'menus'),
-  where('saleStartTime', '>=', oneYearAgo),
-  orderBy('saleStartTime', 'desc')
-);
+db.collection("campaigns")
+    .whereGreaterThanOrEqualTo("saleStartTime", oneYearAgo)
+    .orderBy("saleStartTime", Query.Direction.DESCENDING)
+    .get()
+    .await()
 ```
 
 **必要なインデックス**:
 - `saleStartTime` (descending)
 
 #### パターン2: お気に入りフィルタ（chainIdの配列でフィルタ）
-```typescript
+```kotlin
 // お気に入りチェーンIDを取得（003-favoritesの機能）
-const favoriteChainIds = await getFavoriteChainIds(user.uid);
+val favoriteChainIds = getFavoriteChainIds(user.uid)
 
-// chainIdが配列に含まれるメニューを取得
-const q = query(
-  collection(db, 'menus'),
-  where('chainId', 'in', favoriteChainIds),
-  where('saleStartTime', '>=', oneYearAgo),
-  orderBy('saleStartTime', 'desc')
-);
+// chainIdが配列に含まれるキャンペーンを取得
+db.collection("campaigns")
+    .whereIn("chainId", favoriteChainIds)
+    .whereGreaterThanOrEqualTo("saleStartTime", oneYearAgo)
+    .orderBy("saleStartTime", Query.Direction.DESCENDING)
+    .get()
+    .await()
 ```
 
 **制約**:
-- `where('chainId', 'in', ...)` は最大10個まで
+- `whereIn` は最大10個まで
 - お気に入りチェーンが10個を超える場合は、クライアント側でフィルタリング
 
 **必要なインデックス**:
@@ -238,7 +271,7 @@ const q = query(
 
 ### Performance Considerations
 - **キャッシュ活用**: Firestoreのキャッシュ機能を有効化（デフォルトで有効）
-- **ページネーション**: Phase2では不要（メニュー数160件程度）、500件超えたら検討
+- **ページネーション**: Phase2では不要（キャンペーン数160件程度）、500件超えたら検討
 
 ### Alternatives Considered
 - **Cloud Functions経由**: Phase2ではオーバーエンジニアリング
@@ -252,139 +285,186 @@ const q = query(
 クライアント側で販売開始日時と販売終了日時を元にステータスを自動判定
 
 ### Logic
-```typescript
-type MenuStatus = '予定' | '発売から◯日経過' | '発売から◯ヶ月以上経過' | '販売終了';
+```kotlin
+sealed class CampaignStatus {
+    object Scheduled : CampaignStatus()  // 予定
+    data class DaysElapsed(val days: Int) : CampaignStatus()  // 開始から◯日経過
+    data class MonthsElapsed(val months: Int) : CampaignStatus()  // 開始から◯ヶ月以上経過
+    object Ended : CampaignStatus()  // 終了
+}
 
-const getMenuStatus = (saleStartTime: Timestamp, saleEndTime?: Timestamp): MenuStatus => {
-  const now = new Date();
-  const startDate = saleStartTime.toDate();
-  const endDate = saleEndTime?.toDate();
+fun getCampaignStatus(
+    saleStartTime: Timestamp,
+    saleEndTime: Timestamp?
+): CampaignStatus {
+    val now = Date()
+    val startDate = saleStartTime.toDate()
+    val endDate = saleEndTime?.toDate()
 
-  // 販売終了日時が設定されていて、現在時刻が終了日時を過ぎている
-  if (endDate && now > endDate) {
-    return '販売終了';
-  }
+    // 販売終了日時が設定されていて、現在時刻が終了日時を過ぎている
+    if (endDate != null && now.after(endDate)) {
+        return CampaignStatus.Ended
+    }
 
-  // 販売開始日時が未来
-  if (startDate > now) {
-    return '予定';
-  }
+    // 販売開始日時が未来
+    if (startDate.after(now)) {
+        return CampaignStatus.Scheduled
+    }
 
-  // 販売開始日時から経過日数を計算
-  const daysPassed = Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    // 販売開始日時から経過日数を計算
+    val daysPassed = TimeUnit.MILLISECONDS.toDays(now.time - startDate.time).toInt()
 
-  // 30日以内
-  if (daysPassed < 30) {
-    return `発売から${daysPassed}日経過`;
-  }
+    // 30日以内
+    if (daysPassed < 30) {
+        return CampaignStatus.DaysElapsed(daysPassed)
+    }
 
-  // 30日以上
-  const monthsPassed = Math.floor(daysPassed / 30);
-  return `発売から${monthsPassed}ヶ月以上経過`;
-};
+    // 30日以上
+    val monthsPassed = daysPassed / 30
+    return CampaignStatus.MonthsElapsed(monthsPassed)
+}
+
+// 表示用文字列変換
+fun CampaignStatus.toDisplayString(): String = when (this) {
+    is CampaignStatus.Scheduled -> "予定"
+    is CampaignStatus.DaysElapsed -> "開始から${days}日経過"
+    is CampaignStatus.MonthsElapsed -> "開始から${months}ヶ月以上経過"
+    is CampaignStatus.Ended -> "終了"
+}
 ```
 
 ### Rationale
 - **シンプル**: Firestoreに保存せず、表示時に計算
 - **リアルタイム**: 常に最新の状態を表示
 - **コスト削減**: Firestore書き込み不要
+- **Sealed Class**: Kotlinの型安全性を活用、網羅性チェック
 
 ### Alternatives Considered
 - **Firestore保存**: 日次バッチでステータスを更新する方法（オーバーエンジニアリング、コスト増）
 
 ---
 
-## 8. UI/UXパターン
+## 8. アーキテクチャパターン
 
 ### Decision
-Material-UI（MUI）をUIライブラリとして採用
+**MVVM + Clean Architecture（簡略版）** を採用
 
 ### Rationale
-- **React公式推奨**: Reactエコシステムで最も人気
-- **モバイルファースト**: レスポンシブデザインが標準
-- **TypeScript完全対応**: 型安全性の確保
-- **アクセシビリティ**: WCAG 2.1 AA準拠
-- **カスタマイズ性**: テーマシステムで柔軟なカスタマイズ
+- **Googleの推奨**: Android公式のアーキテクチャガイドライン
+- **テスタビリティ**: ViewModelをユニットテスト可能
+- **関心の分離**: UI、ビジネスロジック、データ層を分離
+- **Jetpack Compose対応**: StateHolderパターンとの親和性
+
+### Layer Structure
+```
+ui/           # Composable関数、画面
+viewmodel/    # ViewModel、UIステート
+repository/   # データ層の抽象化
+model/        # ドメインモデル
+```
 
 ### Key Components
-- **Card**: メニューカード表示
-- **Grid/Stack**: レイアウト
-- **Switch/Checkbox**: お気に入りフィルタのトグル
-- **Typography**: テキスト表示
-- **Skeleton**: ローディング状態
+```kotlin
+// UIステート
+data class CampaignListUiState(
+    val campaigns: List<CampaignWithChain> = emptyList(),
+    val isLoading: Boolean = true,
+    val showFavoritesOnly: Boolean = false,
+    val error: String? = null
+)
 
-### Installation
-```bash
-npm install @mui/material @emotion/react @emotion/styled
+// ViewModel
+class CampaignListViewModel(
+    private val campaignRepository: CampaignRepository,
+    private val preferencesRepository: PreferencesRepository
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(CampaignListUiState())
+    val uiState: StateFlow<CampaignListUiState> = _uiState.asStateFlow()
+
+    fun loadCampaigns() { /* ... */ }
+    fun toggleFavoritesFilter() { /* ... */ }
+}
 ```
 
 ### Alternatives Considered
-- **Chakra UI**: MUIの方が成熟している
-- **Ant Design**: MUIの方がモバイルフレンドリー
-- **Tailwind CSS**: MUIの方がコンポーネントベースで開発しやすい
+- **MVI**: Phase2では過剰、ViewModelで十分
+- **Plain Compose**: 状態管理が複雑になる、テストしにくい
+- **Redux/Mobius**: Androidでは一般的でない
 
 ### Reference
-- [Material-UI公式](https://mui.com/)
+- [Android Architecture Guide](https://developer.android.com/topic/architecture)
 
 ---
 
 ## 9. 状態管理
 
 ### Decision
-Phase2では `useState` + `useEffect` のみ使用、グローバル状態管理ライブラリは不使用
+`StateFlow` + `Jetpack Compose State` を使用
 
 ### Rationale
-- **シンプル**: Constitution III: Simplicity（YAGNI原則）
-- **Phase2の規模**: メニュー一覧とお気に入りフィルタのみで、状態は局所的
-- **オーバーエンジニアリング回避**: Redux/Zustand等は不要
+- **Kotlin Coroutines**: 非同期処理との統合が自然
+- **Compose対応**: `collectAsState()` でシームレスに連携
+- **ライフサイクル対応**: `viewModelScope` で自動キャンセル
 
 ### Pattern
-```typescript
-const [menus, setMenus] = useState<Menu[]>([]);
-const [loading, setLoading] = useState<boolean>(true);
-const [showFavoritesOnly, setShowFavoritesOnly] = useState<boolean>(false);
+```kotlin
+// ViewModel
+private val _uiState = MutableStateFlow(CampaignListUiState())
+val uiState: StateFlow<CampaignListUiState> = _uiState.asStateFlow()
 
-useEffect(() => {
-  // Firestoreからメニューを取得
-  fetchMenus();
-}, [showFavoritesOnly]);
+// Composable
+@Composable
+fun CampaignListScreen(viewModel: CampaignListViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    when {
+        uiState.isLoading -> LoadingIndicator()
+        uiState.error != null -> ErrorMessage(uiState.error)
+        uiState.campaigns.isEmpty() -> EmptyState()
+        else -> CampaignList(uiState.campaigns)
+    }
+}
 ```
 
-### Phase3以降の検討
-- **Zustand**: 軽量、TypeScript対応、学習コスト低い
-- **TanStack Query（React Query）**: Firestoreキャッシュと併用
-
 ### Alternatives Considered
-- **Redux**: Phase2では過剰
-- **Context API**: Phase2では不要
+- **LiveData**: 非推奨（Kotlin Flowの方がモダン）
+- **State Hoisting only**: 複雑な画面では管理が困難
 
 ---
 
 ## 10. テスト戦略
 
 ### Decision
-- **単体テスト**: Vitest + React Testing Library
-- **E2Eテスト**: Playwright
+- **単体テスト**: JUnit 5 + MockK + Turbine（Flow testing）
+- **UIテスト**: Compose Testing + Robolectric
+- **E2Eテスト**: Firebase Test Lab + Espresso
 
 ### Rationale
-- **Vitest**: Vite公式のテストフレームワーク、高速
-- **React Testing Library**: React公式推奨、ユーザー目線のテスト
-- **Playwright**: クロスブラウザ対応、Firestoreエミュレータと連携
+- **JUnit 5**: 最新のJava/Kotlin標準テストフレームワーク
+- **MockK**: Kotlin専用のモッキングライブラリ、コルーチン対応
+- **Turbine**: Kotlin Flow専用のテストユーティリティ
+- **Compose Testing**: Jetpack Compose公式テストライブラリ
+- **Firebase Test Lab**: 実機テスト（Phase3以降で本格利用）
 
 ### Test Coverage
 - **単体テスト**:
-  - ステータス判定ロジック（`getMenuStatus`）
+  - ステータス判定ロジック（`getCampaignStatus`）
   - フィルタロジック（お気に入りのみ表示）
   - 1年フィルタロジック
-- **E2Eテスト**:
-  - メニュー一覧表示
+  - ViewModel状態遷移
+- **UIテスト**:
+  - キャンペーン一覧表示
   - お気に入りフィルタのON/OFF
-  - フィルタ選択の永続化
+  - 空リスト表示
+- **E2Eテスト**:
+  - Firestoreとの統合
+  - フィルタ選択永続化
 
 ### Reference
-- [Vitest公式](https://vitest.dev/)
-- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
-- [Playwright公式](https://playwright.dev/)
+- [Compose Testing](https://developer.android.com/jetpack/compose/testing)
+- [MockK](https://mockk.io/)
+- [Turbine](https://github.com/cashapp/turbine)
 
 ---
 
@@ -392,13 +472,14 @@ useEffect(() => {
 
 | 項目 | 選定技術 | 理由 |
 |------|---------|------|
-| フロントエンド | React 18 + TypeScript + Vite | Constitution準拠、高速開発 |
-| データ読み取り | Firebase JS SDK v9+ | Tree-shaking、TypeScript対応 |
-| 認証 | Firebase Authentication | リアルタイム認証状態監視 |
-| X Post埋め込み | react-twitter-embed | 公式API、レスポンシブ対応 |
-| フィルタ永続化 | localStorage | ブラウザ標準API、シンプル |
-| UIライブラリ | Material-UI（MUI） | モバイルファースト、アクセシビリティ |
-| 状態管理 | useState + useEffect | YAGNI原則、Phase2では十分 |
-| テスト | Vitest + Playwright | Vite公式、クロスブラウザ対応 |
+| 言語 | Kotlin | Android公式推奨、Null安全性 |
+| UIフレームワーク | Jetpack Compose + Material 3 | モダン、宣言的UI |
+| データ読み取り | Firebase Android SDK | Kotlin対応、オフラインキャッシュ |
+| 認証 | Firebase Authentication | Googleログイン、AuthStateListener |
+| X Post埋め込み | WebView + Twitter Widgets | 公式API、WebViewが標準アプローチ |
+| フィルタ永続化 | DataStore Preferences | 型安全、コルーチン対応 |
+| アーキテクチャ | MVVM + Clean Architecture | Google推奨、テスタビリティ |
+| 状態管理 | StateFlow + Compose State | Kotlinネイティブ、Compose統合 |
+| テスト | JUnit 5 + MockK + Compose Testing | Kotlin対応、モダン |
 
 全ての技術選定は Constitution に準拠しています。
