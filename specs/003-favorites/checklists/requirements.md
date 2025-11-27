@@ -1,8 +1,8 @@
 # Specification Quality Checklist: お気に入り登録（Favorites）
-  
-**Purpose**: Validate specification completeness and quality before proceeding to planning  
-**Created**: 2025-11-16  
-**Updated**: 2025-11-16
+
+**Purpose**: Validate specification completeness and quality before proceeding to planning
+**Created**: 2025-11-16
+**Updated**: 2025-11-28
 **Feature**: [spec.md](../spec.md)
 
 ## Content Quality
@@ -41,9 +41,10 @@
 - お気に入り登録・解除の即座反映（1秒以内）
 - 複数デバイス間での同期（Firestore）
 - お気に入り登録数の集約表示
-- 002のメニュー一覧フィルタと連携
+- 002のキャンペーン一覧フィルタと連携
 
 ### Key Decisions Made
+- **プラットフォーム**: Phase2ではAndroidアプリを優先（Webアプリ対応はPhase3以降）
 - **Phase2でログイン必須**: 未ログインユーザー向けローカルストレージ対応はPhase3以降
 - **お気に入り登録数を集約データとして管理**: 非正規化データとしてChainエンティティに保存（リアルタイムカウントではなく、登録・解除時に増減）
 - **未ログインユーザー向けUI**: お気に入り登録ボタンは非表示または無効化
@@ -63,7 +64,7 @@
 - Firebase Authentication: ログインユーザーの識別
 
 ### Dependents（この機能に依存する機能）
-- メニュー一覧機能（002）: お気に入りフィルタ機能で使用
+- キャンペーン一覧機能（002）: お気に入りフィルタ機能で使用
 
 ### Out of Scope (Phase3以降)
 - 未ログインユーザー向けローカルストレージ対応
@@ -75,11 +76,13 @@
 - ソーシャル機能（他ユーザーのお気に入り表示）
 - お気に入りグループ化
 - お気に入りエクスポート
+- Webアプリ
 
 ## Notes
 
 - All validation items passed successfully
 - Spec is ready for `/speckit-plan`
-- 002のメニュー一覧フィルタと連携する前提機能
+- 002のキャンペーン一覧フィルタと連携する前提機能
 - Phase2ではログイン必須とすることでMVP範囲をシンプルに
 - お気に入り登録数は集約データとして管理（パフォーマンス最適化）
+- Phase2ではAndroidアプリを優先（Webアプリ対応はPhase3以降）
