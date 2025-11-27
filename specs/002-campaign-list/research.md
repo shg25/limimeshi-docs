@@ -1,8 +1,8 @@
 # Research: キャンペーン一覧（Campaign List）
 
-**Feature**: 002-campaign-list
-**Date**: 2025-11-28
-**Status**: Phase 0 - Research
+**Feature**: 002-campaign-list  
+**Date**: 2025-11-28  
+**Status**: Phase 0 - Research  
 
 ## Overview
 

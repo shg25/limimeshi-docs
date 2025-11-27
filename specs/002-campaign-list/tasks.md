@@ -1,7 +1,7 @@
 # Tasks: キャンペーン一覧（Campaign List）
 
-**Input**: Design documents from `/specs/002-campaign-list/`
-**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, contracts/firestore-schema.md, quickstart.md
+**Input**: Design documents from `/specs/002-campaign-list/`  
+**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, contracts/firestore-schema.md, quickstart.md  
 
 **Tests**: このタスクリストにはテスト作成タスクが含まれています（spec.mdで明示的に要求されているため）
 

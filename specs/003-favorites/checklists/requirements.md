@@ -1,9 +1,9 @@
 # Specification Quality Checklist: お気に入り登録（Favorites）
 
-**Purpose**: Validate specification completeness and quality before proceeding to planning
-**Created**: 2025-11-16
-**Updated**: 2025-11-28
-**Feature**: [spec.md](../spec.md)
+**Purpose**: Validate specification completeness and quality before proceeding to planning  
+**Created**: 2025-11-16  
+**Updated**: 2025-11-28  
+**Feature**: [spec.md](../spec.md)  
 
 ## Content Quality
 

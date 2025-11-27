@@ -1,9 +1,9 @@
 # Feature Specification: キャンペーン一覧（Campaign List）
 
-**Feature Branch**: `002-campaign-list`
-**Created**: 2025-11-14
-**Updated**: 2025-11-28
-**Status**: Draft
+**Feature Branch**: `002-campaign-list`  
+**Created**: 2025-11-14  
+**Updated**: 2025-11-28  
+**Status**: Draft  
 **Input**: User description: "一般ユーザー向けのキャンペーン一覧画面（Androidアプリ）。キャンペーンを一覧表示し、ログインユーザーはお気に入り登録したチェーンのみ表示するフィルタを利用可能。各キャンペーンにはチェーン名、キャンペーン名、販売開始日時、販売終了日時（未設定時は非表示）、ステータス（予定/開始から◯日経過/終了）、説明を表示。X Post URLがあれば埋め込み表示（商品画像代わり）。販売開始日時の降順（新しい順）でソート。1年経過したキャンペーンは非表示。ログインユーザーのフィルタ選択は次回訪問時も保持。Phase2 MVPで実装。管理画面で登録されたデータを表示する読み取り専用機能。"
 
 ## User Scenarios & Testing *(mandatory)*

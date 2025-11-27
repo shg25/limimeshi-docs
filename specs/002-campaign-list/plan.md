@@ -1,7 +1,7 @@
 # Implementation Plan: キャンペーン一覧（Campaign List）
 
-**Branch**: `002-campaign-list` | **Date**: 2025-11-28 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `/specs/002-campaign-list/spec.md`
+**Branch**: `002-campaign-list` | **Date**: 2025-11-28 | **Spec**: [spec.md](./spec.md)  
+**Input**: Feature specification from `/specs/002-campaign-list/spec.md`  
 
 ## Summary
 
@@ -16,15 +16,15 @@
 
 ## Technical Context
 
-**Language/Version**: Kotlin 1.9+, Android SDK 34 (Android 14)
-**Primary Dependencies**: Jetpack Compose 1.5+, Material 3, Firebase Android SDK, DataStore, Hilt
-**Storage**: Firestore（読み取り専用）、DataStore Preferences（フィルタ設定）
-**Testing**: JUnit 5, MockK, Turbine, Compose Testing, Robolectric
-**Target Platform**: Android 8.0+ (API 26+)
-**Project Type**: Mobile（limimeshi-android リポジトリ）
-**Performance Goals**: 初期表示3秒以内（モバイル4G環境、X Post埋め込み部分を除く）
-**Constraints**: Firestore読み取り150件以内（1年以内のキャンペーン、1年経過したキャンペーンは自動非表示）
-**Scale/Scope**: Phase2の160ユーザー、16チェーン、平均キャンペーン数は変動
+**Language/Version**: Kotlin 1.9+, Android SDK 34 (Android 14)  
+**Primary Dependencies**: Jetpack Compose 1.5+, Material 3, Firebase Android SDK, DataStore, Hilt  
+**Storage**: Firestore（読み取り専用）、DataStore Preferences（フィルタ設定）  
+**Testing**: JUnit 5, MockK, Turbine, Compose Testing, Robolectric  
+**Target Platform**: Android 8.0+ (API 26+)  
+**Project Type**: Mobile（limimeshi-android リポジトリ）  
+**Performance Goals**: 初期表示3秒以内（モバイル4G環境、X Post埋め込み部分を除く）  
+**Constraints**: Firestore読み取り150件以内（1年以内のキャンペーン、1年経過したキャンペーンは自動非表示）  
+**Scale/Scope**: Phase2の160ユーザー、16チェーン、平均キャンペーン数は変動  
 
 ## Constitution Check
 
