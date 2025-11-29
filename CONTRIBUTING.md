@@ -183,6 +183,45 @@ update（何を更新したか不明）
 
 ---
 
+## コード品質ツール（実装リポジトリ共通）
+
+実装リポジトリ（limimeshi-admin、limimeshi-android等）では、以下のツールでコード品質を統一する
+
+### ESLint + Prettier
+
+| ツール | 役割 |
+|--------|------|
+| ESLint | コード品質チェック（バグ防止、未使用変数検出等） |
+| Prettier | コード整形（インデント、引用符、セミコロン等） |
+
+- `eslint-config-prettier`で両者のルール衝突を回避
+- 設定ファイル（`.prettierrc`、`eslint.config.js`）をリポジトリに含める
+
+### Husky + lint-staged（コミット前自動実行）
+
+コミット時に自動でlint/formatを実行し、開発者が意識せずともコードスタイルを統一
+
+```bash
+# 導入手順
+npm install -D husky lint-staged
+npx husky init
+echo "npx lint-staged" > .husky/pre-commit
+```
+
+```json
+// package.json
+{
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  }
+}
+```
+
+---
+
 ## プルリクエスト
 
 ### プルリクエストの作成
