@@ -9,9 +9,30 @@
 - サービスアイデアへのフィードバック
 - 技術的なアドバイス
 
-## GitHub Flowを採用
+## リポジトリ別ブランチ戦略
 
-このリポジトリでは**GitHub Flow**を採用しています。
+このプロジェクトでは、リポジトリの役割に応じて異なるブランチ戦略を採用しています。
+
+| リポジトリ | ブランチ戦略 | 理由 |
+|-----------|------------|------|
+| limimeshi-docs | GitHub Flow | ドキュメント専用、シンプルで十分 |
+| limimeshi-admin | git-flow | 実装リポジトリ、CI/CD・リリース管理が必要 |
+| limimeshi-android | git-flow | 実装リポジトリ、CI/CD・リリース管理が必要 |
+| limimeshi-infra | git-flow | インフラ管理、本番/開発環境の分離が必要 |
+
+### 新規リポジトリ作成時の指針
+
+- **ドキュメント専用リポジトリ** → GitHub Flow
+- **実装リポジトリ（コード）** → git-flow
+- **インフラ・設定リポジトリ** → git-flow
+
+各リポジトリのCONTRIBUTING.mdにブランチ戦略の詳細を記載してください。
+
+---
+
+## GitHub Flow（このリポジトリで採用）
+
+このリポジトリ（limimeshi-docs）では**GitHub Flow**を採用しています。
 
 ### GitHub Flowとは
 
@@ -29,6 +50,42 @@ main ─┬─ feature/add-section ─→ PR ─→ merge ─→ main
       │
       └─ fix/typo ─→ PR ─→ merge ─→ main
 ```
+
+---
+
+## git-flow（実装リポジトリで採用）
+
+実装リポジトリ（limimeshi-admin、limimeshi-android等）では**git-flow**を採用しています。
+
+### git-flowとは
+
+Vincent Driessen氏が提唱したブランチモデルで、リリース管理とCI/CDに適した戦略です。
+
+### ブランチ構成
+
+| ブランチ | 用途 | マージ先 |
+|---------|------|---------|
+| `main` | 本番環境（安定版） | - |
+| `develop` | 開発環境（次期リリース準備） | main |
+| `feature/*` | 機能開発 | develop |
+| `release/*` | リリース準備 | main + develop |
+| `hotfix/*` | 緊急修正 | main + develop |
+
+### ワークフロー
+
+```
+main ────────────────────────────────────→ 本番リリース
+  ↑                                    ↑
+  │                              release/1.0
+  │                                    ↑
+develop ─┬─ feature/add-chain-crud ────┘
+         │
+         └─ feature/add-campaign-list ─→ develop
+
+hotfix/security-fix ─────────────────→ main + develop
+```
+
+詳細は各リポジトリのCONTRIBUTING.mdを参照してください。
 
 ---
 
