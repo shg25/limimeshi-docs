@@ -15,13 +15,16 @@ Architecture Decision Records（ADR）は、アーキテクチャに関する重
 3. **Decision**: 何を選択したか
 4. **Consequences**: この決定がもたらす影響（良い面も悪い面も）
 
-## 作成済み
+## 作成済み（共通ADR）
 
 - [ADR-001: Use Firebase for backend](./001-use-firebase-for-backend.md)
 - [ADR-002: Adopt multi-repository structure](./002-adopt-multi-repository-structure.md)
-- [ADR-003: Use React Admin for admin panel](./003-use-react-admin-for-admin-panel.md)
 - [ADR-004: Use manual data entry for Phase 2](./004-use-manual-data-entry-for-phase2.md)
 - [ADR-005: Deploy using Firebase Hosting multi-site](./005-deploy-using-firebase-hosting-multi-site.md)
+
+## 固有ADR（各リポジトリに配置）
+
+- limimeshi-admin: [ADR-001: Use React Admin for admin panel](https://github.com/shg25/limimeshi-admin/blob/main/.specify/adr/001-use-react-admin-for-admin-panel.md)
 
 ## 命名規則
 
@@ -55,3 +58,25 @@ Architecture Decision Records（ADR）は、アーキテクチャに関する重
 - コミットメッセージと形式が一致
 
 **出典**: [architecture-decision-record](https://github.com/joelparkerhenderson/architecture-decision-record) (Joel Parker Henderson)
+
+---
+
+## ADR配置方針
+
+ADRは影響範囲に応じて配置場所を分ける
+
+| 配置場所 | 対象 | 例 |
+|----------|------|-----|
+| limimeshi-docs/adr/ | 複数リポジトリに影響する決定 | Firebase選定、マルチリポジトリ構成 |
+| limimeshi-admin/.specify/adr/ | 管理画面固有の決定 | React Admin選定 |
+| limimeshi-android/adr/ | Android固有の決定 | Jetpack Compose選定、アーキテクチャパターン |
+
+### 判断基準
+
+- **共通ADR（このリポジトリ）**: 複数のリポジトリで参照される技術決定
+- **固有ADR（各リポジトリ）**: そのリポジトリの実装にのみ関係する技術決定
+
+### 番号の連番
+
+- このリポジトリ（limimeshi-docs）の連番と、各リポジトリの連番は独立
+- 例: limimeshi-docs/adr/005-xxx.md と limimeshi-android/adr/001-xxx.md は共存可能
