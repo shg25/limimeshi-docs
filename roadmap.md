@@ -569,6 +569,67 @@ Phase1（2025/11）時点で`specs/002-chain-list/research.md`に技術選定を
 
 ### 2-3. テスト・品質保証
 
+### 2-4. Phase2完了後のクリーンアップ（予定）
+
+**前提**：Phase2実装完了後、limimeshi-docsと各実装リポジトリの仕様書の二重管理を解消
+
+#### タスク
+
+- [ ] limimeshi-docs/specs/ の整理（実装リポジトリへ移行済みの仕様を削除）
+  - 001-admin-panel → limimeshi-admin/.specify/specs/ に移行済みを確認後、削除
+  - 002-chain-list、003-favorites → limimeshi-android/.specify/specs/ に移行済みを確認後、削除
+- [ ] limimeshi-docs と各実装リポジトリの関係性をドキュメント化
+  - limimeshi-docs の README.md を更新（ガバナンス専用リポジトリであることを明記）
+  - 各実装リポジトリから limimeshi-docs への参照方法を記載
+
+#### 理由
+
+- Phase2実装中は仕様書を参照しながら実装するため、両方に存在しても問題ない
+- 実装完了後は二重管理による混乱を避けるため整理が必要
+- 「仕様が王様、コードは従者」の原則に従い、実装リポジトリの仕様書が正となる
+
+### 2-5. 本番環境セットアップ
+
+**前提**：Android MVP完了後、ベータリリース前に本番環境を構築
+
+**詳細**: [Firebase本番環境セットアップガイド](./guides/firebase-production-setup.md)
+
+#### 実行順序
+
+```
+limimeshi-admin MVP ✅ 完了
+       ↓
+limimeshi-android MVP（開発中）
+       ↓
+2-4. specs整理・ドキュメント化
+       ↓
+2-5. 本番環境セットアップ ← ここ
+       ↓
+Phase3：ベータリリース
+```
+
+#### タスク
+
+- [ ] Firebase プロジェクト `limimeshi-prod` 作成
+- [ ] Blazeプラン有効化
+- [ ] Authentication（メール/パスワード）有効化
+- [ ] Firestore データベース作成（asia-northeast1）
+- [ ] Firestore Rules/Indexes デプロイ
+- [ ] 管理者ユーザー作成 + Custom Claims 設定
+- [ ] limimeshi-admin を本番環境にデプロイ
+- [ ] Android アプリ登録 + `google-services.json` 取得
+
+#### オプション（ポートフォリオ向け）
+
+- [ ] Terraform による IaC 化（limimeshi-infra リポジトリ）
+- [ ] GitHub Actions による CI/CD 構築
+
+#### 理由
+
+- ベータユーザーに実際に使ってもらうため、本番環境が必要
+- 非機能面（インフラ構築、IaC）も転職活動のアピールポイント
+- 開発環境と本番環境を分離し、Firebase公式推奨のベストプラクティスに準拠
+
 ---
 
 ## Phase3：ベータリリース・フィードバック収集 🚀 未着手
@@ -800,3 +861,5 @@ Phase1（2025/11）時点で`specs/002-chain-list/research.md`に技術選定を
 - 2025/11/27：重要な方針変更（データモデル：メニュー→キャンペーン単位、開発優先順位：Android優先、Webアプリ延期）
 - 2025/11/28：Android技術選定の再確認タスクを追加（limimeshi-android着手前に実施、現時点の選定根拠を記録）
 - 2025/11/30：constitution.mdの配置方針を変更（シンボリックリンク→コピー配置、リポジトリの独立性確保のため）
+- 2025/12/02：Phase2完了後のクリーンアップタスクを追加（limimeshi-docs/specs/整理、リポジトリ関係性のドキュメント化）
+- 2025/12/02：2-5. 本番環境セットアップを追加、Firebase本番環境セットアップガイド（guides/firebase-production-setup.md）を作成
