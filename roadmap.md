@@ -551,7 +551,7 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
   - コミットメッセージ規約
 - [ ] Claude Code Hooks設定（.claude/settings.json）
   - PostToolUse：ファイル編集後の自動チェック
-- [ ] Claude Code Skills作成（.claude/skills/）
+- [x] Claude Code Skills作成（.claude/skills/）
   - security-check.md：機密情報検出
   - style-guide-check.md：docs-style-guide準拠確認
 - [ ] 各実装リポジトリへの展開
