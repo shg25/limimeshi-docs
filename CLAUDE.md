@@ -19,7 +19,7 @@
 |------|------|
 | **ガバナンス** | プロジェクト全体の企画・方針・ルールを管理 |
 | **共通ADR** | 複数リポジトリに影響する技術選定を記録 |
-| **マスタードキュメント** | Constitution、WRITING_STYLE_GUIDEのマスターを保持 |
+| **マスタードキュメント** | Constitution、docs-style-guideのマスターを保持 |
 
 > **Note**: 機能仕様書（specs）やSpec Kitファイルは各実装リポジトリに移行済み
 
@@ -50,12 +50,11 @@
 limimeshi-docs/
 ├── adr/                 # 共通ADR（複数リポジトリに影響する技術選定）
 ├── data-model/          # Firestoreスキーマ設計（→Phase3でlimimeshi-infraに移行予定）
+├── governance/          # ガバナンスルール（constitution.md、docs-style-guide.md）
 ├── guides/              # 本番環境セットアップガイド（→Phase3でlimimeshi-infraに移行予定）
-├── memory/              # Constitution（憲法）：開発原則のマスター
 ├── planning/            # Phase0企画ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md）
 ├── CLAUDE.md            # AI向けプロジェクト情報（このファイル）
 ├── roadmap.md           # プロジェクト全体のロードマップ
-├── WRITING_STYLE_GUIDE.md  # ドキュメント記述ルールのマスター
 └── README.md            # ガバナンスリポジトリ説明
 ```
 
@@ -63,14 +62,14 @@ limimeshi-docs/
 
 ### 必ず参照すべきファイル
 
-1. **[memory/constitution.md](./memory/constitution.md)**
+1. **[governance/constitution.md](./governance/constitution.md)**
    - **プロジェクトの憲法（最優先）**
    - 開発原則：Test-First、Firebase-First、Manual Operation First、Simplicity など
    - 技術選定方針、品質基準、ガバナンス
    - **全ての実装・設計はこの憲法に準拠する**
    - 新規リポジトリ作成時はこれをコピーして配置
 
-2. **[WRITING_STYLE_GUIDE.md](./WRITING_STYLE_GUIDE.md)**
+2. **[governance/docs-style-guide.md](./governance/docs-style-guide.md)**
    - **すべてのドキュメント作成時に必ず従う**
    - 句読点、強調表記、見出しレベル、サービス名表記など
 
@@ -84,7 +83,7 @@ limimeshi-docs/
 
 ## ドキュメント記述ルール
 
-新しいドキュメントを作成する際は、**必ず [WRITING_STYLE_GUIDE.md](./WRITING_STYLE_GUIDE.md) を参照**
+新しいドキュメントを作成する際は、**必ず [governance/docs-style-guide.md](./governance/docs-style-guide.md) を参照**
 
 ### 主要ルール（抜粋）
 
@@ -123,14 +122,14 @@ Spec Kitファイル（specs/、templates/、.claude/commands/）は**各実装�
 .specify/
 ├── .claude/commands/   # スラッシュコマンド
 ├── memory/
-│   └── constitution.md # ← 本リポジトリのmemory/constitution.mdをコピー
+│   └── constitution.md # ← 本リポジトリのgovernance/constitution.mdをコピー
 ├── specs/              # 機能仕様書
 └── templates/          # テンプレート
 ```
 
 ### 2. ドキュメントスタイル統一
 
-- 本リポジトリの WRITING_STYLE_GUIDE.md を参照
+- 本リポジトリの governance/docs-style-guide.md を参照
 - 必要に応じて各リポジトリにコピー
 
 ### 3. ADR配置

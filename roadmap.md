@@ -118,7 +118,7 @@ Phase0完了後、以下のディレクトリ構成に整理しました：
 limimeshi-docs/
 ├── README.md
 ├── CLAUDE.md            # AI向けプロジェクト情報
-├── WRITING_STYLE_GUIDE.md
+├── governance/docs-style-guide.md
 ├── CONTRIBUTING.md
 ├── .gitignore
 ├── roadmap.md
@@ -141,7 +141,7 @@ limimeshi-docs/
 - Phase0ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md）をplanning/に移動
 - 4つの新規ディレクトリ作成（specs/、adr/、api/、data-model/）
 - 各ディレクトリにREADME.md作成（役割と作成予定ドキュメントを記載）
-- CLAUDE.md作成（AI向けプロジェクト情報、WRITING_STYLE_GUIDE.mdへのリンク含む）
+- CLAUDE.md作成（AI向けプロジェクト情報、governance/docs-style-guide.mdへのリンク含む）
 
 ---
 
@@ -282,7 +282,7 @@ limimeshi-docs/              # ガバナンス専用リポジトリ
 limimeshi-admin/            # 管理画面リポジトリ
 ├── .specify/
 │   ├── specs/001-admin-panel/
-│   ├── memory/constitution.md  # コピー配置
+│   ├── governance/constitution.md  # コピー配置
 │   ├── templates/
 │   └── .claude/commands/
 └── src/
@@ -292,7 +292,7 @@ limimeshi-android/          # Androidアプリリポジトリ
 │   ├── specs/
 │   │   ├── 002-chain-list/
 │   │   └── 003-favorites/
-│   ├── memory/constitution.md  # コピー配置
+│   ├── governance/constitution.md  # コピー配置
 │   ├── templates/
 │   └── .claude/commands/
 └── app/
@@ -302,7 +302,7 @@ limimeshi-android/          # Androidアプリリポジトリ
 
 1. **GitHub Spec Kit公式の意図**：`.specify/`ディレクトリは実装コードと同居させることで、仕様と実装のギャップをゼロにする
 2. **リポジトリの責務分離**：limimeshi-docsはガバナンス（憲法、ADR、企画）のみ、実装仕様は各実装リポジトリで管理
-3. **Constitution配置**：`memory/constitution.md`は各リポジトリにコピー配置（リポジトリの独立性を確保）
+3. **Constitution配置**：`governance/constitution.md`は各リポジトリにコピー配置（リポジトリの独立性を確保）
 4. **作業の流れ**：Phase1は企画・設計フェーズなので、現在の構成で完了させてから移行
 
 #### 移行タイミング
@@ -357,7 +357,7 @@ limimeshi-android/          # Androidアプリリポジトリ
 
 #### 整合性確保
 
-- Constitution（memory/constitution.md）との整合性確認完了
+- Constitution（governance/constitution.md）との整合性確認完了
 - first-idea.mdとの矛盾解消完了
   - 差分検知システムの取りやめを明記
   - レビュー機能のPhase3延期を明記
@@ -461,14 +461,14 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
    - [ ] リポジトリ作成（GitHub、public）
    - [ ] `.specify/`ディレクトリ構成作成（specs/, memory/, templates/, .claude/commands/）
    - [ ] `specs/001-admin-panel/`を移行（limimeshi-docsから）
-   - [ ] `memory/constitution.md`をコピー配置
+   - [ ] `governance/constitution.md`をコピー配置
    - [ ] templates/、.claude/commands/をコピー
 
 2. **limimeshi-androidリポジトリ作成** → 詳細は [limimeshi-android/docs/roadmap.md](https://github.com/shg25/limimeshi-android/blob/main/docs/roadmap.md) を参照
    - [x] リポジトリ作成（GitHub、public）
    - [x] `.specify/`ディレクトリ構成作成
    - [x] `specs/002-chain-list/`、`specs/003-favorites/`を移行
-   - [x] `memory/constitution.md`をコピー配置
+   - [x] `governance/constitution.md`をコピー配置
    - [x] templates/、.claude/commands/をコピー
    - [ ] **Android技術選定の再確認**（詳細はlimimeshi-android/docs/roadmap.md参照）
 
@@ -481,7 +481,7 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 
 #### 移行後の構成
 
-- **limimeshi-docs**：ガバナンス専用（planning/, adr/, memory/constitution.md）
+- **limimeshi-docs**：ガバナンス専用（planning/, adr/, governance/constitution.md）
 - **limimeshi-admin**：管理画面の実装と仕様（.specify/specs/001-admin-panel/）
 - **limimeshi-android**：Androidアプリの実装と仕様（.specify/specs/002-chain-list/, 003-favorites/）
 
@@ -744,7 +744,7 @@ Phase3：ベータリリース
   - 各ディレクトリにREADME.md作成（役割と作成予定ドキュメントを記載）
 - ✅ CLAUDE.md作成
   - AI向けプロジェクト情報（現在のフェーズ、ディレクトリ構造、重要なドキュメント）
-  - WRITING_STYLE_GUIDE.mdへのリンク（AI作業時の必須参照）
+  - governance/docs-style-guide.mdへのリンク（AI作業時の必須参照）
   - AI向けの注意事項（ドキュメント作成時のルール、作業の優先順位）
 
 ---
@@ -755,7 +755,7 @@ Phase3：ベータリリース
 1. ~~**サービス名・プロジェクト名の決定**~~ ✅ 完了（期間限定めし / リミメシ / limimeshi）
 2. ~~**GitHubリポジトリの初期設定**~~ ✅ 完了（README.md、.gitignore、CONTRIBUTING.md作成済み）
 3. ~~**`first-idea.md` の拡充（Phase0-1）**~~ ✅ 完了（全7セクション + 機能優先順位 + サポート範囲）
-4. ~~**記述ルールの策定（WRITING_STYLE_GUIDE.md）**~~ ✅ 完了
+4. ~~**記述ルールの策定（governance/docs-style-guide.md）**~~ ✅ 完了
 5. ~~**`lean-canvas.md` の作成（Phase0-2）**~~ ✅ 完了（9ブロック全て完成）
 6. ~~**`inception-deck.md` の作成（Phase0-3）**~~ ✅ 完了（10の質問に全て回答）
 7. ~~**整合性チェック（Phase0-4）**~~ ✅ 完了（矛盾を修正、企画ドキュメント完成）
@@ -795,7 +795,7 @@ Phase3：ベータリリース
 - 2025/10/18：Phase0-1 の進捗を反映（5/7完了、開発フェーズ・マイルストーンを追加）、Phase0の進捗率を70%に更新
 - 2025/10/18：Phase0-1 の進捗を反映（6/7完了、リスクと対策を追加）、Phase0の進捗率を85%に更新
 - 2025/10/18：Phase0-1 の進捗を反映（7/7完了、モニタリング・分析を追加）、Phase0-1を完了
-- 2025/10/18：WRITING_STYLE_GUIDE.mdを作成、記述ルールを策定
+- 2025/10/18：governance/docs-style-guide.mdを作成、記述ルールを策定
 - 2025/10/18：記述スタイルの統一（句読点、Phase表記、コロン、見出し構造の改善）
 - 2025/10/18：Phase表記を統一（「Phase 1:」→「Phase1：」）、Phase0の進捗率を修正（Phase0-1のみ完了で25%）
 - 2025/10/24：機能の優先順位を決定（Phase2必須機能とPhase3以降機能を明確化）

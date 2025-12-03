@@ -18,7 +18,7 @@
 |------|------|
 | **ガバナンス** | プロジェクト全体の企画・方針・ルールを管理 |
 | **共通ADR** | 複数リポジトリに影響する技術選定を記録 |
-| **マスタードキュメント** | Constitution、WRITING_STYLE_GUIDEのマスターを保持 |
+| **マスタードキュメント** | Constitution、docs-style-guideのマスターを保持 |
 
 **実装・機能仕様は各実装リポジトリで管理**：
 - [limimeshi-admin](https://github.com/shg25/limimeshi-admin)：管理画面（React Admin）
@@ -31,11 +31,10 @@
 | [adr/](./adr/) | 共通ADR（複数リポジトリに影響する技術選定） |
 | [data-model/](./data-model/) | Firestoreスキーマ設計（→Phase3でlimimeshi-infraに移行予定） |
 | [guides/](./guides/) | 本番環境セットアップガイド（→Phase3でlimimeshi-infraに移行予定） |
-| [memory/](./memory/) | Constitution（憲法）：開発原則のマスター |
+| [governance/](./governance/) | ガバナンスルール（constitution.md、docs-style-guide.md） |
 | [planning/](./planning/) | Phase0企画ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md） |
 | [CLAUDE.md](./CLAUDE.md) | AI向けプロジェクト情報 |
 | [roadmap.md](./roadmap.md) | プロジェクト全体のロードマップ |
-| [WRITING_STYLE_GUIDE.md](./WRITING_STYLE_GUIDE.md) | ドキュメント記述ルールのマスター |
 
 ## 新規リポジトリ作成ルール
 
@@ -49,19 +48,19 @@
 .specify/
 ├── .claude/commands/   # スラッシュコマンド
 ├── memory/
-│   └── constitution.md # ← 本リポジトリのmemory/constitution.mdをコピー
+│   └── constitution.md # ← 本リポジトリのgovernance/constitution.mdをコピー
 ├── specs/              # 機能仕様書
 └── templates/          # テンプレート
 ```
 
 **Constitution（憲法）について**：
-- 本リポジトリの [memory/constitution.md](./memory/constitution.md) がマスター
+- 本リポジトリの [governance/constitution.md](./governance/constitution.md) がマスター
 - 新規リポジトリ作成時はこれをコピーして配置
 - プロジェクト固有のカスタマイズは各リポジトリで実施可
 
 ### 2. ドキュメントスタイル統一
 
-- 本リポジトリの [WRITING_STYLE_GUIDE.md](./WRITING_STYLE_GUIDE.md) を参照
+- 本リポジトリの [governance/docs-style-guide.md](./governance/docs-style-guide.md) を参照
 - 必要に応じて各リポジトリにコピー
 - 主要ルール：句読点、文体、サービス名表記、Phase表記など
 
