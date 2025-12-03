@@ -533,7 +533,7 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 - [x] limimeshi-docs と各実装リポジトリの関係性をドキュメント化
   - limimeshi-docs の README.md を更新（ガバナンス専用リポジトリであることを明記）
 
-### 2-5. ガバナンス強化・自動チェック導入 🚧 進行中
+### 2-5. ガバナンス強化・自動チェック導入 ✅ 完了
 
 **目的**：複数リポジトリで共通ルールを適用し、品質を維持する仕組みを構築
 
@@ -542,9 +542,6 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 - [x] memory/ → governance/ にリネーム
 - [x] WRITING_STYLE_GUIDE.md → governance/docs-style-guide.md に移動・改名
 - [x] 参照元（README.md、CLAUDE.md、roadmap.md、constitution.md）を更新
-
-#### 未完了タスク
-
 - [x] governance/shared-rules.md 作成（複数リポジトリ共通のチェックルール）
   - 公開リポジトリへのアップロード安全性チェック
   - ドキュメントスタイルガイド準拠確認
@@ -555,8 +552,17 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 - [x] Claude Code Skills作成（.claude/skills/）
   - security-check.md：機密情報検出
   - style-guide-check.md：docs-style-guide準拠確認
-- [ ] 各実装リポジトリへの展開
-  - limimeshi-admin、limimeshi-androidで共通Hooksを参照
+- [x] スラッシュコマンド作成（.claude/commands/）
+  - `/setup-new-repo`：新規リポジトリの初期セットアップ
+  - `/sync-shared-rules`：共通ルールの同期（Claude Code設定、スタイルガイド）
+- [x] 同期ポリシー確定
+  - 初期コピーのみ：constitution.md、Spec Kit（各リポジトリで独立管理）
+  - 継続同期：Claude Code設定、docs-style-guide.md、shared-rules.md
+
+#### 未完了タスク（各リポジトリで実施）
+
+- [ ] limimeshi-adminへの展開（`/sync-shared-rules`で同期）
+- [ ] limimeshi-androidへの展開（`/sync-shared-rules`で同期）
 
 ### 2-6. 本番環境セットアップ
 
@@ -840,3 +846,4 @@ Phase3：ベータリリース
 - 2025/12/03：Android関連タスクをlimimeshi-android/docs/roadmap.mdに移行、重複を削除（Android技術選定セクション削除、limimeshi-androidリポジトリ作成タスク完了）
 - 2025/12/03：limimeshi-docsの整理完了（specs/、.claude/commands/、templates/、scripts/、specs-old/、api/、MIGRATION_TO_SPEC_KIT.md削除）、Phase3-1にdata-model/、guides/のlimimeshi-infra移行タスク追加、README.md更新（ガバナンス専用リポジトリ化、新規リポジトリ作成ルール追加）
 - 2025/12/03：2-5. ガバナンス強化・自動チェック導入を追加（memory/→governance/リネーム、WRITING_STYLE_GUIDE.md→governance/docs-style-guide.md移動・改名、shared-rules/Hooks/Skills導入予定）
+- 2025/12/04：2-5. ガバナンス強化・自動チェック完了（スラッシュコマンド追加：/setup-new-repo、/sync-shared-rules、同期ポリシー確定）、README.md簡素化（詳細はスラッシュコマンドに移行）

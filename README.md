@@ -36,60 +36,9 @@
 | [CLAUDE.md](./CLAUDE.md) | AI向けプロジェクト情報 |
 | [roadmap.md](./roadmap.md) | プロジェクト全体のロードマップ |
 
-## 新規リポジトリ作成ルール
+## 新規リポジトリ作成・設定同期
 
-新しい実装リポジトリを作成する際は以下を必ず実施：
-
-### 1. Spec Kit導入
-
-各実装リポジトリには`.specify/`ディレクトリを作成し、Spec Kit構造を導入する。
-
-```
-.specify/
-├── .claude/commands/   # スラッシュコマンド
-├── memory/
-│   └── constitution.md # ← 本リポジトリのgovernance/constitution.mdをコピー
-├── specs/              # 機能仕様書
-└── templates/          # テンプレート
-```
-
-**Constitution（憲法）について**：
-- 本リポジトリの [governance/constitution.md](./governance/constitution.md) がマスター
-- 新規リポジトリ作成時はこれをコピーして配置
-- プロジェクト固有のカスタマイズは各リポジトリで実施可
-
-### 2. ドキュメントスタイル統一
-
-- 本リポジトリの [governance/docs-style-guide.md](./governance/docs-style-guide.md) を参照
-- 必要に応じて各リポジトリにコピー
-- 主要ルール：句読点、文体、サービス名表記、Phase表記など
-
-### 3. ADR配置
-
-- **共通ADR**：本リポジトリ（limimeshi-docs/adr/）
-- **固有ADR**：各実装リポジトリ（docs/adr/）
-
-### 4. Claude Code設定
-
-各実装リポジトリに`.claude/`ディレクトリを作成し、以下をコピー：
-
-```
-.claude/
-├── settings.json   # ← 本リポジトリの.claude/settings.jsonをコピー
-└── skills/         # ← 本リポジトリの.claude/skills/をコピー
-    ├── security-check.md
-    └── style-guide-check.md
-```
-
-**設定について**：
-- 本リポジトリの [.claude/settings.json](./.claude/settings.json) がマスター
-- Hooks：ファイル編集後のセキュリティ・スタイルチェック
-- Skills：機密情報検出、スタイルガイド準拠確認
-- 更新時は本リポジトリを修正後、各リポジトリにコピー
-
-## スラッシュコマンド
-
-本リポジトリには、リポジトリ管理用のスラッシュコマンドを用意：
+スラッシュコマンドを使用してセットアップ：
 
 | コマンド | 用途 | 実行タイミング |
 |---------|------|---------------|
