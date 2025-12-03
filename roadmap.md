@@ -549,8 +549,9 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
   - 公開リポジトリへのアップロード安全性チェック
   - ドキュメントスタイルガイド準拠確認
   - コミットメッセージ規約
-- [ ] Claude Code Hooks設定（.claude/settings.json）
+- [x] Claude Code Hooks設定（.claude/settings.json）
   - PostToolUse：ファイル編集後の自動チェック
+  - PreToolUse：Bashコマンド実行前の確認
 - [x] Claude Code Skills作成（.claude/skills/）
   - security-check.md：機密情報検出
   - style-guide-check.md：docs-style-guide準拠確認
