@@ -1,6 +1,8 @@
-# 期間限定めし（リミメシ）企画・設計ドキュメント
+# 期間限定めし（リミメシ）ガバナンスリポジトリ
 
-チェーン店の期間限定メニューに特化した情報プラットフォーム「期間限定めし（リミメシ）」の企画・設計ドキュメントリポジトリです。
+チェーン店の期間限定メニューに特化した情報プラットフォーム「期間限定めし（リミメシ）」の**ガバナンス専用リポジトリ**です。
+
+> **Note**: 機能仕様書（specs）やSpec Kitファイルは各実装リポジトリに移行済みです。
 
 ## サービス概要
 
@@ -8,139 +10,95 @@
 **略称**：リミメシ
 **英語表記**：Limited Meshi（Limimeshi）
 
-「なじみのチェーン店で新しい体験を楽しむ」をコンセプトに、日本の大手チェーン店で現在販売中の期間限定メニューを一覧できるサービスです。
+「なじみのチェーン店で新しい体験を楽しむ」をコンセプトに、日本の大手チェーン店で現在販売中の期間限定メニューを一覧できるサービス。
+
+## このリポジトリの役割
+
+| 役割 | 説明 |
+|------|------|
+| **ガバナンス** | プロジェクト全体の企画・方針・ルールを管理 |
+| **共通ADR** | 複数リポジトリに影響する技術選定を記録 |
+| **マスタードキュメント** | Constitution、WRITING_STYLE_GUIDEのマスターを保持 |
+
+**実装・機能仕様は各実装リポジトリで管理**：
+- [limimeshi-admin](https://github.com/shg25/limimeshi-admin)：管理画面（React Admin）
+- [limimeshi-android](https://github.com/shg25/limimeshi-android)：Androidアプリ（Kotlin + Jetpack Compose）
 
 ## ドキュメント構成
 
 | ディレクトリ/ファイル | 内容 |
 |-----------|------|
-| [.claude/](./.claude/) | Claude Code設定（スラッシュコマンド） |
-| [adr/](./adr/) | Architecture Decision Records（技術選定の記録） |
-| [api/](./api/) | API仕様書 |
-| [data-model/](./data-model/) | データモデル詳細設計 |
-| [memory/](./memory/) | Constitution（憲法）：開発原則、技術選定方針、品質基準 |
+| [adr/](./adr/) | 共通ADR（複数リポジトリに影響する技術選定） |
+| [data-model/](./data-model/) | Firestoreスキーマ設計（→Phase3でlimimeshi-infraに移行予定） |
+| [guides/](./guides/) | 本番環境セットアップガイド（→Phase3でlimimeshi-infraに移行予定） |
+| [memory/](./memory/) | Constitution（憲法）：開発原則のマスター |
 | [planning/](./planning/) | Phase0企画ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md） |
-| [scripts/](./scripts/) | GitHub Spec Kitスクリプト（bash/PowerShell） |
-| [specs/](./specs/) | 機能設計書（GitHub Spec Kit形式） |
-| [specs-old/](./specs-old/) | 旧仕様書のバックアップ |
-| [templates/](./templates/) | GitHub Spec Kitテンプレート（spec、plan、tasks） |
 | [CLAUDE.md](./CLAUDE.md) | AI向けプロジェクト情報 |
-| [MIGRATION_TO_SPEC_KIT.md](./MIGRATION_TO_SPEC_KIT.md) | GitHub Spec Kit適合計画 |
-| [README.md](./README.md) | プロジェクト概要（このファイル） |
-| [roadmap.md](./roadmap.md) | プロジェクトロードマップ |
-| [WRITING_STYLE_GUIDE.md](./WRITING_STYLE_GUIDE.md) | ドキュメント記述ルール |
+| [roadmap.md](./roadmap.md) | プロジェクト全体のロードマップ |
+| [WRITING_STYLE_GUIDE.md](./WRITING_STYLE_GUIDE.md) | ドキュメント記述ルールのマスター |
+
+## 新規リポジトリ作成ルール
+
+新しい実装リポジトリを作成する際は以下を必ず実施：
+
+### 1. Spec Kit導入
+
+各実装リポジトリには`.specify/`ディレクトリを作成し、Spec Kit構造を導入する。
+
+```
+.specify/
+├── .claude/commands/   # スラッシュコマンド
+├── memory/
+│   └── constitution.md # ← 本リポジトリのmemory/constitution.mdをコピー
+├── specs/              # 機能仕様書
+└── templates/          # テンプレート
+```
+
+**Constitution（憲法）について**：
+- 本リポジトリの [memory/constitution.md](./memory/constitution.md) がマスター
+- 新規リポジトリ作成時はこれをコピーして配置
+- プロジェクト固有のカスタマイズは各リポジトリで実施可
+
+### 2. ドキュメントスタイル統一
+
+- 本リポジトリの [WRITING_STYLE_GUIDE.md](./WRITING_STYLE_GUIDE.md) を参照
+- 必要に応じて各リポジトリにコピー
+- 主要ルール：句読点、文体、サービス名表記、Phase表記など
+
+### 3. ADR配置
+
+- **共通ADR**：本リポジトリ（limimeshi-docs/adr/）
+- **固有ADR**：各実装リポジトリ（docs/adr/）
+
+## 共通ADR一覧
+
+| ADR | 内容 |
+|-----|------|
+| [ADR-001](./adr/001-use-firebase-for-backend.md) | Use Firebase for backend |
+| [ADR-002](./adr/002-adopt-multi-repository-structure.md) | Adopt multi-repository structure |
+| [ADR-003](./adr/003-use-react-admin-for-admin-panel.md) | Use React Admin for admin panel |
+| [ADR-004](./adr/004-use-manual-data-entry-for-phase2.md) | Use manual data entry for Phase 2 |
+| [ADR-005](./adr/005-deploy-using-firebase-hosting-multi-site.md) | Deploy using Firebase Hosting multi-site |
 
 ## 採用している手法・フレームワーク
 
-このプロジェクトは、業界標準または公式推奨の手法のみを使用しています。
-
 | フェーズ | 手法・フレームワーク | 役割・目的 | 公式リンク |
 |---------|-------------------|-----------|-----------|
-| Phase0 | リーンキャンバス（Lean Canvas） | ビジネスモデルの検証 | [Lean Canvas公式](https://leanstack.com/lean-canvas) |
-| Phase0 | インセプションデッキ（Inception Deck） | プロジェクトの目的・優先順位の明確化 | [Agile Warrior解説](https://agilewarrior.wordpress.com/2010/11/06/the-inception-deck/) |
+| Phase0 | リーンキャンバス | ビジネスモデルの検証 | [Lean Canvas公式](https://leanstack.com/lean-canvas) |
+| Phase0 | インセプションデッキ | プロジェクトの目的・優先順位の明確化 | [Agile Warrior解説](https://agilewarrior.wordpress.com/2010/11/06/the-inception-deck/) |
 | Phase1 | GitHub Spec Kit | 仕様駆動開発（Spec-Driven Development） | [GitHub公式](https://github.com/github/spec-kit) |
-| Phase1 | ADR（Architecture Decision Records） | 技術選定の記録 | [ADR公式](https://adr.github.io/) |
+| Phase1 | ADR | 技術選定の記録 | [ADR公式](https://adr.github.io/) |
 | Phase1 | Firestore公式ベストプラクティス | データベース設計 | [Firebase公式](https://firebase.google.com/docs/firestore/best-practices) |
 
-**詳細**：各手法の詳細な適用方法は [roadmap.md](./roadmap.md) を参照
+## リポジトリ構成
 
-## GitHub Spec Kit（仕様駆動開発）
-
-このプロジェクトは **GitHub Spec Kit** を採用しています（2025/10/27）。
-
-GitHub Spec Kitは、GitHubが公式に提供する仕様駆動開発（Spec-Driven Development）のためのツールキット/テンプレート集です。
-
-### 主要な構成要素
-
-- **Constitution（憲法）**: [memory/constitution.md](./memory/constitution.md)
-  - プロジェクトの開発原則、技術選定方針、品質基準を定義
-  - 全ての実装・設計はこの憲法に準拠
-
-- **スラッシュコマンド**: [.claude/commands/](./.claude/commands/)
-  - `/speckit-specify <機能の説明>`: 機能仕様書（spec.md）を生成
-  - `/speckit-plan`: 実装計画（plan.md）を生成
-  - `/speckit-tasks`: タスクリスト（tasks.md）を生成
-  - `/speckit-clarify`: 仕様の曖昧な点を明確化
-  - `/speckit-implement`: 実装開始
-
-- **テンプレート**: [templates/](./templates/)
-  - spec-template.md：機能仕様書テンプレート
-  - plan-template.md：実装計画テンプレート
-  - tasks-template.md：タスクリストテンプレート
-
-- **スクリプト**: [scripts/](./scripts/)
-  - スラッシュコマンドから呼び出されるbash/PowerShellスクリプト
-  - 機能番号の自動採番、ディレクトリ作成などを自動化
-
-### 参考リンク
-
-- [GitHub Spec Kit公式リポジトリ](https://github.com/github/spec-kit)
-- [適合計画の詳細](./MIGRATION_TO_SPEC_KIT.md)
-
-## ADR（Architecture Decision Records）
-
-このプロジェクトは **Architecture Decision Records（ADR）** を採用しています。
-
-ADRは、アーキテクチャに関する重要な決定とその理由を記録するドキュメント形式で、Michael Nygardが2011年に提唱した手法です。
-
-### フォーマット
-
-**Michael Nygard形式**（2011年、業界標準）を採用：
-
-1. **Status**: proposed, accepted, deprecated, superseded等
-2. **Context**: なぜこの決定が必要か
-3. **Decision**: 何を選択したか
-4. **Consequences**: この決定がもたらす影響（良い面も悪い面も）
-
-### タイトル命名規則
-
-**Present tense imperative verb phrase**（現在形の命令形動詞句）を使用：
-- `Use Firebase for backend`
-- `Adopt multi-repository structure`
-- `Deploy using Firebase Hosting multi-site`
-
-### 作成済みADR
-
-- [ADR-001: Use Firebase for backend](./adr/001-use-firebase-for-backend.md)
-- [ADR-002: Adopt multi-repository structure](./adr/002-adopt-multi-repository-structure.md)
-- [ADR-003: Use React Admin for admin panel](./adr/003-use-react-admin-for-admin-panel.md)
-- [ADR-004: Use manual data entry for Phase 2](./adr/004-use-manual-data-entry-for-phase2.md)
-- [ADR-005: Deploy using Firebase Hosting multi-site](./adr/005-deploy-using-firebase-hosting-multi-site.md)
-
-### 参考リンク
-
-- [Michael Nygard "Documenting Architecture Decisions" (2011)](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
-- [ADR公式サイト](https://adr.github.io/)
-- [architecture-decision-record リポジトリ](https://github.com/joelparkerhenderson/architecture-decision-record)
-
-## 開発方針
-
-- 仕様駆動開発（Spec-Driven Development）：**GitHub Spec Kit** 採用（2025/10/27）
-- ドキュメント駆動開発：実装前に企画・設計を詳細に文書化
-- AI活用前提：Claude Code + スラッシュコマンドで効率化
-- Constitution（憲法）：開発原則を [memory/constitution.md](./memory/constitution.md) で定義
-- **公開リポジトリ**：全てのリポジトリを公開、透明性を重視
-  - 企画・設計・実装の全てを公開
-  - コミュニティからのフィードバックを得る
-  - 個人開発のベストプラクティス実践を学習目的で公開
-  - `.env` ファイル等の秘匿情報は `.gitignore` で除外
-  - Firestore Security Rulesで適切にセキュリティを保護
-
-## 技術スタック
-
-- バックエンド：Firebase (Auth, Firestore, Functions, Hosting, Scheduler)
-- フロントエンド：React
-- 管理画面：React Admin
-- モバイル（将来）：Expo + React Native / SwiftUI / Jetpack Compose
-
-## リポジトリ構成（予定）
-
-| リポジトリ | 役割 | 備考 |
+| リポジトリ | 役割 | 状態 |
 |-------------|------|------|
-| `limimeshi-web` | 一般向けWebアプリ | Hosting:web |
-| `limimeshi-admin` | 管理UI | Hosting:admin |
-| `limimeshi-jobs` | 定期処理（季節メニューリマインダー等） | Functions（onSchedule） |
-| `limimeshi-docs` | 企画・設計・ADR | 公開リポジトリ（このリポジトリ） |
+| `limimeshi-docs` | ガバナンス（このリポジトリ） | ✅ 運用中 |
+| `limimeshi-admin` | 管理画面（React Admin） | ✅ 実装完了 |
+| `limimeshi-android` | Androidアプリ（Kotlin + Jetpack Compose） | 🚧 準備中 |
+| `limimeshi-infra` | Firestore Rules/Indexes管理 | 📋 Phase3で作成予定 |
+| `limimeshi-web` | Webアプリ | 📋 Phase3で作成予定 |
 
 ## コントリビューション
 
@@ -158,4 +116,4 @@ ADRは、アーキテクチャに関する重要な決定とその理由を記�
 
 ---
 
-**最終更新**：2025/10/27
+**最終更新**：2025/12/03
