@@ -481,7 +481,7 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 
 #### 移行後の構成
 
-- **limimeshi-docs**：ガバナンス専用（planning/, adr/, governance/constitution.md）
+- **limimeshi-docs**：ガバナンス専用（planning/, adr/, governance/）
 - **limimeshi-admin**：管理画面の実装と仕様（.specify/specs/001-admin-panel/）
 - **limimeshi-android**：Androidアプリの実装と仕様（.specify/specs/002-chain-list/, 003-favorites/）
 
@@ -521,26 +521,42 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 
 ### 2-3. テスト・品質保証
 
-### 2-4. Phase2完了後のクリーンアップ（予定）
+### 2-4. Phase2完了後のクリーンアップ ✅ 完了
 
 **前提**：Phase2実装完了後、limimeshi-docsと各実装リポジトリの仕様書の二重管理を解消
 
 #### タスク
 
-- [ ] limimeshi-docs/specs/ の整理（実装リポジトリへ移行済みの仕様を削除）
-  - 001-admin-panel → limimeshi-admin/.specify/specs/ に移行済みを確認後、削除
-  - 002-chain-list、003-favorites → limimeshi-android/.specify/specs/ に移行済みを確認後、削除
-- [ ] limimeshi-docs と各実装リポジトリの関係性をドキュメント化
+- [x] limimeshi-docs/specs/ の整理（実装リポジトリへ移行済みの仕様を削除）
+  - 001-admin-panel → limimeshi-admin/.specify/specs/ に移行済み、削除完了
+  - 002-chain-list、003-favorites → limimeshi-android/.specify/specs/ に移行済み、削除完了
+- [x] limimeshi-docs と各実装リポジトリの関係性をドキュメント化
   - limimeshi-docs の README.md を更新（ガバナンス専用リポジトリであることを明記）
-  - 各実装リポジトリから limimeshi-docs への参照方法を記載
 
-#### 理由
+### 2-5. ガバナンス強化・自動チェック導入 🚧 進行中
 
-- Phase2実装中は仕様書を参照しながら実装するため、両方に存在しても問題ない
-- 実装完了後は二重管理による混乱を避けるため整理が必要
-- 「仕様が王様、コードは従者」の原則に従い、実装リポジトリの仕様書が正となる
+**目的**：複数リポジトリで共通ルールを適用し、品質を維持する仕組みを構築
 
-### 2-5. 本番環境セットアップ
+#### 完了タスク
+
+- [x] memory/ → governance/ にリネーム
+- [x] WRITING_STYLE_GUIDE.md → governance/docs-style-guide.md に移動・改名
+- [x] 参照元（README.md、CLAUDE.md、roadmap.md、constitution.md）を更新
+
+#### 未完了タスク
+
+- [ ] governance/shared-rules.md 作成（複数リポジトリ共通のチェックルール）
+  - 公開リポジトリへのアップロード安全性チェック
+  - ドキュメントスタイルガイド準拠確認
+- [ ] Claude Code Hooks設定（.claude/settings.json）
+  - PostToolUse：ファイル編集後の自動チェック
+- [ ] Claude Code Skills作成（.claude/skills/）
+  - security-check.md：機密情報検出
+  - style-guide-check.md：docs-style-guide準拠確認
+- [ ] 各実装リポジトリへの展開
+  - limimeshi-admin、limimeshi-androidで共通Hooksを参照
+
+### 2-6. 本番環境セットアップ
 
 **前提**：Android MVP完了後、ベータリリース前に本番環境を構築
 
@@ -553,9 +569,11 @@ limimeshi-admin MVP ✅ 完了
        ↓
 limimeshi-android MVP（開発中）
        ↓
-2-4. specs整理・ドキュメント化
+2-4. specs整理・ドキュメント化 ✅
        ↓
-2-5. 本番環境セットアップ ← ここ
+2-5. ガバナンス強化・自動チェック ← 進行中
+       ↓
+2-6. 本番環境セットアップ
        ↓
 Phase3：ベータリリース
 ```
@@ -795,7 +813,7 @@ Phase3：ベータリリース
 - 2025/10/18：Phase0-1 の進捗を反映（5/7完了、開発フェーズ・マイルストーンを追加）、Phase0の進捗率を70%に更新
 - 2025/10/18：Phase0-1 の進捗を反映（6/7完了、リスクと対策を追加）、Phase0の進捗率を85%に更新
 - 2025/10/18：Phase0-1 の進捗を反映（7/7完了、モニタリング・分析を追加）、Phase0-1を完了
-- 2025/10/18：governance/docs-style-guide.mdを作成、記述ルールを策定
+- 2025/10/18：WRITING_STYLE_GUIDE.mdを作成、記述ルールを策定
 - 2025/10/18：記述スタイルの統一（句読点、Phase表記、コロン、見出し構造の改善）
 - 2025/10/18：Phase表記を統一（「Phase 1:」→「Phase1：」）、Phase0の進捗率を修正（Phase0-1のみ完了で25%）
 - 2025/10/24：機能の優先順位を決定（Phase2必須機能とPhase3以降機能を明確化）
@@ -816,6 +834,7 @@ Phase3：ベータリリース
 - 2025/11/28：Android技術選定の再確認タスクを追加（limimeshi-android着手前に実施、現時点の選定根拠を記録）
 - 2025/11/30：constitution.mdの配置方針を変更（シンボリックリンク→コピー配置、リポジトリの独立性確保のため）
 - 2025/12/02：Phase2完了後のクリーンアップタスクを追加（limimeshi-docs/specs/整理、リポジトリ関係性のドキュメント化）
-- 2025/12/02：2-5. 本番環境セットアップを追加、Firebase本番環境セットアップガイド（guides/firebase-production-setup.md）を作成
+- 2025/12/02：2-6. 本番環境セットアップを追加、Firebase本番環境セットアップガイド（guides/firebase-production-setup.md）を作成
 - 2025/12/03：Android関連タスクをlimimeshi-android/docs/roadmap.mdに移行、重複を削除（Android技術選定セクション削除、limimeshi-androidリポジトリ作成タスク完了）
 - 2025/12/03：limimeshi-docsの整理完了（specs/、.claude/commands/、templates/、scripts/、specs-old/、api/、MIGRATION_TO_SPEC_KIT.md削除）、Phase3-1にdata-model/、guides/のlimimeshi-infra移行タスク追加、README.md更新（ガバナンス専用リポジトリ化、新規リポジトリ作成ルール追加）
+- 2025/12/03：2-5. ガバナンス強化・自動チェック導入を追加（memory/→governance/リネーム、WRITING_STYLE_GUIDE.md→governance/docs-style-guide.md移動・改名、shared-rules/Hooks/Skills導入予定）
