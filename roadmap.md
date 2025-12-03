@@ -464,14 +464,13 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
    - [ ] `memory/constitution.md`をコピー配置
    - [ ] templates/、.claude/commands/をコピー
 
-2. **limimeshi-androidリポジトリ作成**
-   - [ ] リポジトリ作成（GitHub、public）
-   - [ ] `.specify/`ディレクトリ構成作成
-   - [ ] `specs/002-chain-list/`を移行（大幅修正済み）
-   - [ ] `specs/003-favorites/`を移行（大幅修正済み）
-   - [ ] `memory/constitution.md`をコピー配置
-   - [ ] templates/、.claude/commands/をコピー
-   - [ ] **Android技術選定の再確認**（詳細は下記「Android技術選定」セクション参照）
+2. **limimeshi-androidリポジトリ作成** → 詳細は [limimeshi-android/docs/roadmap.md](https://github.com/shg25/limimeshi-android/blob/main/docs/roadmap.md) を参照
+   - [x] リポジトリ作成（GitHub、public）
+   - [x] `.specify/`ディレクトリ構成作成
+   - [x] `specs/002-chain-list/`、`specs/003-favorites/`を移行
+   - [x] `memory/constitution.md`をコピー配置
+   - [x] templates/、.claude/commands/をコピー
+   - [ ] **Android技術選定の再確認**（詳細はlimimeshi-android/docs/roadmap.md参照）
 
 3. **limimeshi-docsの整理**
    - [ ] specs/ディレクトリを削除（全仕様書を移行済み）
@@ -484,50 +483,6 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 - **limimeshi-docs**：ガバナンス専用（planning/, adr/, memory/constitution.md）
 - **limimeshi-admin**：管理画面の実装と仕様（.specify/specs/001-admin-panel/）
 - **limimeshi-android**：Androidアプリの実装と仕様（.specify/specs/002-chain-list/, 003-favorites/）
-
----
-
-### Android技術選定（limimeshi-android着手前に再確認）
-
-#### 背景
-
-Phase1（2025/11）時点で`specs/002-chain-list/research.md`に技術選定を記録済み。ただし、Android実装はlimimeshi-admin完了後となるため、着手時点で以下を再確認する。
-
-#### 再確認が必要な理由
-
-1. **Androidエコシステムの変化**: Jetpackライブラリは頻繁に更新される
-2. **就活での市場調査**: 求人で求められているライブラリを把握してから選定
-3. **公式推奨の最新化**: Android Developersサイトの推奨が変わる可能性
-
-#### 現時点の選定（2025/11、Phase1時点）
-
-| カテゴリ | 選定技術 | 選定根拠 |
-|---------|---------|---------|
-| 言語 | Kotlin | Android公式推奨 |
-| UIフレームワーク | Jetpack Compose + Material 3 | Android公式推奨 |
-| データ読み取り | Firebase Android SDK | Firebase公式ドキュメント |
-| 認証 | Firebase Authentication | Firebase公式ドキュメント |
-| 設定永続化 | DataStore Preferences | Android公式推奨（SharedPreferencesの後継） |
-| アーキテクチャ | MVVM + Clean Architecture | Android Architecture Guide |
-| 状態管理 | StateFlow + Compose State | Kotlin公式 + Android公式 |
-| DI | Hilt | Android公式推奨 |
-| テスト | JUnit 5 + MockK + Turbine | ※要再確認（公式はJUnit 4 + Mockito） |
-| UIテスト | Compose Testing | Android公式 |
-
-#### 着手時の確認タスク
-
-- [ ] [Android Developers - Testing](https://developer.android.com/training/testing)で推奨ライブラリを確認
-- [ ] [Android Developers - App architecture](https://developer.android.com/topic/architecture)で最新パターンを確認
-- [ ] 就活求人で求められているライブラリを調査・反映
-- [ ] `specs/002-chain-list/research.md`を最新化
-- [ ] `specs/003-favorites/research.md`を最新化（002と整合性を取る）
-
-#### 参考リンク
-
-- [Android Developers](https://developer.android.com/)
-- [Firebase Android Setup](https://firebase.google.com/docs/android/setup)
-- [Jetpack Compose](https://developer.android.com/jetpack/compose)
-- [Material 3 for Android](https://m3.material.io/)
 
 ---
 
@@ -548,11 +503,7 @@ Phase1（2025/11）時点で`specs/002-chain-list/research.md`に技術選定を
    - キャンペーンCRUD（旧メニュー）
    - React Admin + Firebase
 
-2. **limimeshi-android（Androidアプリ）**
-   - チェーン一覧表示
-   - キャンペーン一覧表示（チェーン別）
-   - チェーン店お気に入り登録
-   - Kotlin + Jetpack Compose + Firebase
+2. **limimeshi-android（Androidアプリ）** → 詳細は [limimeshi-android/docs/roadmap.md](https://github.com/shg25/limimeshi-android/blob/main/docs/roadmap.md) を参照
 
 #### 初期リリース対象
 - 16チェーン店（`first-idea.md` 参照）
@@ -863,3 +814,4 @@ Phase3：ベータリリース
 - 2025/11/30：constitution.mdの配置方針を変更（シンボリックリンク→コピー配置、リポジトリの独立性確保のため）
 - 2025/12/02：Phase2完了後のクリーンアップタスクを追加（limimeshi-docs/specs/整理、リポジトリ関係性のドキュメント化）
 - 2025/12/02：2-5. 本番環境セットアップを追加、Firebase本番環境セットアップガイド（guides/firebase-production-setup.md）を作成
+- 2025/12/03：Android関連タスクをlimimeshi-android/docs/roadmap.mdに移行、重複を削除（Android技術選定セクション削除、limimeshi-androidリポジトリ作成タスク完了）
