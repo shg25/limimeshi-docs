@@ -31,7 +31,7 @@
 | [adr/](./adr/) | 共通ADR（複数リポジトリに影響する技術選定） |
 | [data-model/](./data-model/) | Firestoreスキーマ設計（→Phase3でlimimeshi-infraに移行予定） |
 | [guides/](./guides/) | 本番環境セットアップガイド（→Phase3でlimimeshi-infraに移行予定） |
-| [governance/](./governance/) | ガバナンスルール（constitution.md、docs-style-guide.md） |
+| [governance/](./governance/) | ガバナンスルール（constitution.md、docs-style-guide.md、shared-rules.md） |
 | [planning/](./planning/) | Phase0企画ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md） |
 | [CLAUDE.md](./CLAUDE.md) | AI向けプロジェクト情報 |
 | [roadmap.md](./roadmap.md) | プロジェクト全体のロードマップ |
@@ -68,6 +68,24 @@
 
 - **共通ADR**：本リポジトリ（limimeshi-docs/adr/）
 - **固有ADR**：各実装リポジトリ（docs/adr/）
+
+### 4. Claude Code設定
+
+各実装リポジトリに`.claude/`ディレクトリを作成し、以下をコピー：
+
+```
+.claude/
+├── settings.json   # ← 本リポジトリの.claude/settings.jsonをコピー
+└── skills/         # ← 本リポジトリの.claude/skills/をコピー
+    ├── security-check.md
+    └── style-guide-check.md
+```
+
+**設定について**：
+- 本リポジトリの [.claude/settings.json](./.claude/settings.json) がマスター
+- Hooks：ファイル編集後のセキュリティ・スタイルチェック
+- Skills：機密情報検出、スタイルガイド準拠確認
+- 更新時は本リポジトリを修正後、各リポジトリにコピー
 
 ## 共通ADR一覧
 
