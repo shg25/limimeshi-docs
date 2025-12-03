@@ -545,9 +545,10 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 
 #### 未完了タスク
 
-- [ ] governance/shared-rules.md 作成（複数リポジトリ共通のチェックルール）
+- [x] governance/shared-rules.md 作成（複数リポジトリ共通のチェックルール）
   - 公開リポジトリへのアップロード安全性チェック
   - ドキュメントスタイルガイド準拠確認
+  - コミットメッセージ規約
 - [ ] Claude Code Hooks設定（.claude/settings.json）
   - PostToolUse：ファイル編集後の自動チェック
 - [ ] Claude Code Skills作成（.claude/skills/）
