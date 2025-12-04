@@ -143,7 +143,7 @@ Spec Kitファイル（specs/、templates/、.claude/commands/）は**各実装�
 |-----|------|
 | [ADR-001](./adr/001-use-firebase-for-backend.md) | Use Firebase for backend |
 | [ADR-002](./adr/002-adopt-multi-repository-structure.md) | Adopt multi-repository structure |
-| [ADR-003](./adr/003-use-react-admin-for-admin-panel.md) | Use React Admin for admin panel |
+| ADR-003 | Use React Admin for admin panel（limimeshi-adminリポジトリに移行） |
 | [ADR-004](./adr/004-use-manual-data-entry-for-phase2.md) | Use manual data entry for Phase 2 |
 | [ADR-005](./adr/005-deploy-using-firebase-hosting-multi-site.md) | Deploy using Firebase Hosting multi-site |
 
@@ -210,4 +210,4 @@ chore: ビルド・ツール
 
 ---
 
-**最終更新**: 2025/12/03
+**最終更新**: 2025/12/05

@@ -383,7 +383,7 @@
 
 ---
 
-## 15. GitHub Spec Kit テンプレート作成時の注意点
+## 16. GitHub Spec Kit テンプレート作成時の注意点
 
 ### Markdown改行の記法
 

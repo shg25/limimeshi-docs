@@ -558,6 +558,10 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 - [x] 同期ポリシー確定
   - 初期コピーのみ：constitution.md、Spec Kit（各リポジトリで独立管理）
   - 継続同期：Claude Code設定、docs-style-guide.md、shared-rules.md
+- [x] CHANGELOG.md作成（Keep a Changelog形式）
+- [x] Keep a Changelog / Conventional Commits / Semantic Versioning採用を宣言
+- [x] Claude Code Hooksにコミット時リマインダー追加（roadmap.md、CHANGELOG.md更新確認）
+- [x] `/suggest-claude-md` Custom Slash Command作成
 
 #### 未完了タスク（各リポジトリで実施）
 
@@ -669,7 +673,7 @@ Phase3：ベータリリース
 |---------|-----------|--------|
 | Phase0：企画の妥当性検証 | ✅ 完了 | 100% |
 | Phase1：設計・仕様策定 | ✅ 完了 | 100% |
-| Phase2：MVP実装 | 🚧 未着手 | 0% |
+| Phase2：MVP実装 | 🚧 進行中 | 30% |
 | Phase3：ベータリリース | 🚀 未着手 | 0% |
 | Phase4：本番リリース・運用 | 🚀 未着手 | 0% |
 | Phase5以降：スケールアップ | 🌟 未着手 | 0% |
@@ -847,3 +851,4 @@ Phase3：ベータリリース
 - 2025/12/03：limimeshi-docsの整理完了（specs/、.claude/commands/、templates/、scripts/、specs-old/、api/、MIGRATION_TO_SPEC_KIT.md削除）、Phase3-1にdata-model/、guides/のlimimeshi-infra移行タスク追加、README.md更新（ガバナンス専用リポジトリ化、新規リポジトリ作成ルール追加）
 - 2025/12/03：2-5. ガバナンス強化・自動チェック導入を追加（memory/→governance/リネーム、WRITING_STYLE_GUIDE.md→governance/docs-style-guide.md移動・改名、shared-rules/Hooks/Skills導入予定）
 - 2025/12/04：2-5. ガバナンス強化・自動チェック完了（スラッシュコマンド追加：/setup-new-repo、/sync-shared-rules、同期ポリシー確定）、README.md簡素化（詳細はスラッシュコマンドに移行）
+- 2025/12/05：CHANGELOG.md作成、Keep a Changelog/Conventional Commits/Semantic Versioning採用、Claude Code Hooksにコミット時リマインダー追加、/suggest-claude-md作成、ドキュメント整合性修正（docs-style-guide.mdセクション番号、first-idea.md差分検知記述削除、ADR-003参照修正）、Phase2進捗率を30%に更新
