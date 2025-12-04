@@ -11,12 +11,16 @@ limimeshi-docsリポジトリから必要なファイルをコピーする。
 
 ### 1. Spec Kit構造（初期値、その後は各リポジトリで独立管理）
 
+**テンプレート**: [docs/specify-template/](../../docs/specify-template/)
+
 ```
 .specify/
 ├── memory/
-│   └── constitution.md # ← limimeshi-docs/docs/governance/constitution.md
-├── specs/              # 機能仕様書（空）
-└── templates/          # テンプレート
+│   └── constitution.md # ← docs/specify-template/memory/constitution.md
+├── specs/              # 機能仕様書（空、.gitkeepあり）
+├── templates/          # テンプレート ← docs/specify-template/templates/
+└── .claude/
+    └── commands/       # speckit-*.md ← docs/specify-template/commands/
 ```
 
 ### 2. Claude Code設定
@@ -146,15 +150,17 @@ Claude Code設定：
 ## 実行手順
 
 1. limimeshi-docsリポジトリの場所を確認（通常は兄弟ディレクトリ）
-2. `docs/governance/`、`docs/adr/` ディレクトリを作成
-3. `.claude/commands/`、`.claude/skills/` ディレクトリを作成
-4. 上記ファイルを順番にコピー
-5. constitution.mdの内容を確認し、リポジトリ固有のカスタマイズが必要か確認
-6. `docs/roadmap.md` を作成（リポジトリ固有の内容で）
-7. `docs/CHANGELOG.md` を作成（Keep a Changelog形式）
-8. `docs/adr/README.md` を作成（テンプレートで）
-9. CLAUDE.mdに「ディレクトリ構成（ガバナンス関連）」セクションを追記
-10. コピー完了後、差分を報告
+2. `.specify/` ディレクトリを作成（memory/、specs/、templates/、.claude/commands/）
+3. `docs/specify-template/` からSpec Kitファイルをコピー
+4. `docs/governance/`、`docs/adr/` ディレクトリを作成
+5. `.claude/commands/`、`.claude/skills/` ディレクトリを作成
+6. 上記ファイルを順番にコピー
+7. constitution.mdの内容を確認し、リポジトリ固有のカスタマイズが必要か確認
+8. `docs/roadmap.md` を作成（リポジトリ固有の内容で）
+9. `docs/CHANGELOG.md` を作成（Keep a Changelog形式）
+10. `docs/adr/README.md` を作成（テンプレートで）
+11. CLAUDE.mdに「ディレクトリ構成（ガバナンス関連）」セクションを追記
+12. コピー完了後、差分を報告
 
 ## 注意事項
 

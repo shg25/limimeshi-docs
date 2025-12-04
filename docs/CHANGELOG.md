@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/ja/).
 ## [Unreleased]
 
 ### Added
+- docs/specify-template/ディレクトリ作成（Spec Kitテンプレート）
+  - README.md（SpecKitの説明）
+  - memory/constitution.md（憲法テンプレート）
+  - specs/.gitkeep
+  - templates/（spec、plan、tasks、checklist、agent-fileテンプレート）
+  - commands/（speckit-*.mdコマンド）
 - Keep a Changelog / Conventional Commits / Semantic Versioning 採用を宣言
 - Custom Slash Commands作成（`/setup-new-repo`、`/sync-shared-rules`、`/suggest-claude-md`）
 - Agent Skills作成（`security-check.md`、`style-guide-check.md`）
@@ -22,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/ja/).
 - governance/docs-style-guide.md（ドキュメント記述ルール）
 
 ### Changed
+- setup-new-repo.md：Spec Kitテンプレートディレクトリへの参照を追加
 - ディレクトリ構造を統一：governance/、adr/、roadmap.md、CHANGELOG.mdをdocs/以下に移動
 - Claude Code用語を英語表記に統一（Custom Slash Commands / Agent Skills / Claude Code Hooks）
 - memory/ → governance/ にリネーム

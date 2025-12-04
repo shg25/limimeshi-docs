@@ -1,0 +1,3 @@
+# 機能仕様書ディレクトリ
+# /speckit-specify コマンドで機能ごとにサブディレクトリが作成される
+# 例：specs/001-admin-panel/spec.md
