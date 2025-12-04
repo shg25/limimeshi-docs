@@ -1,1 +1,0 @@
-../../../../shared/setup-new-repo/.claude/skills/style-guide-check.md

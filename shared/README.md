@@ -9,7 +9,8 @@ shared/
 └── setup-new-repo/           # 各リポジトリからシンボリックリンクで参照
     ├── .claude/              # Claude Code設定
     │   ├── commands/
-    │   │   └── suggest-claude-md.md
+    │   │   ├── suggest-claude-md.md
+    │   │   └── sync-shared-rules.md
     │   ├── skills/
     │   │   ├── security-check.md
     │   │   └── style-guide-check.md
@@ -43,7 +44,7 @@ limimeshi-admin/.claude/settings.json
 
 ### 新規リポジトリ作成
 
-`/setup-new-repo` コマンドでシンボリックリンクを作成
+limimeshi-docsから `/setup-new-repo [リポジトリ名]` を実行してシンボリックリンクを作成
 
 ### ファイル追加時
 

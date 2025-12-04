@@ -1,12 +1,22 @@
 # 新規リポジトリセットアップテンプレート
 
-このディレクトリは新規リポジトリの構造を示すリファレンス
+このディレクトリはコピー対象の実体ファイルのみを含む
+
+## このディレクトリの内容
+
+コピー対象（各リポジトリ固有）：
+- `.specify/memory/constitution.md` - プロジェクトの憲法
+- `.specify/specs/.gitkeep` - 機能仕様書ディレクトリ
+- `docs/roadmap.md` - ロードマップ
+- `docs/CHANGELOG.md` - 変更履歴
+- `docs/adr/README.md` - ADRディレクトリ
+
+※ シンボリックリンク対象ファイルは `shared/setup-new-repo/` に配置
 
 ## セットアップ方法
 
-新規リポジトリ作成時は `/setup-new-repo` コマンドを実行
+limimeshi-docsリポジトリから `/setup-new-repo [リポジトリ名]` を実行
 
-**重要**: limimeshi-docsを先にcloneすること
 ```bash
 # 1. limimeshi-docsをclone
 git clone https://github.com/shg25/limimeshi-docs.git
@@ -14,7 +24,10 @@ git clone https://github.com/shg25/limimeshi-docs.git
 # 2. 同じディレクトリで新規リポジトリを作成
 mkdir new-repo && cd new-repo
 git init
-# その後 /setup-new-repo を実行
+
+# 3. limimeshi-docsに移動してセットアップ実行
+cd ../limimeshi-docs
+# /setup-new-repo new-repo を実行
 ```
 
 ## ディレクトリ構成

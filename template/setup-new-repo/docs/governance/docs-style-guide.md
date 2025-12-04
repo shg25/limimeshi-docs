@@ -1,1 +1,0 @@
-../../../../shared/setup-new-repo/docs/governance/docs-style-guide.md

@@ -1,1 +1,0 @@
-../../../../shared/setup-new-repo/.specify/templates/tasks-template.md

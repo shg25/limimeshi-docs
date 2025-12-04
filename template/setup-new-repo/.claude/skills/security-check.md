@@ -1,1 +1,0 @@
-../../../../shared/setup-new-repo/.claude/skills/security-check.md

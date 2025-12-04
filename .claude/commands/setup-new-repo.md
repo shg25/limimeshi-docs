@@ -1,64 +1,70 @@
 # 新規リポジトリセットアップ
 
-新しいlimimeshiリポジトリを作成する際の初期セットアップを実行する
+新しいlimimeshiリポジトリの初期セットアップを実行する
+
+## 使用方法
+
+**limimeshi-docsリポジトリから実行**：
+```
+/setup-new-repo [リポジトリ名]
+```
+
+例：
+```
+/setup-new-repo limimeshi-android
+```
+
+引数がない場合はリポジトリ名を質問する
 
 ## 前提条件
 
-limimeshi-docsリポジトリが兄弟ディレクトリにclone済みであること：
+- 現在のワーキングディレクトリがlimimeshi-docs
+- 対象リポジトリが兄弟ディレクトリに存在（`../[リポジトリ名]/`）
+
 ```
 parent-directory/
-├── limimeshi-docs/    ← 必須
-└── new-repo/          ← セットアップ対象
+├── limimeshi-docs/    ← ここから実行
+└── target-repo/       ← セットアップ対象
 ```
 
 ## 作成するファイル
 
-### シンボリックリンク（limimeshi-docs/shared/setup-new-repo/を参照）
+### シンボリックリンク（limimeshi-docs/shared/を参照）
 
-以下はシンボリックリンクとして作成（パスはファイルの深さにより異なる）：
+| 作成先 | リンク先 |
+|--------|---------|
+| `.claude/settings.json` | `../../limimeshi-docs/shared/setup-new-repo/.claude/settings.json` |
+| `.claude/commands/suggest-claude-md.md` | `../../../limimeshi-docs/shared/setup-new-repo/.claude/commands/suggest-claude-md.md` |
+| `.claude/commands/sync-shared-rules.md` | `../../../limimeshi-docs/shared/setup-new-repo/.claude/commands/sync-shared-rules.md` |
+| `.claude/skills/security-check.md` | `../../../limimeshi-docs/shared/setup-new-repo/.claude/skills/security-check.md` |
+| `.claude/skills/style-guide-check.md` | `../../../limimeshi-docs/shared/setup-new-repo/.claude/skills/style-guide-check.md` |
+| `docs/governance/docs-style-guide.md` | `../../../limimeshi-docs/shared/setup-new-repo/docs/governance/docs-style-guide.md` |
+| `docs/governance/shared-rules.md` | `../../../limimeshi-docs/shared/setup-new-repo/docs/governance/shared-rules.md` |
+| `.specify/.claude/commands/speckit-*.md` | `../../../../limimeshi-docs/shared/setup-new-repo/.specify/.claude/commands/speckit-*.md` |
+| `.specify/templates/*.md` | `../../../limimeshi-docs/shared/setup-new-repo/.specify/templates/*.md` |
 
-```
-.claude/
-├── settings.json → ../../limimeshi-docs/shared/setup-new-repo/.claude/settings.json
-├── commands/suggest-claude-md.md → ../../../limimeshi-docs/shared/setup-new-repo/.claude/commands/suggest-claude-md.md
-├── commands/sync-shared-rules.md → ../../../limimeshi-docs/shared/setup-new-repo/.claude/commands/sync-shared-rules.md
-├── skills/security-check.md → ../../../limimeshi-docs/shared/setup-new-repo/.claude/skills/security-check.md
-└── skills/style-guide-check.md → ../../../limimeshi-docs/shared/setup-new-repo/.claude/skills/style-guide-check.md
+### 実体ファイル（template/setup-new-repo/からコピー）
 
-.specify/
-├── .claude/commands/speckit-*.md → ../../../../limimeshi-docs/shared/setup-new-repo/.specify/.claude/commands/speckit-*.md
-└── templates/*.md → ../../../limimeshi-docs/shared/setup-new-repo/.specify/templates/*.md
-
-docs/governance/
-├── docs-style-guide.md → ../../../limimeshi-docs/shared/setup-new-repo/docs/governance/docs-style-guide.md
-└── shared-rules.md → ../../../limimeshi-docs/shared/setup-new-repo/docs/governance/shared-rules.md
-```
-
-### 実体ファイル（各リポジトリ固有）
-
-以下は `template/setup-new-repo/` から実体としてコピー：
-
-```
-.specify/
-├── memory/constitution.md   # カスタマイズ必要
-└── specs/.gitkeep           # リポジトリ固有の仕様書
-
-docs/
-├── adr/README.md            # リポジトリ固有のADR
-├── roadmap.md               # リポジトリ固有のロードマップ
-└── CHANGELOG.md             # リポジトリ固有の変更履歴
-```
+| ファイル | 説明 |
+|---------|------|
+| `.specify/memory/constitution.md` | プロジェクトの憲法（カスタマイズ必要） |
+| `.specify/specs/.gitkeep` | 機能仕様書ディレクトリ |
+| `docs/adr/README.md` | ADRディレクトリ |
+| `docs/roadmap.md` | ロードマップ |
+| `docs/CHANGELOG.md` | 変更履歴 |
 
 ## 実行手順
 
-1. limimeshi-docsリポジトリの場所を確認（兄弟ディレクトリ `../limimeshi-docs/`）
-2. 必要なディレクトリ構造を作成
-3. シンボリックリンクを作成（shared/へ参照）
-4. 実体ファイルをコピー（template/から）
-5. `.specify/memory/constitution.md`をプロジェクトに合わせてカスタマイズ
-6. `docs/roadmap.md`の`[REPOSITORY_NAME]`を実際のリポジトリ名に変更
-7. CLAUDE.mdに「ディレクトリ構成（ガバナンス関連）」セクションを追記
-8. セットアップ完了後、差分を報告
+1. **引数確認**: リポジトリ名が指定されていなければ質問
+2. **対象確認**: `../[リポジトリ名]/`の存在を確認
+3. **作成内容表示**: 作成するファイル一覧を表示
+4. **ユーザー確認**: 実行して良いか確認
+5. **ディレクトリ作成**: 必要なディレクトリ構造を作成
+6. **シンボリックリンク作成**: shared/への参照を作成
+7. **ファイルコピー**: template/から実体ファイルをコピー
+8. **置換処理**: `[REPOSITORY_NAME]`を実際のリポジトリ名に置換
+9. **CLAUDE.md更新**: ディレクトリ構成セクションを追記
+10. **結果報告**: 作成したファイル一覧を報告
 
 ## CLAUDE.mdに追記する内容
 
@@ -102,7 +108,7 @@ GitHub Spec Kit（仕様駆動開発）：
 
 ## 注意事項
 
-- limimeshi-docsが兄弟ディレクトリにない場合、シンボリックリンクが壊れる
-- constitution.mdは初期値としてコピー。その後は各リポジトリで独立管理
-- specs/内の機能仕様書は各リポジトリ固有
+- 対象リポジトリが存在しない場合はエラー
 - 既存ファイルがある場合は上書き前に確認
+- constitution.mdは初期値としてコピー後、各リポジトリで独立管理
+- セットアップ後はコミットを忘れずに

@@ -1,1 +1,0 @@
-../../../../../shared/setup-new-repo/.specify/.claude/commands/speckit-plan.md

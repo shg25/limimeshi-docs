@@ -1,1 +1,0 @@
-../../../../shared/setup-new-repo/.specify/templates/agent-file-template.md
