@@ -77,7 +77,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/ja/).
 - 初期セットアップ
 ```
 
-### 5. CLAUDE.md更新
+### 5. ADRディレクトリ（新規作成）
+
+```
+docs/
+└── adr/
+    └── README.md  # ADR説明とテンプレート
+```
+
+**README.md**：以下のテンプレートで作成
+```markdown
+# Architecture Decision Records（ADR）
+
+このリポジトリ固有の技術選定を記録
+
+## ADRとは
+
+Architecture Decision Records（ADR）は、アーキテクチャに関する重要な決定とその理由を記録するドキュメント
+
+**出典**: Michael Nygard "[Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)" (2011)
+
+## ADR一覧
+
+（ADRを作成したらここに追加）
+
+## 命名規則
+
+`NNN-short-title.md`形式で命名
+- **NNN**: 連番（001, 002, 003...）
+- **short-title**: 短いタイトル（kebab-case）
+
+**タイトルパターン**:
+- `Use [technology] for [purpose]`
+- `Adopt [approach]`
+- `Choose [option]`
+
+## 共通ADR
+
+複数リポジトリに影響するADRは [limimeshi-docs/docs/adr/](https://github.com/shg25/limimeshi-docs/tree/main/docs/adr) を参照
+```
+
+### 6. CLAUDE.md更新
 
 対象リポジトリのCLAUDE.mdに以下の内容を追記：
 
@@ -106,14 +146,15 @@ Claude Code設定：
 ## 実行手順
 
 1. limimeshi-docsリポジトリの場所を確認（通常は兄弟ディレクトリ）
-2. `docs/governance/` ディレクトリを作成
+2. `docs/governance/`、`docs/adr/` ディレクトリを作成
 3. `.claude/commands/`、`.claude/skills/` ディレクトリを作成
 4. 上記ファイルを順番にコピー
 5. constitution.mdの内容を確認し、リポジトリ固有のカスタマイズが必要か確認
 6. `docs/roadmap.md` を作成（リポジトリ固有の内容で）
 7. `docs/CHANGELOG.md` を作成（Keep a Changelog形式）
-8. CLAUDE.mdに「ディレクトリ構成（ガバナンス関連）」セクションを追記
-9. コピー完了後、差分を報告
+8. `docs/adr/README.md` を作成（テンプレートで）
+9. CLAUDE.mdに「ディレクトリ構成（ガバナンス関連）」セクションを追記
+10. コピー完了後、差分を報告
 
 ## 注意事項
 
