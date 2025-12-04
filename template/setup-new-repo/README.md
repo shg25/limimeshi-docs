@@ -5,6 +5,7 @@
 ## このディレクトリの内容
 
 コピー対象（各リポジトリ固有）：
+- `.specify/README.md` - Spec Kit使い方ガイド
 - `.specify/memory/constitution.md` - プロジェクトの憲法
 - `.specify/specs/.gitkeep` - 機能仕様書ディレクトリ
 - `docs/roadmap.md` - ロードマップ

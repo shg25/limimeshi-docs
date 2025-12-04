@@ -47,6 +47,7 @@ parent-directory/
 
 | ファイル | 説明 |
 |---------|------|
+| `.specify/README.md` | Spec Kit使い方ガイド |
 | `.specify/memory/constitution.md` | プロジェクトの憲法（カスタマイズ必要） |
 | `.specify/specs/.gitkeep` | 機能仕様書ディレクトリ |
 | `docs/adr/README.md` | ADRディレクトリ |
