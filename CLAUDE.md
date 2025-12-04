@@ -164,7 +164,7 @@ Spec Kitファイル（specs/、templates/、.claude/commands/）は**各実装�
 
 - **仕様駆動開発（Spec-Driven Development）**: GitHub Spec Kit採用、仕様が王様
 - **ドキュメント駆動開発**: 実装前に企画・設計を詳細に文書化
-- **AI活用前提**: Claude Code使用、スラッシュコマンドで効率化
+- **AI活用前提**: Claude Code使用、Custom Slash Commandsで効率化
 - **Constitution（憲法）遵守**: 全ての実装・設計は憲法に準拠
 - **公開リポジトリ**: 透明性を重視
 - **個人開発**: 1名（重次弘規）

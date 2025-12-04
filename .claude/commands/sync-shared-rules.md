@@ -28,7 +28,7 @@ docsリポジトリで更新があった際に、各実装リポジトリで実�
 以下は各リポジトリで独立管理するため同期しない：
 - `constitution.md` - リポジトリ固有のカスタマイズ可
 - `.specify/` - Spec Kit（各リポジトリの機能仕様）
-- `speckit-*.md` - Spec Kitスラッシュコマンド（各リポジトリでカスタマイズ可）
+- `speckit-*.md` - Spec Kit Custom Slash Commands（各リポジトリでカスタマイズ可）
 
 ## 実行手順
 

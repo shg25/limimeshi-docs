@@ -167,7 +167,7 @@ limimeshi-docs/
 
 - Phase1-2の機能設計書を公式テンプレートで書き直し
 - ディレクトリ構造を変更（`specs/menu-list.md` → `specs/001-menu-list/spec.md`）
-- スラッシュコマンド（`/speckit.specify`、`/speckit.plan`、`/speckit.tasks`）のセットアップ
+- Custom Slash Commands（`/speckit.specify`、`/speckit.plan`、`/speckit.tasks`）のセットアップ
 - Constitution（開発原則）の定義
 
 #### 詳細
@@ -549,10 +549,10 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 - [x] Claude Code Hooks設定（.claude/settings.json）
   - PostToolUse：ファイル編集後の自動チェック
   - PreToolUse：Bashコマンド実行前の確認
-- [x] Claude Code Skills作成（.claude/skills/）
+- [x] Agent Skills作成（.claude/skills/）
   - security-check.md：機密情報検出
   - style-guide-check.md：docs-style-guide準拠確認
-- [x] スラッシュコマンド作成（.claude/commands/）
+- [x] Custom Slash Commands作成（.claude/commands/）
   - `/setup-new-repo`：新規リポジトリの初期セットアップ
   - `/sync-shared-rules`：共通ルールの同期（Claude Code設定、スタイルガイド）
 - [x] 同期ポリシー確定

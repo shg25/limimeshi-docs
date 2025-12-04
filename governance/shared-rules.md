@@ -177,12 +177,12 @@ Closes #123
 - コミットメッセージ規約
 ```
 
-### Claude Code Hooks/Skills連携
+### Claude Code Hooks / Agent Skills 連携
 
 このルールは以下のClaude Code機能と連携予定：
 
-- **Skills**: `security-check.md`、`style-guide-check.md`
-- **Hooks**: PostToolUseで自動チェック
+- **Agent Skills**: `security-check.md`、`style-guide-check.md`
+- **Claude Code Hooks**: PostToolUseで自動チェック
 
 ---
 

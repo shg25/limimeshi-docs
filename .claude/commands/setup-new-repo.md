@@ -68,9 +68,9 @@ limimeshi-docsから同期されるガバナンスドキュメント：
 
 ### .claude/
 Claude Code設定：
-- `commands/`：スラッシュコマンド
-- `skills/`：自動適用スキル
-- `settings.json`：フック設定
+- `commands/`：Custom Slash Commands
+- `skills/`：Agent Skills
+- `settings.json`：Claude Code Hooks設定
 
 ### 同期について
 - `docs/governance/` と `.claude/`（speckit-*以外）は limimeshi-docs から同期
