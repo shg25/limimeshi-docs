@@ -33,56 +33,73 @@
 ### 1. 仕様作成
 
 ```
-/speckit-specify NNN-feature-name
+/speckit-specify [機能の説明文]
 ```
 
-`specs/NNN-feature-name/spec.md`を作成
-
-### 2. 仕様分析・質問
-
+例：
 ```
-/speckit-analyze NNN-feature-name
-/speckit-clarify NNN-feature-name
+/speckit-specify ユーザーがお気に入りのチェーン店を保存できる機能
 ```
 
-仕様の曖昧な点を洗い出し、質問を整理
+AIが説明文から：
+- 短い機能名を生成（例: `favorites`）
+- 連番付きディレクトリを作成（例: `specs/003-favorites/`）
+- **ほぼ完成形のspec.mdを自動生成**
+- 不明点は最大3つまで`[NEEDS CLARIFICATION]`マーカーを付与
 
-### 3. 実装計画
+### 2. 不明点の解消（必要な場合のみ）
 
 ```
-/speckit-plan NNN-feature-name
+/speckit-clarify 003-favorites
+```
+
+`[NEEDS CLARIFICATION]`マーカーが残っている場合のみ実行。
+選択肢形式で質問され、回答するとspec.mdが更新される。
+
+### 3. 仕様分析（オプション）
+
+```
+/speckit-analyze 003-favorites
+```
+
+仕様の整合性チェックや追加の検討が必要な場合に実行
+
+### 4. 実装計画
+
+```
+/speckit-plan 003-favorites
 ```
 
 `plan.md`と`tasks.md`を作成
 
-### 4. 実装
+### 5. 実装
 
 ```
-/speckit-implement NNN-feature-name
+/speckit-implement 003-favorites
 ```
 
 タスクに従って実装を進める
 
-### 5. 完了確認
+### 6. 完了確認
 
 ```
-/speckit-checklist NNN-feature-name
+/speckit-checklist 003-favorites
 ```
 
 `checklist.md`で完了状態を確認
 
 ## コマンド一覧
 
-| コマンド | 説明 |
-|---------|------|
-| `/speckit-specify` | 仕様書を作成 |
-| `/speckit-analyze` | 仕様を分析 |
-| `/speckit-clarify` | 不明点を質問形式で整理 |
-| `/speckit-plan` | 実装計画を作成 |
-| `/speckit-tasks` | タスク一覧を更新 |
-| `/speckit-implement` | 実装を進める |
-| `/speckit-checklist` | 完了チェックリストを作成・確認 |
-| `/speckit-constitution` | constitution.mdを参照・更新 |
+| コマンド | 引数 | 説明 |
+|---------|------|------|
+| `/speckit-specify` | 機能の説明文 | 説明文から仕様書を自動生成 |
+| `/speckit-clarify` | 機能名 | 不明点を選択肢形式で解消 |
+| `/speckit-analyze` | 機能名 | 仕様の整合性を分析 |
+| `/speckit-plan` | 機能名 | 実装計画とタスク一覧を作成 |
+| `/speckit-tasks` | 機能名 | タスク一覧を更新 |
+| `/speckit-implement` | 機能名 | タスクに従って実装 |
+| `/speckit-checklist` | 機能名 | 完了チェックリストを作成・確認 |
+| `/speckit-constitution` | - | constitution.mdを参照・更新 |
 
 ## 仕様書の命名規則
 
