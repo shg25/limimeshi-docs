@@ -8,12 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/ja/).
 ## [Unreleased]
 
 ### Added
-- docs/specify-template/ディレクトリ作成（Spec Kitテンプレート）
-  - README.md（SpecKitの説明）
-  - memory/constitution.md（憲法テンプレート）
-  - specs/.gitkeep
-  - templates/（spec、plan、tasks、checklist、agent-fileテンプレート）
-  - commands/（speckit-*.mdコマンド）
+- template/setup-new-repo/ディレクトリ作成（新規リポジトリ一括セットアップ用）
+  - .specify/（Spec Kit一式：memory、specs、templates、speckit-*コマンド）
+  - .claude/（Claude Code設定：commands、skills、settings.json）
+  - docs/（governance、adr、roadmap、CHANGELOG）
 - Keep a Changelog / Conventional Commits / Semantic Versioning 採用を宣言
 - Custom Slash Commands作成（`/setup-new-repo`、`/sync-shared-rules`、`/suggest-claude-md`）
 - Agent Skills作成（`security-check.md`、`style-guide-check.md`）
@@ -28,8 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/ja/).
 - governance/docs-style-guide.md（ドキュメント記述ルール）
 
 ### Changed
-- setup-new-repo.md：Spec Kitテンプレートディレクトリへの参照を追加
+- setup-new-repo.md：テンプレートコピー方式にシンプル化
 - ディレクトリ構造を統一：governance/、adr/、roadmap.md、CHANGELOG.mdをdocs/以下に移動
+- テンプレートをtemplate/配下に統合（docs/specify-template/ → template/setup-new-repo/）
 - Claude Code用語を英語表記に統一（Custom Slash Commands / Agent Skills / Claude Code Hooks）
 - memory/ → governance/ にリネーム
 - データモデルをメニュー単位からキャンペーン単位に変更

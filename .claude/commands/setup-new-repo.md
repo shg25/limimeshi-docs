@@ -1,134 +1,54 @@
 # 新規リポジトリセットアップ
 
-新しいlimimeshiリポジトリを作成する際の初期セットアップを実行する。
+新しいlimimeshiリポジトリを作成する際の初期セットアップを実行する
 
 ## 対象リポジトリ
 
-現在のワーキングディレクトリが対象リポジトリ。
-limimeshi-docsリポジトリから必要なファイルをコピーする。
+現在のワーキングディレクトリが対象リポジトリ
+limimeshi-docsリポジトリの`template/setup-new-repo/`から必要なファイルをコピーする
 
-## コピー対象
+## テンプレート内容
 
-### 1. Spec Kit構造（初期値、その後は各リポジトリで独立管理）
-
-**テンプレート**: [docs/specify-template/](../../docs/specify-template/)
+**ソース**: `limimeshi-docs/template/setup-new-repo/`
 
 ```
-.specify/
-├── memory/
-│   └── constitution.md # ← docs/specify-template/memory/constitution.md
-├── specs/              # 機能仕様書（空、.gitkeepあり）
-├── templates/          # テンプレート ← docs/specify-template/templates/
-└── .claude/
-    └── commands/       # speckit-*.md ← docs/specify-template/commands/
+template/setup-new-repo/
+├── .specify/              # GitHub Spec Kit（仕様駆動開発）
+│   ├── memory/
+│   │   └── constitution.md  # プロジェクトの憲法
+│   ├── specs/               # 機能仕様書（空）
+│   ├── templates/           # 仕様書テンプレート
+│   └── .claude/
+│       └── commands/        # speckit-*.md コマンド
+├── .claude/               # Claude Code設定
+│   ├── commands/
+│   │   └── suggest-claude-md.md
+│   ├── skills/
+│   └── settings.json
+├── docs/                  # ガバナンスドキュメント
+│   ├── governance/
+│   ├── adr/
+│   ├── roadmap.md
+│   └── CHANGELOG.md
+└── README.md              # テンプレート説明（コピー後に削除）
 ```
 
-### 2. Claude Code設定
+## 実行手順
 
-```
-.claude/
-├── commands/
-│   ├── speckit-specify.md     # 初期コピーのみ（カスタマイズ可）
-│   ├── speckit-plan.md        # 初期コピーのみ（カスタマイズ可）
-│   ├── speckit-tasks.md       # 初期コピーのみ（カスタマイズ可）
-│   ├── speckit-implement.md   # 初期コピーのみ（カスタマイズ可）
-│   ├── speckit-clarify.md     # 初期コピーのみ（カスタマイズ可）
-│   ├── speckit-analyze.md     # 初期コピーのみ（カスタマイズ可）
-│   ├── speckit-checklist.md   # 初期コピーのみ（カスタマイズ可）
-│   ├── speckit-constitution.md # 初期コピーのみ（カスタマイズ可）
-│   └── suggest-claude-md.md   # 継続同期対象
-├── settings.json              # 継続同期対象
-└── skills/
-    ├── security-check.md      # 継続同期対象
-    └── style-guide-check.md   # 継続同期対象
-```
+1. limimeshi-docsリポジトリの場所を確認（通常は兄弟ディレクトリ）
+2. `template/setup-new-repo/`の内容をまるごとコピー
+3. `template/setup-new-repo/README.md`を削除（テンプレート説明用なので不要）
+4. `.specify/memory/constitution.md`をプロジェクトに合わせてカスタマイズ
+5. `docs/roadmap.md`の`[REPOSITORY_NAME]`を実際のリポジトリ名に変更
+6. CLAUDE.mdに「ディレクトリ構成（ガバナンス関連）」セクションを追記
+7. コピー完了後、差分を報告
 
-**同期ポリシー**：
-- `speckit-*` コマンド：初期コピーのみ（各リポジトリでカスタマイズ可）
-- その他：継続同期対象（`/sync-shared-rules`で同期）
-
-### 3. ガバナンスドキュメント（継続同期対象）
-
-```
-docs/
-└── governance/
-    ├── docs-style-guide.md  # ← limimeshi-docs/docs/governance/docs-style-guide.md
-    └── shared-rules.md      # ← limimeshi-docs/docs/governance/shared-rules.md
-```
-
-### 4. プロジェクト管理ファイル（新規作成）
-
-```
-docs/
-├── roadmap.md    # リポジトリ固有のロードマップ
-└── CHANGELOG.md  # 変更履歴（Keep a Changelog形式）
-```
-
-**roadmap.md**：リポジトリ固有のタスク・進捗を管理
-
-**CHANGELOG.md**：Keep a Changelog形式で作成
-```markdown
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/ja/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/lang/ja/).
-
-## [Unreleased]
-
-### Added
-- 初期セットアップ
-```
-
-### 5. ADRディレクトリ（新規作成）
-
-```
-docs/
-└── adr/
-    └── README.md  # ADR説明とテンプレート
-```
-
-**README.md**：以下のテンプレートで作成
-```markdown
-# Architecture Decision Records（ADR）
-
-このリポジトリ固有の技術選定を記録
-
-## ADRとは
-
-Architecture Decision Records（ADR）は、アーキテクチャに関する重要な決定とその理由を記録するドキュメント
-
-**出典**: Michael Nygard "[Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)" (2011)
-
-## ADR一覧
-
-（ADRを作成したらここに追加）
-
-## 命名規則
-
-`NNN-short-title.md`形式で命名
-- **NNN**: 連番（001, 002, 003...）
-- **short-title**: 短いタイトル（kebab-case）
-
-**タイトルパターン**:
-- `Use [technology] for [purpose]`
-- `Adopt [approach]`
-- `Choose [option]`
-
-## 共通ADR
-
-複数リポジトリに影響するADRは [limimeshi-docs/docs/adr/](https://github.com/shg25/limimeshi-docs/tree/main/docs/adr) を参照
-```
-
-### 6. CLAUDE.md更新
-
-対象リポジトリのCLAUDE.mdに以下の内容を追記：
+## CLAUDE.mdに追記する内容
 
 ```markdown
 ## ディレクトリ構成（ガバナンス関連）
 
-本リポジトリは limimeshi-docs のガバナンスルールに従う。
+本リポジトリは limimeshi-docs のガバナンスルールに従う
 
 ### docs/governance/
 limimeshi-docsから同期されるガバナンスドキュメント：
@@ -141,30 +61,21 @@ Claude Code設定：
 - `skills/`：Agent Skills
 - `settings.json`：Claude Code Hooks設定
 
+### .specify/
+GitHub Spec Kit（仕様駆動開発）：
+- `memory/constitution.md`：プロジェクトの憲法
+- `specs/`：機能仕様書
+- `templates/`：仕様書テンプレート
+
 ### 同期について
 - `docs/governance/` と `.claude/`（speckit-*以外）は limimeshi-docs から同期
 - 同期は `/sync-shared-rules` コマンドで実行
 - 詳細は limimeshi-docs/README.md を参照
 ```
 
-## 実行手順
-
-1. limimeshi-docsリポジトリの場所を確認（通常は兄弟ディレクトリ）
-2. `.specify/` ディレクトリを作成（memory/、specs/、templates/、.claude/commands/）
-3. `docs/specify-template/` からSpec Kitファイルをコピー
-4. `docs/governance/`、`docs/adr/` ディレクトリを作成
-5. `.claude/commands/`、`.claude/skills/` ディレクトリを作成
-6. 上記ファイルを順番にコピー
-7. constitution.mdの内容を確認し、リポジトリ固有のカスタマイズが必要か確認
-8. `docs/roadmap.md` を作成（リポジトリ固有の内容で）
-9. `docs/CHANGELOG.md` を作成（Keep a Changelog形式）
-10. `docs/adr/README.md` を作成（テンプレートで）
-11. CLAUDE.mdに「ディレクトリ構成（ガバナンス関連）」セクションを追記
-12. コピー完了後、差分を報告
-
 ## 注意事項
 
 - constitution.mdは初期値としてコピー。その後は各リポジトリで独立管理
-- speckit-*コマンドは初期コピーのみ。各リポジトリでカスタマイズ可能
+- speckit-*コマンドは各リポジトリでカスタマイズ可能
 - その他のClaude Code設定とガバナンスドキュメントは `/sync-shared-rules` で継続同期
 - 既存ファイルがある場合は上書き前に確認
