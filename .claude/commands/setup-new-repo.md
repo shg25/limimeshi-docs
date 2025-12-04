@@ -52,7 +52,32 @@ docs/
     └── shared-rules.md      # ← limimeshi-docs/governance/shared-rules.md
 ```
 
-### 4. CLAUDE.md更新
+### 4. プロジェクト管理ファイル（新規作成）
+
+```
+docs/
+├── roadmap.md    # リポジトリ固有のロードマップ
+└── CHANGELOG.md  # 変更履歴（Keep a Changelog形式）
+```
+
+**roadmap.md**：リポジトリ固有のタスク・進捗を管理
+
+**CHANGELOG.md**：Keep a Changelog形式で作成
+```markdown
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/ja/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/lang/ja/).
+
+## [Unreleased]
+
+### Added
+- 初期セットアップ
+```
+
+### 5. CLAUDE.md更新
 
 対象リポジトリのCLAUDE.mdに以下の内容を追記：
 
@@ -85,8 +110,10 @@ Claude Code設定：
 3. `.claude/commands/`、`.claude/skills/` ディレクトリを作成
 4. 上記ファイルを順番にコピー
 5. constitution.mdの内容を確認し、リポジトリ固有のカスタマイズが必要か確認
-6. CLAUDE.mdに「ディレクトリ構成（ガバナンス関連）」セクションを追記
-7. コピー完了後、差分を報告
+6. `docs/roadmap.md` を作成（リポジトリ固有の内容で）
+7. `docs/CHANGELOG.md` を作成（Keep a Changelog形式）
+8. CLAUDE.mdに「ディレクトリ構成（ガバナンス関連）」セクションを追記
+9. コピー完了後、差分を報告
 
 ## 注意事項
 
