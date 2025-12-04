@@ -5,7 +5,7 @@ docsリポジトリで更新があった際に、各実装リポジトリで実�
 
 ## 同期対象
 
-以下のファイルのみ同期（constitution.mdやSpec Kitは対象外）
+以下のファイルを同期（constitution.md、Spec Kit、speckit-*コマンドは対象外）
 
 ### Claude Code設定
 
@@ -14,6 +14,7 @@ docsリポジトリで更新があった際に、各実装リポジトリで実�
 | `.claude/settings.json` | `.claude/settings.json` |
 | `.claude/skills/security-check.md` | `.claude/skills/security-check.md` |
 | `.claude/skills/style-guide-check.md` | `.claude/skills/style-guide-check.md` |
+| `.claude/commands/suggest-claude-md.md` | `.claude/commands/suggest-claude-md.md` |
 
 ### ガバナンスドキュメント
 
@@ -27,6 +28,7 @@ docsリポジトリで更新があった際に、各実装リポジトリで実�
 以下は各リポジトリで独立管理するため同期しない：
 - `constitution.md` - リポジトリ固有のカスタマイズ可
 - `.specify/` - Spec Kit（各リポジトリの機能仕様）
+- `speckit-*.md` - Spec Kitスラッシュコマンド（各リポジトリでカスタマイズ可）
 
 ## 実行手順
 
