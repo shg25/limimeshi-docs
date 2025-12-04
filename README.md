@@ -28,13 +28,14 @@
 
 | ディレクトリ/ファイル | 内容 |
 |-----------|------|
-| [adr/](./adr/) | 共通ADR（複数リポジトリに影響する技術選定） |
+| [docs/adr/](./docs/adr/) | 共通ADR（複数リポジトリに影響する技術選定） |
+| [docs/governance/](./docs/governance/) | ガバナンスルール（constitution.md、docs-style-guide.md、shared-rules.md） |
+| [docs/roadmap.md](./docs/roadmap.md) | プロジェクト全体のロードマップ |
+| [docs/CHANGELOG.md](./docs/CHANGELOG.md) | 変更履歴 |
 | [data-model/](./data-model/) | Firestoreスキーマ設計（→Phase3でlimimeshi-infraに移行予定） |
 | [guides/](./guides/) | 本番環境セットアップガイド（→Phase3でlimimeshi-infraに移行予定） |
-| [governance/](./governance/) | ガバナンスルール（constitution.md、docs-style-guide.md、shared-rules.md） |
 | [planning/](./planning/) | Phase0企画ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md） |
 | [CLAUDE.md](./CLAUDE.md) | AI向けプロジェクト情報 |
-| [roadmap.md](./roadmap.md) | プロジェクト全体のロードマップ |
 
 ## 新規リポジトリ作成・設定同期
 
@@ -55,11 +56,11 @@ Custom Slash Commandsを使用してセットアップ：
 
 | ADR | 内容 |
 |-----|------|
-| [ADR-001](./adr/001-use-firebase-for-backend.md) | Use Firebase for backend |
-| [ADR-002](./adr/002-adopt-multi-repository-structure.md) | Adopt multi-repository structure |
-| [ADR-003](./adr/003-use-react-admin-for-admin-panel.md) | Use React Admin for admin panel |
-| [ADR-004](./adr/004-use-manual-data-entry-for-phase2.md) | Use manual data entry for Phase 2 |
-| [ADR-005](./adr/005-deploy-using-firebase-hosting-multi-site.md) | Deploy using Firebase Hosting multi-site |
+| [ADR-001](./docs/adr/001-use-firebase-for-backend.md) | Use Firebase for backend |
+| [ADR-002](./docs/adr/002-adopt-multi-repository-structure.md) | Adopt multi-repository structure |
+| [ADR-003](./docs/adr/003-use-react-admin-for-admin-panel.md) | Use React Admin for admin panel |
+| [ADR-004](./docs/adr/004-use-manual-data-entry-for-phase2.md) | Use manual data entry for Phase 2 |
+| [ADR-005](./docs/adr/005-deploy-using-firebase-hosting-multi-site.md) | Deploy using Firebase Hosting multi-site |
 
 ## 採用している手法・フレームワーク
 

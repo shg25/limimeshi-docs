@@ -222,7 +222,7 @@ All notable changes to this project will be documented in this file.
 
 本プロジェクトは以下の共通ルールに従う：
 
-**参照**: [limimeshi-docs/governance/shared-rules.md](https://github.com/shg25/limimeshi-docs/blob/main/governance/shared-rules.md)
+**参照**: [limimeshi-docs/docs/governance/shared-rules.md](https://github.com/shg25/limimeshi-docs/blob/main/docs/governance/shared-rules.md)
 
 - 公開リポジトリ安全性チェック
 - ドキュメントスタイルガイド準拠

@@ -42,19 +42,21 @@
 - 📋 Phase3: ベータリリース（未着手）
 - 📋 Phase4: 本番リリース（未着手）
 
-詳細は [roadmap.md](./roadmap.md) を参照
+詳細は [docs/roadmap.md](./docs/roadmap.md) を参照
 
 ## ディレクトリ構造
 
 ```
 limimeshi-docs/
-├── adr/                 # 共通ADR（複数リポジトリに影響する技術選定）
+├── docs/
+│   ├── adr/             # 共通ADR（複数リポジトリに影響する技術選定）
+│   ├── governance/      # ガバナンスルール（constitution.md、docs-style-guide.md）
+│   ├── roadmap.md       # プロジェクト全体のロードマップ
+│   └── CHANGELOG.md     # 変更履歴
 ├── data-model/          # Firestoreスキーマ設計（→Phase3でlimimeshi-infraに移行予定）
-├── governance/          # ガバナンスルール（constitution.md、docs-style-guide.md）
 ├── guides/              # 本番環境セットアップガイド（→Phase3でlimimeshi-infraに移行予定）
 ├── planning/            # Phase0企画ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md）
 ├── CLAUDE.md            # AI向けプロジェクト情報（このファイル）
-├── roadmap.md           # プロジェクト全体のロードマップ
 └── README.md            # ガバナンスリポジトリ説明
 ```
 
@@ -62,18 +64,18 @@ limimeshi-docs/
 
 ### 必ず参照すべきファイル
 
-1. **[governance/constitution.md](./governance/constitution.md)**
+1. **[docs/governance/constitution.md](./docs/governance/constitution.md)**
    - **プロジェクトの憲法（最優先）**
    - 開発原則：Test-First、Firebase-First、Manual Operation First、Simplicity など
    - 技術選定方針、品質基準、ガバナンス
    - **全ての実装・設計はこの憲法に準拠する**
    - 新規リポジトリ作成時はこれをコピーして配置
 
-2. **[governance/docs-style-guide.md](./governance/docs-style-guide.md)**
+2. **[docs/governance/docs-style-guide.md](./docs/governance/docs-style-guide.md)**
    - **すべてのドキュメント作成時に必ず従う**
    - 句読点、強調表記、見出しレベル、サービス名表記など
 
-3. **[roadmap.md](./roadmap.md)**
+3. **[docs/roadmap.md](./docs/roadmap.md)**
    - プロジェクト全体のロードマップ
    - 各フェーズのタスク一覧と進捗状況
 
@@ -83,7 +85,7 @@ limimeshi-docs/
 
 ## ドキュメント記述ルール
 
-新しいドキュメントを作成する際は、**必ず [governance/docs-style-guide.md](./governance/docs-style-guide.md) を参照**
+新しいドキュメントを作成する際は、**必ず [docs/governance/docs-style-guide.md](./docs/governance/docs-style-guide.md) を参照**
 
 ### 主要ルール（抜粋）
 
@@ -122,30 +124,30 @@ Spec Kitファイル（specs/、templates/、.claude/commands/）は**各実装�
 .specify/
 ├── .claude/commands/   # スラッシュコマンド
 ├── memory/
-│   └── constitution.md # ← 本リポジトリのgovernance/constitution.mdをコピー
+│   └── constitution.md # ← 本リポジトリのdocs/governance/constitution.mdをコピー
 ├── specs/              # 機能仕様書
 └── templates/          # テンプレート
 ```
 
 ### 2. ドキュメントスタイル統一
 
-- 本リポジトリの governance/docs-style-guide.md を参照
+- 本リポジトリの docs/governance/docs-style-guide.md を参照
 - 必要に応じて各リポジトリにコピー
 
 ### 3. ADR配置
 
-- **共通ADR**: 本リポジトリ（limimeshi-docs/adr/）
+- **共通ADR**: 本リポジトリ（limimeshi-docs/docs/adr/）
 - **固有ADR**: 各実装リポジトリ（docs/adr/）
 
 ## 共通ADR一覧
 
 | ADR | 内容 |
 |-----|------|
-| [ADR-001](./adr/001-use-firebase-for-backend.md) | Use Firebase for backend |
-| [ADR-002](./adr/002-adopt-multi-repository-structure.md) | Adopt multi-repository structure |
+| [ADR-001](./docs/adr/001-use-firebase-for-backend.md) | Use Firebase for backend |
+| [ADR-002](./docs/adr/002-adopt-multi-repository-structure.md) | Adopt multi-repository structure |
 | ADR-003 | Use React Admin for admin panel（limimeshi-adminリポジトリに移行） |
-| [ADR-004](./adr/004-use-manual-data-entry-for-phase2.md) | Use manual data entry for Phase 2 |
-| [ADR-005](./adr/005-deploy-using-firebase-hosting-multi-site.md) | Deploy using Firebase Hosting multi-site |
+| [ADR-004](./docs/adr/004-use-manual-data-entry-for-phase2.md) | Use manual data entry for Phase 2 |
+| [ADR-005](./docs/adr/005-deploy-using-firebase-hosting-multi-site.md) | Deploy using Firebase Hosting multi-site |
 
 ## 技術スタック
 
@@ -188,7 +190,7 @@ Spec Kitファイル（specs/、templates/、.claude/commands/）は**各実装�
 
 ### コミットメッセージ
 
-Conventional Commits形式を使用（詳細は `governance/shared-rules.md` 参照）
+Conventional Commits形式を使用（詳細は `docs/governance/shared-rules.md` 参照）
 
 ```
 <type>: <subject>

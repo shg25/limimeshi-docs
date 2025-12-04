@@ -20,8 +20,8 @@ docsリポジトリで更新があった際に、各実装リポジトリで実�
 
 | ソース（limimeshi-docs） | コピー先 |
 |-------------------------|---------|
-| `governance/docs-style-guide.md` | `docs/governance/docs-style-guide.md` |
-| `governance/shared-rules.md` | `docs/governance/shared-rules.md` |
+| `docs/governance/docs-style-guide.md` | `docs/governance/docs-style-guide.md` |
+| `docs/governance/shared-rules.md` | `docs/governance/shared-rules.md` |
 
 ## 同期対象外（初期コピーのみ）
 

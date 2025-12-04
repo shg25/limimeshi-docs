@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/ja/).
 - governance/docs-style-guide.md（ドキュメント記述ルール）
 
 ### Changed
+- ディレクトリ構造を統一：governance/、adr/、roadmap.md、CHANGELOG.mdをdocs/以下に移動
 - Claude Code用語を英語表記に統一（Custom Slash Commands / Agent Skills / Claude Code Hooks）
 - memory/ → governance/ にリネーム
 - データモデルをメニュー単位からキャンペーン単位に変更

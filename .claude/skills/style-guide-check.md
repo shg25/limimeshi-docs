@@ -18,7 +18,7 @@ description: |
 
 ### 参照ガイド
 
-**マスター**: [governance/docs-style-guide.md](../../governance/docs-style-guide.md)
+**マスター**: [docs/governance/docs-style-guide.md](../../docs/governance/docs-style-guide.md)
 
 ### チェック項目
 

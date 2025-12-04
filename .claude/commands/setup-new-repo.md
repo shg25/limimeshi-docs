@@ -14,7 +14,7 @@ limimeshi-docsリポジトリから必要なファイルをコピーする。
 ```
 .specify/
 ├── memory/
-│   └── constitution.md # ← limimeshi-docs/governance/constitution.md
+│   └── constitution.md # ← limimeshi-docs/docs/governance/constitution.md
 ├── specs/              # 機能仕様書（空）
 └── templates/          # テンプレート
 ```
@@ -48,8 +48,8 @@ limimeshi-docsリポジトリから必要なファイルをコピーする。
 ```
 docs/
 └── governance/
-    ├── docs-style-guide.md  # ← limimeshi-docs/governance/docs-style-guide.md
-    └── shared-rules.md      # ← limimeshi-docs/governance/shared-rules.md
+    ├── docs-style-guide.md  # ← limimeshi-docs/docs/governance/docs-style-guide.md
+    └── shared-rules.md      # ← limimeshi-docs/docs/governance/shared-rules.md
 ```
 
 ### 4. プロジェクト管理ファイル（新規作成）
