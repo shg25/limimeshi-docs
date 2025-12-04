@@ -159,7 +159,59 @@ Closes #123
 
 ---
 
-## 4. 適用方法
+## 4. 変更履歴（CHANGELOG）運用
+
+### 採用規約
+
+| 規約 | 用途 | 公式リンク |
+|------|------|-----------|
+| **Keep a Changelog** | 変更履歴の記録形式 | [公式](https://keepachangelog.com/ja/1.1.0/) |
+| **Conventional Commits** | コミットメッセージ規約 | [公式](https://www.conventionalcommits.org/ja/v1.0.0/) |
+| **Semantic Versioning** | バージョン番号体系 | [公式](https://semver.org/lang/ja/) |
+
+### CHANGELOG.md形式
+
+```markdown
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+### Added
+- 新機能の説明
+
+## [1.0.0] - 2025-XX-XX
+### Added
+- 初期リリース機能
+### Changed
+- 変更内容
+### Fixed
+- バグ修正
+```
+
+### カテゴリ
+
+| カテゴリ | 用途 |
+|---------|------|
+| `Added` | 新機能 |
+| `Changed` | 既存機能の変更 |
+| `Deprecated` | 将来削除予定の機能 |
+| `Removed` | 削除された機能 |
+| `Fixed` | バグ修正 |
+| `Security` | セキュリティ修正 |
+
+### 運用ルール
+
+- 変更は `[Unreleased]` セクションに随時追記
+- リリース時に `[Unreleased]` → `[X.X.X] - YYYY-MM-DD` に変換
+- バージョン番号はSemantic Versioningに従う
+  - MAJOR：後方互換性のない変更
+  - MINOR：後方互換性のある機能追加
+  - PATCH：後方互換性のあるバグ修正
+
+---
+
+## 5. 適用方法
 
 ### 各リポジトリでの参照
 
@@ -175,6 +227,7 @@ Closes #123
 - 公開リポジトリ安全性チェック
 - ドキュメントスタイルガイド準拠
 - コミットメッセージ規約
+- 変更履歴（CHANGELOG）運用
 ```
 
 ### Claude Code Hooks / Agent Skills 連携

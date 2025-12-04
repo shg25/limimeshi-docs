@@ -170,6 +170,38 @@ Spec Kitファイル（specs/、templates/、.claude/commands/）は**各実装�
 - **個人開発**: 1名（重次弘規）
 - **品質最優先**: CI/CD・テスト・負荷テストを最優先（後回し厳禁）
 
+## バージョン管理・変更履歴
+
+このプロジェクトは以下の標準規約を採用：
+
+| 規約 | 用途 |
+|------|------|
+| **Keep a Changelog** | 変更履歴の記録形式 |
+| **Conventional Commits** | コミットメッセージ規約 |
+| **Semantic Versioning** | バージョン番号体系 |
+
+### CHANGELOG更新ルール
+
+- 変更履歴は `CHANGELOG.md` に記録（Keep a Changelog形式）
+- 現在進行中の変更は `[Unreleased]` セクションに記載
+- カテゴリ：Added, Changed, Deprecated, Removed, Fixed, Security
+
+### コミットメッセージ
+
+Conventional Commits形式を使用（詳細は `governance/shared-rules.md` 参照）
+
+```
+<type>: <subject>
+
+feat: 新機能
+fix: バグ修正
+docs: ドキュメント
+style: コードスタイル
+refactor: リファクタリング
+test: テスト
+chore: ビルド・ツール
+```
+
 ## 成功の定義
 
 - Phase3で50人のベータユーザーから好意的なフィードバック

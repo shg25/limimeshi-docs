@@ -70,6 +70,9 @@ Custom Slash Commandsを使用してセットアップ：
 | Phase1 | GitHub Spec Kit | 仕様駆動開発（Spec-Driven Development） | [GitHub公式](https://github.com/github/spec-kit) |
 | Phase1 | ADR | 技術選定の記録 | [ADR公式](https://adr.github.io/) |
 | Phase1 | Firestore公式ベストプラクティス | データベース設計 | [Firebase公式](https://firebase.google.com/docs/firestore/best-practices) |
+| 全体 | Keep a Changelog | 変更履歴の記録 | [Keep a Changelog公式](https://keepachangelog.com/ja/1.1.0/) |
+| 全体 | Conventional Commits | コミットメッセージ規約 | [Conventional Commits公式](https://www.conventionalcommits.org/ja/v1.0.0/) |
+| 全体 | Semantic Versioning | バージョン番号体系 | [Semantic Versioning公式](https://semver.org/lang/ja/) |
 
 ## リポジトリ構成
 
