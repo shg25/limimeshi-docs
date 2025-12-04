@@ -1,45 +1,69 @@
-# 共通ルール同期
+# 共有ファイル同期（シンボリックリンク）
 
-limimeshi-docsリポジトリから共通ルールを同期する。
-docsリポジトリで更新があった際に、各実装リポジトリで実行する。
+既存リポジトリのシンボリックリンクを更新する。
+shared/にファイルが追加・削除された場合、または既存リポジトリをシンボリックリンク方式に移行する際に使用する。
 
-## 同期対象
+## 前提条件
 
-以下のファイルを同期（constitution.md、Spec Kit、speckit-*コマンドは対象外）
+limimeshi-docsリポジトリが兄弟ディレクトリにあること：
+```
+parent-directory/
+├── limimeshi-docs/    ← ソース
+└── target-repo/       ← 同期対象（現在のワーキングディレクトリ）
+```
+
+## シンボリックリンク対象
+
+以下のファイルは `../limimeshi-docs/shared/setup-new-repo/` へのシンボリックリンク：
 
 ### Claude Code設定
 
-| ソース（limimeshi-docs） | コピー先 |
-|-------------------------|---------|
-| `.claude/settings.json` | `.claude/settings.json` |
-| `.claude/skills/security-check.md` | `.claude/skills/security-check.md` |
-| `.claude/skills/style-guide-check.md` | `.claude/skills/style-guide-check.md` |
-| `.claude/commands/suggest-claude-md.md` | `.claude/commands/suggest-claude-md.md` |
+| シンボリックリンク | リンク先 |
+|------------------|---------|
+| `.claude/settings.json` | `../limimeshi-docs/shared/setup-new-repo/.claude/settings.json` |
+| `.claude/skills/security-check.md` | `../limimeshi-docs/shared/setup-new-repo/.claude/skills/security-check.md` |
+| `.claude/skills/style-guide-check.md` | `../limimeshi-docs/shared/setup-new-repo/.claude/skills/style-guide-check.md` |
+| `.claude/commands/suggest-claude-md.md` | `../limimeshi-docs/shared/setup-new-repo/.claude/commands/suggest-claude-md.md` |
 
 ### ガバナンスドキュメント
 
-| ソース（limimeshi-docs） | コピー先 |
-|-------------------------|---------|
-| `docs/governance/docs-style-guide.md` | `docs/governance/docs-style-guide.md` |
-| `docs/governance/shared-rules.md` | `docs/governance/shared-rules.md` |
+| シンボリックリンク | リンク先 |
+|------------------|---------|
+| `docs/governance/docs-style-guide.md` | `../limimeshi-docs/shared/setup-new-repo/docs/governance/docs-style-guide.md` |
+| `docs/governance/shared-rules.md` | `../limimeshi-docs/shared/setup-new-repo/docs/governance/shared-rules.md` |
 
-## 同期対象外（初期コピーのみ）
+### Spec Kitファイル
 
-以下は各リポジトリで独立管理するため同期しない：
-- `constitution.md` - リポジトリ固有のカスタマイズ可
-- `.specify/` - Spec Kit（各リポジトリの機能仕様）
-- `speckit-*.md` - Spec Kit Custom Slash Commands（各リポジトリでカスタマイズ可）
+| シンボリックリンク | リンク先 |
+|------------------|---------|
+| `.specify/.claude/commands/speckit-*.md` | `../limimeshi-docs/shared/setup-new-repo/.specify/.claude/commands/speckit-*.md` |
+| `.specify/templates/*.md` | `../limimeshi-docs/shared/setup-new-repo/.specify/templates/*.md` |
+
+## 同期対象外（各リポジトリ固有）
+
+以下は実体ファイルとして各リポジトリで独立管理：
+- `constitution.md` - リポジトリ固有のカスタマイズ
+- `specs/` - 機能仕様書（リポジトリ固有）
+
+## 実行タイミング
+
+シンボリックリンク方式では、**ファイル内容の変更は自動反映**されるため、以下の場合のみ実行：
+
+1. **新規ファイル追加時**: shared/に新しいファイルが追加された場合
+2. **ファイル削除時**: shared/からファイルが削除された場合
+3. **移行時**: コピー方式からシンボリックリンク方式への移行
 
 ## 実行手順
 
-1. limimeshi-docsリポジトリの場所を確認（通常は兄弟ディレクトリ）
-2. 同期対象ファイルの差分を確認
-3. 差分があるファイルを報告
-4. ユーザーの確認後、ファイルを更新
-5. 更新完了後、変更内容を報告
+1. limimeshi-docsリポジトリの場所を確認（`../limimeshi-docs/`）
+2. 現在のシンボリックリンク状態を確認
+3. 壊れたシンボリックリンクを検出
+4. 不足しているシンボリックリンクを作成
+5. 不要なシンボリックリンク（実体ファイル）を報告
+6. 変更完了後、差分を報告
 
 ## 注意事項
 
-- 既存ファイルとの差分を必ず確認してから上書き
-- ローカルで独自の変更を加えている場合は要注意
+- limimeshi-docsが兄弟ディレクトリにない場合は実行不可
+- 既存の実体ファイルは確認してからシンボリックリンクに置換
 - 同期後はコミットを忘れずに

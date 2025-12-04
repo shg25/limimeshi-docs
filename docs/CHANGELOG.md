@@ -8,10 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/ja/).
 ## [Unreleased]
 
 ### Added
+- shared/setup-new-repo/ディレクトリ作成（マスターファイル管理用）
+  - template/setup-new-repo/と同じ構造で直感的に
+  - .claude/（Claude Code設定のマスター）
+  - .specify/（Spec Kitファイルのマスター）
+  - docs/governance/（ガバナンスドキュメントのマスター）
 - template/setup-new-repo/ディレクトリ作成（新規リポジトリ一括セットアップ用）
   - .specify/（Spec Kit一式：memory、specs、templates、speckit-*コマンド）
   - .claude/（Claude Code設定：commands、skills、settings.json）
   - docs/（governance、adr、roadmap、CHANGELOG）
+  - ※共有ファイルはshared/へのシンボリックリンク（19ファイル）
 - Keep a Changelog / Conventional Commits / Semantic Versioning 採用を宣言
 - Custom Slash Commands作成（`/setup-new-repo`、`/sync-shared-rules`、`/suggest-claude-md`）
 - Agent Skills作成（`security-check.md`、`style-guide-check.md`）
@@ -26,7 +32,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/ja/).
 - governance/docs-style-guide.md（ドキュメント記述ルール）
 
 ### Changed
-- setup-new-repo.md：テンプレートコピー方式にシンプル化
+- 共有ファイル管理をシンボリックリンク方式に変更（コピー同期から自動同期へ）
+  - 他リポジトリからlimimeshi-docs/shared/への相対シンボリックリンク
+  - ファイル内容変更時の手動同期が不要に
+- setup-new-repo.md：シンボリックリンク作成方式に変更
+- sync-shared-rules.md：ファイル追加時のシンボリックリンク作成用に変更
+- template/setup-new-repo/docs/adr/README.md：リポジトリ固有セクション（ADR一覧）を削除
+- docs/governance/：docs-style-guide.mdとshared-rules.mdをshared/へのシンボリックリンクに変更
+- .claude/：共有ファイル（settings.json、suggest-claude-md.md、skills/*）をshared/へのシンボリックリンクに変更
+- docs/governance/constitution.md：削除（マスターはtemplate/setup-new-repo/.specify/memory/に移動）
 - ディレクトリ構造を統一：governance/、adr/、roadmap.md、CHANGELOG.mdをdocs/以下に移動
 - テンプレートをtemplate/配下に統合（docs/specify-template/ → template/setup-new-repo/）
 - Claude Code用語を英語表記に統一（Custom Slash Commands / Agent Skills / Claude Code Hooks）

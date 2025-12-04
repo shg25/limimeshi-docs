@@ -8,10 +8,6 @@ Architecture Decision Records（ADR）は、アーキテクチャに関する重
 
 **出典**: Michael Nygard "[Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)" (2011)
 
-## ADR一覧
-
-（ADRを作成したらここに追加）
-
 ## 命名規則
 
 `NNN-short-title.md`形式で命名
