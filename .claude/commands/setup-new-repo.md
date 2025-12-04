@@ -15,23 +15,23 @@ parent-directory/
 
 ### シンボリックリンク（limimeshi-docs/shared/setup-new-repo/を参照）
 
-以下は `../limimeshi-docs/shared/setup-new-repo/` へのシンボリックリンクとして作成：
+以下はシンボリックリンクとして作成（パスはファイルの深さにより異なる）：
 
 ```
 .claude/
-├── commands/suggest-claude-md.md → ../limimeshi-docs/shared/...
-├── commands/sync-shared-rules.md → ../limimeshi-docs/shared/...
-├── skills/security-check.md → ../limimeshi-docs/shared/...
-├── skills/style-guide-check.md → ../limimeshi-docs/shared/...
-└── settings.json → ../limimeshi-docs/shared/...
+├── settings.json → ../../limimeshi-docs/shared/setup-new-repo/.claude/settings.json
+├── commands/suggest-claude-md.md → ../../../limimeshi-docs/shared/setup-new-repo/.claude/commands/suggest-claude-md.md
+├── commands/sync-shared-rules.md → ../../../limimeshi-docs/shared/setup-new-repo/.claude/commands/sync-shared-rules.md
+├── skills/security-check.md → ../../../limimeshi-docs/shared/setup-new-repo/.claude/skills/security-check.md
+└── skills/style-guide-check.md → ../../../limimeshi-docs/shared/setup-new-repo/.claude/skills/style-guide-check.md
 
 .specify/
-├── .claude/commands/speckit-*.md → ../limimeshi-docs/shared/...
-└── templates/*.md → ../limimeshi-docs/shared/...
+├── .claude/commands/speckit-*.md → ../../../../limimeshi-docs/shared/setup-new-repo/.specify/.claude/commands/speckit-*.md
+└── templates/*.md → ../../../limimeshi-docs/shared/setup-new-repo/.specify/templates/*.md
 
 docs/governance/
-├── docs-style-guide.md → ../limimeshi-docs/shared/...
-└── shared-rules.md → ../limimeshi-docs/shared/...
+├── docs-style-guide.md → ../../../limimeshi-docs/shared/setup-new-repo/docs/governance/docs-style-guide.md
+└── shared-rules.md → ../../../limimeshi-docs/shared/setup-new-repo/docs/governance/shared-rules.md
 ```
 
 ### 実体ファイル（各リポジトリ固有）
