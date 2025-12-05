@@ -563,10 +563,10 @@ Phase1完了後、実際のチェーン店の情報発信形態を調査した�
 - [x] Claude Code Hooksにコミット時リマインダー追加（roadmap.md、CHANGELOG.md更新確認）
 - [x] `/suggest-claude-md` Custom Slash Command作成
 
-#### 未完了タスク（各リポジトリで実施）
+#### 展開状況
 
-- [ ] limimeshi-adminへの展開（`/sync-shared-rules`で同期）
-- [ ] limimeshi-androidへの展開（`/sync-shared-rules`で同期）
+- [x] limimeshi-adminへの展開（`/sync-shared-rules`で同期）✅ 2025/12/05
+- [x] limimeshi-androidへの展開（`/sync-shared-rules`で同期）✅ 2025/12/05
 
 ### 2-6. 本番環境セットアップ
 
@@ -852,3 +852,4 @@ Phase3：ベータリリース
 - 2025/12/03：2-5. ガバナンス強化・自動チェック導入を追加（memory/→governance/リネーム、WRITING_STYLE_GUIDE.md→governance/docs-style-guide.md移動・改名、shared-rules/Hooks/Skills導入予定）
 - 2025/12/04：2-5. ガバナンス強化・自動チェック完了（スラッシュコマンド追加：/setup-new-repo、/sync-shared-rules、同期ポリシー確定）、README.md簡素化（詳細はスラッシュコマンドに移行）
 - 2025/12/05：CHANGELOG.md作成、Keep a Changelog/Conventional Commits/Semantic Versioning採用、Claude Code Hooksにコミット時リマインダー追加、/suggest-claude-md作成、ドキュメント整合性修正（docs-style-guide.mdセクション番号、first-idea.md差分検知記述削除、ADR-003参照修正）、Phase2進捗率を30%に更新
+- 2025/12/05：共有ファイル管理の完全実装（シンボリックリンク方式への移行、READMEコピー機能追加、/sync-shared-rulesをdocsリポジトリから実行する形式に変更）、README/CLAUDE.mdの構成統一（前提条件、ディレクトリ構成セクションを追加）、limimeshi-admin・limimeshi-androidへの展開完了
