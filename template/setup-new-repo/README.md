@@ -75,7 +75,7 @@ parent-directory/
 
 **シンボリックリンク**: 自動同期（limimeshi-docs/shared/編集で反映）
 
-**READMEコピー**: `/sync-shared-rules`で同期（limimeshi-docs/template/編集後に実行）
+**READMEコピー**: limimeshi-docsから`/sync-shared-rules [リポジトリ名]`で同期
 
 **同期対象外（各リポジトリ固有）**:
 - constitution.md

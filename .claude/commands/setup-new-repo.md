@@ -35,7 +35,6 @@ parent-directory/
 |--------|---------|
 | `.claude/settings.json` | `../../limimeshi-docs/shared/setup-new-repo/.claude/settings.json` |
 | `.claude/commands/suggest-claude-md.md` | `../../../limimeshi-docs/shared/setup-new-repo/.claude/commands/suggest-claude-md.md` |
-| `.claude/commands/sync-shared-rules.md` | `../../../limimeshi-docs/shared/setup-new-repo/.claude/commands/sync-shared-rules.md` |
 | `.claude/skills/security-check.md` | `../../../limimeshi-docs/shared/setup-new-repo/.claude/skills/security-check.md` |
 | `.claude/skills/style-guide-check.md` | `../../../limimeshi-docs/shared/setup-new-repo/.claude/skills/style-guide-check.md` |
 | `docs/governance/docs-style-guide.md` | `../../../limimeshi-docs/shared/setup-new-repo/docs/governance/docs-style-guide.md` |
@@ -102,7 +101,6 @@ limimeshi-docsへのシンボリックリンク（自動同期）：
 ### .claude/
 Claude Code設定（limimeshi-docsへのシンボリックリンク）：
 - `commands/suggest-claude-md.md`
-- `commands/sync-shared-rules.md`
 - `skills/`：Agent Skills
 - `settings.json`：Claude Code Hooks設定
 
@@ -115,7 +113,7 @@ GitHub Spec Kit（仕様駆動開発）：
 
 ### 同期について
 - シンボリックリンクのファイルは limimeshi-docs を更新すれば自動反映
-- 各種README（.specify/README.md, docs/README.md等）は `/sync-shared-rules` で同期
+- 各種READMEは limimeshi-docs から `/sync-shared-rules [リポジトリ名]` で同期
 - constitution.md、roadmap.md、CHANGELOG.md、specs/は各リポジトリで独立管理
 ```
 
