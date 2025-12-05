@@ -93,16 +93,25 @@ parent-directory/
 
 本リポジトリは limimeshi-docs のガバナンスルールに従う
 
+### docs/
+- `roadmap.md`：ロードマップ（実体、リポジトリ固有）
+- `CHANGELOG.md`：変更履歴（実体、リポジトリ固有）
+- `README.md`：ディレクトリ説明（コピー、編集不可）
+
+### docs/adr/
+- リポジトリ固有のADR（実体）
+- `README.md`：ADR説明（コピー、編集不可）
+
 ### docs/governance/
-limimeshi-docsへのシンボリックリンク（自動同期）：
-- `docs-style-guide.md`：ドキュメント記述ルール
-- `shared-rules.md`：複数リポジトリ共通ルール
+- `docs-style-guide.md`：ドキュメント記述ルール（シンボリックリンク）
+- `shared-rules.md`：複数リポジトリ共通ルール（シンボリックリンク）
+- `README.md`：ガバナンス説明（コピー、編集不可）
 
 ### .claude/
-Claude Code設定（limimeshi-docsへのシンボリックリンク）：
+Claude Code設定（シンボリックリンク）：
+- `settings.json`：Hooks設定
 - `commands/suggest-claude-md.md`
 - `skills/`：Agent Skills
-- `settings.json`：Claude Code Hooks設定
 
 ### .specify/
 GitHub Spec Kit（仕様駆動開発）：
@@ -110,11 +119,25 @@ GitHub Spec Kit（仕様駆動開発）：
 - `specs/`：機能仕様書（実体、リポジトリ固有）
 - `.claude/commands/`：speckit-*コマンド（シンボリックリンク）
 - `templates/`：仕様書テンプレート（シンボリックリンク）
+- `README.md`：Spec Kit説明（コピー、編集不可）
 
 ### 同期について
-- シンボリックリンクのファイルは limimeshi-docs を更新すれば自動反映
-- 各種READMEは limimeshi-docs から `/sync-shared-rules [リポジトリ名]` で同期
-- constitution.md、roadmap.md、CHANGELOG.md、specs/は各リポジトリで独立管理
+- **シンボリックリンク**: limimeshi-docs更新で自動反映
+- **READMEコピー**: limimeshi-docsから`/sync-shared-rules [リポジトリ名]`で同期
+- **リポジトリ固有**: constitution.md、roadmap.md、CHANGELOG.md、specs/、adr/
+```
+
+## README.mdに追記する内容
+
+```markdown
+## 前提条件
+
+このリポジトリは limimeshi-docs と同じ親ディレクトリに配置する必要がある：
+\`\`\`
+parent-directory/
+├── limimeshi-docs/    ← 必須
+└── this-repo/
+\`\`\`
 ```
 
 ## 注意事項

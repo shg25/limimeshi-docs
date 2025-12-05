@@ -2,6 +2,28 @@
 
 このファイルはClaude CodeなどのAIエージェントがプロジェクトを効率的に理解するための情報です。
 
+## 共有ファイル管理（このリポジトリがマスター）
+
+このリポジトリは他のlimimeshiリポジトリへの共有ファイルのマスターを管理
+
+### shared/setup-new-repo/
+他リポジトリからシンボリックリンクで参照されるマスターファイル：
+- `.claude/`：Claude Code設定（settings.json、commands/、skills/）
+- `.specify/.claude/commands/`：speckit-*コマンド
+- `.specify/templates/`：仕様書テンプレート
+- `docs/governance/`：docs-style-guide.md、shared-rules.md
+
+### template/setup-new-repo/
+新規リポジトリ作成時にコピーするファイル：
+- READMEコピー（編集不可）：`.specify/README.md`、`docs/README.md`、`docs/adr/README.md`、`docs/governance/README.md`
+- リポジトリ固有ファイル（編集可）：`constitution.md`、`roadmap.md`、`CHANGELOG.md`
+
+### 同期コマンド
+- `/setup-new-repo [リポジトリ名]`：新規リポジトリのセットアップ
+- `/sync-shared-rules [リポジトリ名]`：既存リポジトリへの同期
+
+---
+
 ## プロジェクト概要
 
 **正式名称**: 期間限定めし（リミメシ）
