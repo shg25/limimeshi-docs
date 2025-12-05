@@ -664,6 +664,11 @@ Phase3：ベータリリース
 ### 5-2. 位置情報機能の実装
 ### 5-3. iOSアプリ展開
 ### 5-4. チェーン店との提携
+### 5-5. 開発効率化
+
+- [ ] `/setup-new-repo`にGitHub CLI対応を追加
+  - `gh repo edit --default-branch develop`（defaultブランチ変更）
+  - その他リポジトリ設定の自動化
 
 ---
 
