@@ -51,7 +51,7 @@
 |------------|------|------|
 | `limimeshi-admin` | 管理画面（React Admin） | ✅ 実装完了 |
 | `limimeshi-android` | Androidアプリ（Kotlin + Jetpack Compose） | 🚧 準備中 |
-| `limimeshi-infra` | Firestore Rules/Indexes管理 | 📋 Phase3で作成予定 |
+| `limimeshi-infra` | Firestore Rules/Indexes・データモデル管理 | ✅ 作成完了 |
 | `limimeshi-web` | Webアプリ | 📋 Phase3で作成予定 |
 
 ## 現在のフェーズ
@@ -75,12 +75,14 @@ limimeshi-docs/
 │   ├── governance/      # ガバナンスルール（constitution.md、docs-style-guide.md）
 │   ├── roadmap.md       # プロジェクト全体のロードマップ
 │   └── CHANGELOG.md     # 変更履歴
-├── data-model/          # Firestoreスキーマ設計（→Phase3でlimimeshi-infraに移行予定）
-├── guides/              # 本番環境セットアップガイド（→Phase3でlimimeshi-infraに移行予定）
 ├── planning/            # Phase0企画ドキュメント（first-idea.md、lean-canvas.md、inception-deck.md）
+├── shared/              # 他リポジトリへのシンボリックリンク用マスターファイル
+├── template/            # 新規リポジトリ作成時のテンプレート
 ├── CLAUDE.md            # AI向けプロジェクト情報（このファイル）
 └── README.md            # ガバナンスリポジトリ説明
 ```
+
+> **Note**: data-model/、guides/はlimimeshi-infraに移行済み
 
 ## 重要なドキュメント
 
