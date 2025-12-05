@@ -1,5 +1,7 @@
 # ドキュメントディレクトリ
 
+> **Note**: このファイルはlimimeshi-docsで管理。編集は [limimeshi-docs/template/setup-new-repo/docs/README.md](https://github.com/shg25/limimeshi-docs/blob/main/template/setup-new-repo/docs/README.md) で行い、`/sync-shared-rules` で同期
+
 このリポジトリのドキュメントを管理
 
 ## ディレクトリ構成

@@ -1,5 +1,7 @@
 # ガバナンスルール
 
+> **Note**: このファイルはlimimeshi-docsで管理。編集は [limimeshi-docs/template/setup-new-repo/docs/governance/README.md](https://github.com/shg25/limimeshi-docs/blob/main/template/setup-new-repo/docs/governance/README.md) で行い、`/sync-shared-rules` で同期
+
 プロジェクト全体で共有するルール・スタイルガイド
 
 ## このディレクトリについて

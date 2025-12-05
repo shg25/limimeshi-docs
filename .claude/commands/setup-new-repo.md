@@ -43,16 +43,25 @@ parent-directory/
 | `.specify/.claude/commands/speckit-*.md` | `../../../../limimeshi-docs/shared/setup-new-repo/.specify/.claude/commands/speckit-*.md` |
 | `.specify/templates/*.md` | `../../../limimeshi-docs/shared/setup-new-repo/.specify/templates/*.md` |
 
-### 実体ファイル（template/setup-new-repo/からコピー）
+### READMEコピー（編集不可、limimeshi-docsで管理）
+
+GitHubでの表示用にコピー。編集はlimimeshi-docsで行い、`/sync-shared-rules`で同期。
 
 | ファイル | 説明 |
 |---------|------|
 | `.specify/README.md` | Spec Kit使い方ガイド |
+| `docs/README.md` | ドキュメントディレクトリ説明 |
+| `docs/adr/README.md` | ADRディレクトリ説明 |
+| `docs/governance/README.md` | ガバナンスルール説明 |
+
+### リポジトリ固有ファイル（編集可）
+
+各リポジトリで独立管理。自由に編集可能。
+
+| ファイル | 説明 |
+|---------|------|
 | `.specify/memory/constitution.md` | プロジェクトの憲法（カスタマイズ必要） |
 | `.specify/specs/.gitkeep` | 機能仕様書ディレクトリ |
-| `docs/README.md` | ドキュメントディレクトリ説明 |
-| `docs/adr/README.md` | ADRディレクトリ |
-| `docs/governance/README.md` | ガバナンスルール説明 |
 | `docs/roadmap.md` | ロードマップ |
 | `docs/CHANGELOG.md` | 変更履歴 |
 
@@ -106,7 +115,8 @@ GitHub Spec Kit（仕様駆動開発）：
 
 ### 同期について
 - シンボリックリンクのファイルは limimeshi-docs を更新すれば自動反映
-- constitution.mdとspecs/は各リポジトリで独立管理
+- 各種README（.specify/README.md, docs/README.md等）は `/sync-shared-rules` で同期
+- constitution.md、roadmap.md、CHANGELOG.md、specs/は各リポジトリで独立管理
 ```
 
 ## 注意事項

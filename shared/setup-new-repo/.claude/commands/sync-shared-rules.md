@@ -41,18 +41,31 @@ parent-directory/
 | `.specify/.claude/commands/speckit-*.md` | `../../../../limimeshi-docs/shared/setup-new-repo/.specify/.claude/commands/speckit-*.md` |
 | `.specify/templates/*.md` | `../../../limimeshi-docs/shared/setup-new-repo/.specify/templates/*.md` |
 
+## READMEコピー対象（編集不可）
+
+以下のファイルはGitHubでの表示用にコピー。limimeshi-docsで管理し、このコマンドで同期。
+
+| コピー先 | コピー元 |
+|---------|---------|
+| `.specify/README.md` | `../limimeshi-docs/template/setup-new-repo/.specify/README.md` |
+| `docs/README.md` | `../limimeshi-docs/template/setup-new-repo/docs/README.md` |
+| `docs/adr/README.md` | `../limimeshi-docs/template/setup-new-repo/docs/adr/README.md` |
+| `docs/governance/README.md` | `../limimeshi-docs/template/setup-new-repo/docs/governance/README.md` |
+
 ## 同期対象外（各リポジトリ固有）
 
 以下は実体ファイルとして各リポジトリで独立管理：
 - `constitution.md` - リポジトリ固有のカスタマイズ
 - `specs/` - 機能仕様書（リポジトリ固有）
+- `roadmap.md` - リポジトリ固有のロードマップ
+- `CHANGELOG.md` - リポジトリ固有の変更履歴
 
 ## 実行タイミング
 
 シンボリックリンク方式では、**ファイル内容の変更は自動反映**されるため、以下の場合のみ実行：
 
-1. **新規ファイル追加時**: shared/に新しいファイルが追加された場合
-2. **ファイル削除時**: shared/からファイルが削除された場合
+1. **シンボリックリンク追加・削除時**: shared/にファイルが追加・削除された場合
+2. **READMEファイル更新時**: template/setup-new-repo/内のREADMEが更新された場合
 3. **移行時**: コピー方式からシンボリックリンク方式への移行
 
 ## 実行手順
@@ -61,7 +74,7 @@ parent-directory/
 2. 現在のシンボリックリンク状態を確認
 3. 壊れたシンボリックリンクを検出
 4. 不足しているシンボリックリンクを作成
-5. 不要なシンボリックリンク（実体ファイル）を報告
+5. READMEファイルをコピー（template/から）
 6. 変更完了後、差分を報告
 
 ## 注意事項

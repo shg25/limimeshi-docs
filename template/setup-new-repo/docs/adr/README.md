@@ -1,5 +1,7 @@
 # Architecture Decision Records（ADR）
 
+> **Note**: このファイルはlimimeshi-docsで管理。編集は [limimeshi-docs/template/setup-new-repo/docs/adr/README.md](https://github.com/shg25/limimeshi-docs/blob/main/template/setup-new-repo/docs/adr/README.md) で行い、`/sync-shared-rules` で同期
+
 このリポジトリ固有の技術選定を記録
 
 ## ADRとは

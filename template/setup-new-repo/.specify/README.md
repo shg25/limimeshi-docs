@@ -1,5 +1,7 @@
 # GitHub Spec Kit（仕様駆動開発）
 
+> **Note**: このファイルはlimimeshi-docsで管理。編集は [limimeshi-docs/template/setup-new-repo/.specify/README.md](https://github.com/shg25/limimeshi-docs/blob/main/template/setup-new-repo/.specify/README.md) で行い、`/sync-shared-rules` で同期
+
 仕様書からコードを生成する開発手法を支援するディレクトリ
 
 ## Spec Kitとは

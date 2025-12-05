@@ -4,13 +4,15 @@
 
 ## このディレクトリの内容
 
-コピー対象（各リポジトリ固有）：
+### READMEコピー（編集不可、limimeshi-docsで管理）
 - `.specify/README.md` - Spec Kit使い方ガイド
+- `docs/README.md` - ドキュメントディレクトリ説明
+- `docs/adr/README.md` - ADRディレクトリ説明
+- `docs/governance/README.md` - ガバナンスルール説明
+
+### リポジトリ固有ファイル（編集可）
 - `.specify/memory/constitution.md` - プロジェクトの憲法
 - `.specify/specs/.gitkeep` - 機能仕様書ディレクトリ
-- `docs/README.md` - ドキュメントディレクトリ説明
-- `docs/adr/README.md` - ADRディレクトリ
-- `docs/governance/README.md` - ガバナンスルール説明
 - `docs/roadmap.md` - ロードマップ
 - `docs/CHANGELOG.md` - 変更履歴
 
@@ -71,15 +73,15 @@ parent-directory/
 
 ## 継続同期
 
-シンボリックリンクのファイルは自動同期。
-limimeshi-docs/shared/を編集すれば全リポジトリに反映される。
+**シンボリックリンク**: 自動同期（limimeshi-docs/shared/編集で反映）
+
+**READMEコピー**: `/sync-shared-rules`で同期（limimeshi-docs/template/編集後に実行）
 
 **同期対象外（各リポジトリ固有）**:
 - constitution.md
 - specs/
 - roadmap.md
 - CHANGELOG.md
-- adr/
 
 ## 関連
 
