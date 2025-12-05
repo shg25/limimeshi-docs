@@ -64,6 +64,34 @@ GitHubでの表示用にコピー。編集はlimimeshi-docsで行い、`/sync-sh
 | `docs/roadmap.md` | ロードマップ |
 | `docs/CHANGELOG.md` | 変更履歴 |
 
+## git-flow初期化
+
+実装リポジトリ（docs以外）では**git-flow**を採用。セットアップ時に自動で初期化する。
+
+### 実行内容
+
+```bash
+# git-flow初期化（デフォルト設定）
+git flow init -d
+
+# developブランチをリモートにpush
+git push -u origin develop
+```
+
+### ブランチ構成
+
+| ブランチ | 用途 | マージ先 |
+|---------|------|---------|
+| `main` | 本番環境（リリース済み） | - |
+| `develop` | 開発環境（次期リリース準備） | main |
+| `feature/*` | 機能開発 | develop |
+| `release/*` | リリース準備 | main + develop |
+| `hotfix/*` | 緊急修正 | main + develop |
+
+### 参考
+
+詳細は [CONTRIBUTING.md](https://github.com/shg25/limimeshi-docs/blob/main/CONTRIBUTING.md) を参照
+
 ## 実行手順
 
 1. **引数確認**: リポジトリ名が指定されていなければ質問
@@ -75,7 +103,9 @@ GitHubでの表示用にコピー。編集はlimimeshi-docsで行い、`/sync-sh
 7. **ファイルコピー**: template/から実体ファイルをコピー
 8. **置換処理**: `[REPOSITORY_NAME]`を実際のリポジトリ名に置換
 9. **CLAUDE.md更新**: ディレクトリ構成セクションを追記
-10. **結果報告**: 作成したファイル一覧を報告
+10. **git-flow初期化**: `git flow init -d`を実行
+11. **developブランチpush**: `git push -u origin develop`
+12. **結果報告**: 作成したファイル一覧を報告
 
 ## CLAUDE.mdに追記する内容
 
@@ -88,6 +118,26 @@ parent-directory/
 ├── limimeshi-docs/    ← 必須
 └── this-repo/
 \`\`\`
+
+## ブランチ戦略
+
+このリポジトリは**git-flow**を採用
+
+### ブランチ構成
+| ブランチ | 用途 |
+|---------|------|
+| `main` | 本番環境 |
+| `develop` | 開発環境 |
+| `feature/*` | 機能開発 |
+| `release/*` | リリース準備 |
+| `hotfix/*` | 緊急修正 |
+
+### 基本フロー
+1. `develop`から`feature/xxx`ブランチを作成
+2. 作業完了後、`develop`へPR
+3. リリース時は`release/x.x`→`main`にマージ
+
+詳細は [CONTRIBUTING.md](https://github.com/shg25/limimeshi-docs/blob/main/CONTRIBUTING.md) を参照
 
 ## ディレクトリ構成（ガバナンス関連）
 
@@ -138,6 +188,16 @@ parent-directory/
 ├── limimeshi-docs/    ← 必須
 └── this-repo/
 \`\`\`
+
+## ブランチ戦略
+
+このリポジトリは**git-flow**を採用。詳細は [CONTRIBUTING.md](https://github.com/shg25/limimeshi-docs/blob/main/CONTRIBUTING.md) を参照。
+
+| ブランチ | 用途 |
+|---------|------|
+| `main` | 本番環境 |
+| `develop` | 開発環境（通常はここから作業） |
+| `feature/*` | 機能開発 |
 ```
 
 ## 注意事項
