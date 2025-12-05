@@ -626,20 +626,18 @@ Phase3：ベータリリース
 - [ ] specs作成（002-chain-list、003-favoritesをWeb用に調整）
 - [ ] React + TypeScript + Firebase
 
-### 3-1. インフラ分離（limimeshi-web 作成前に実施）
+### 3-1. インフラ分離 ✅ 完了
 
 **詳細**: [ADR-005](./adr/005-firebase-hosting-multi-site.md) 参照
 
-#### タスク
-- [ ] limimeshi-infra リポジトリ作成
-- [ ] firestore.rules/indexes を limimeshi-admin から移行
-- [ ] limimeshi-docs/data-model/ を limimeshi-infra に移行（Firestoreスキーマ設計）
-- [ ] limimeshi-docs/guides/ を limimeshi-infra に移行（本番環境セットアップガイド）
-- [ ] デプロイスクリプト作成（deploy-dev.sh, deploy-prod.sh）
-- [ ] limimeshi-admin の firebase.json から firestore 設定を削除
-- [ ] 移行確認（開発環境でテスト）
-
-**重要**: このタスクは limimeshi-web リポジトリ作成の**直前**に実施
+#### 完了タスク
+- [x] limimeshi-infra リポジトリ作成
+- [x] firestore.rules/indexes を limimeshi-admin から移行
+- [x] limimeshi-docs/data-model/ を limimeshi-infra に移行（Firestoreスキーマ設計）
+- [x] limimeshi-docs/guides/ を limimeshi-infra に移行（本番環境セットアップガイド）
+- [x] デプロイスクリプト作成（deploy-dev.sh, deploy-prod.sh）
+- [x] limimeshi-admin の firebase.json から firestore 設定を削除（Hosting専用に変更）
+- [x] データ管理スクリプト移行（seed-test-data.js, clear-test-data.js, set-admin-claim.js）
 
 ---
 
@@ -858,3 +856,4 @@ Phase3：ベータリリース
 - 2025/12/04：2-5. ガバナンス強化・自動チェック完了（スラッシュコマンド追加：/setup-new-repo、/sync-shared-rules、同期ポリシー確定）、README.md簡素化（詳細はスラッシュコマンドに移行）
 - 2025/12/05：CHANGELOG.md作成、Keep a Changelog/Conventional Commits/Semantic Versioning採用、Claude Code Hooksにコミット時リマインダー追加、/suggest-claude-md作成、ドキュメント整合性修正（docs-style-guide.mdセクション番号、first-idea.md差分検知記述削除、ADR-003参照修正）、Phase2進捗率を30%に更新
 - 2025/12/05：共有ファイル管理の完全実装（シンボリックリンク方式への移行、READMEコピー機能追加、/sync-shared-rulesをdocsリポジトリから実行する形式に変更）、README/CLAUDE.mdの構成統一（前提条件、ディレクトリ構成セクションを追加）、limimeshi-admin・limimeshi-androidへの展開完了
+- 2025/12/06：Phase3-1インフラ分離完了（limimeshi-infra作成、firestore.rules/indexes移行、data-model/guides/移行、scripts移行、limimeshi-admin Hosting専用化）
