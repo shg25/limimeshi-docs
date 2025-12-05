@@ -8,9 +8,11 @@
 - `.specify/README.md` - Spec Kit使い方ガイド
 - `.specify/memory/constitution.md` - プロジェクトの憲法
 - `.specify/specs/.gitkeep` - 機能仕様書ディレクトリ
+- `docs/README.md` - ドキュメントディレクトリ説明
+- `docs/adr/README.md` - ADRディレクトリ
+- `docs/governance/README.md` - ガバナンスルール説明
 - `docs/roadmap.md` - ロードマップ
 - `docs/CHANGELOG.md` - 変更履歴
-- `docs/adr/README.md` - ADRディレクトリ
 
 ※ シンボリックリンク対象ファイルは `shared/setup-new-repo/` に配置
 
